@@ -12,7 +12,7 @@ public class AESTest extends BaseCipherTest {
     @Test
     @Override
     public void testEncryption() {
-//        testEncryption("plain text", "expected result");
+//        testEncryption("mark frequency  ", "expected result");
     }
 
     @Test
