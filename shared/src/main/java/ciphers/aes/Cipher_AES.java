@@ -1,21 +1,27 @@
 package ciphers.aes;
 
 import ciphers.BaseCipher;
+import ciphers.CipherUtils;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cipher_AES extends BaseCipher {
 
-    private static final String[] DEFAULT_KEY = {   "2b", "28", "ab", "09",
-                                                    "7e", "ae", "f7", "cf",
-                                                    "15", "d2", "15", "4f",
-                                                    "16", "a6", "88", "3c" };
+    private static final String[][] DEFAULT_KEY = { {"2b", "28", "ab", "09"},
+                                                    {"7e", "ae", "f7", "cf"},
+                                                    {"15", "d2", "15", "4f"},
+                                                    {"16", "a6", "88", "3c"} };
 
     // Matrix used for mix coulmns
-    private final String[][] MIX_COLUMN_MATRIX = {  {"02", "03", "01", "01"},
-                                                    {"01", "02", "03", "01"},
-                                                    {"01", "01", "02", "03"},
-                                                    {"03", "01", "01", "02"} };
+    private final String[][] MIX_COLUMN_MATRIX = {  {"2", "3", "1", "1"},
+                                                    {"1", "2", "3", "1"},
+                                                    {"1", "1", "2", "3"},
+                                                    {"3", "1", "1", "2"} };
+
+    private final String[][] MIX_COLUMN_TEST = {    {"d4", "e0", "b8", "1e"},
+                                                    {"bf", "b4", "41", "27"},
+                                                    {"5d", "52", "11", "98"},
+                                                    {"30", "ae", "f1", "e5"} };
 
     // S-Box used for sub bytes
     private final String S_BOX[][] = {  {"63", "7c", "77", "7b", "f2", "6b", "6f", "c5", "30", "01", "67", "2b", "fe", "d7", "ab", "76"},
@@ -43,7 +49,7 @@ public class Cipher_AES extends BaseCipher {
      * Constructor - Use provided key.
      * @param key   The key to use for encryption.
      */
-    public Cipher_AES(String[] key) {
+    public Cipher_AES(String[][] key) {
         this.keyGen = new RoundKeyGenerator(key);
     }
 
@@ -125,17 +131,6 @@ public class Cipher_AES extends BaseCipher {
     }
 
     /**
-     * Performed by mapping each element in the current matrix with the value
-     * returned by its helper function.
-     * @param arr the array with we calculate against the galois field matrix.
-     */
-
-    public void mixColumns(int[][] arr) //method for mixColumns
-    {
-
-    }
-
-    /**
      * Transform a hex block into a string of text.
      * @param state The hex block
      * @return      The output text
@@ -149,7 +144,7 @@ public class Cipher_AES extends BaseCipher {
      * @param state
      * @param roundKey
      */
-    private void addRoundKey(String[][] state, String[] roundKey) {
+    private void addRoundKey(String[][] state, String[][] roundKey) {
     }
 
     /**
@@ -165,8 +160,8 @@ public class Cipher_AES extends BaseCipher {
                 String right = state[i][j].substring(1, 2);
 
                 // Get the row and column in the array
-                int row = hexToDecimal(left);
-                int column = hexToDecimal(right);
+                int row = CipherUtils.hexToDecimal(left);
+                int column = CipherUtils.hexToDecimal(right);
 
                 // Get new value and overwrite old value in state
                 String lookup = S_BOX[row][column];
@@ -184,7 +179,7 @@ public class Cipher_AES extends BaseCipher {
         // For each row
         for (int i = 0; i < blockSideLength; i++) {
             // Shift the current row by the current index
-            state[i] = shiftRowLeft(state[i], i);
+            state[i] = circularShiftRowLeft(state[i], i);
         }
     }
 
@@ -193,7 +188,7 @@ public class Cipher_AES extends BaseCipher {
      * @param array The array to shift.
      * @param shift The amount of places to shift.
      */
-    private String[] shiftRowLeft(String[] array, int shift) {
+    private String[] circularShiftRowLeft(String[] array, int shift) {
         String[] temp = new String[array.length];
 
         // Copy non shifted section to start of new array
@@ -205,20 +200,120 @@ public class Cipher_AES extends BaseCipher {
     }
 
     /**
-     *
-     * @param state
+     * Perform a mix columns operation on the current state.
+     * 01:  No operation
+     * 02:  If left most bit is 0, shift left only.
+     *      If left most bit is 1, shift left and XOR with 27
+     * 03:  (01) XOR (O2)
+     * @param state The state.
      */
     private void mixColumns(String[][] state) {
+        state = MIX_COLUMN_TEST;
 
+        // Invert the state to get columns
+        String[][] columnState = getInvertedState(state);
+        String[][] mixedColumnState = new String[blockSideLength][blockSideLength];
+
+        // For each column in the column state
+        for (int i = 0; i < blockSideLength; i++) {
+            String[] binaryColumn = new String[blockSideLength];
+
+            // Convert current column to binary
+            for (int j = 0; j < blockSideLength; j++) {
+                binaryColumn[j] = CipherUtils.hexToBinaryString(columnState[i][j]);
+            }
+
+            String[] resultColumn = new String[blockSideLength];
+
+            // For each entry in the column
+            for (int j = 0; j < blockSideLength; j++) {
+
+                // Get the matrix row for this entry
+                String[] matrixRow = MIX_COLUMN_MATRIX[j];
+
+                // Perform the mix column operation
+                resultColumn[j] = performMixColumn(binaryColumn, matrixRow);
+            }
+
+            // Convert result column to hex and store
+            for (int j = 0; j < blockSideLength; j++) {
+                mixedColumnState[i][j] = CipherUtils.binaryStringToHex(resultColumn[j]);
+            }
+        }
+
+        // Invert the state back to normal orientation
+        state = getInvertedState(mixedColumnState);
     }
 
     /**
-     * Convert a hexadecimal string into a decimal number.
-     * @param hex   The hex string.
-     * @return      The number representation.
+     * Perform the mix column operation.
+     * @param binaryColumn  The colum on binary strings.
+     * @param matrixRow     The row from the galois matrix.
+     * @return              The result of the operation.
      */
-    private int hexToDecimal(String hex) {
-        return Integer.parseInt(hex, 16);
+    private String performMixColumn(String[] binaryColumn, String[] matrixRow) {
+        String[] results = new String[blockSideLength];
+
+        // Populate binary results
+        for (int i = 0; i < blockSideLength; i++) {
+            String binaryValue = binaryColumn[i];
+            String matrixValue = matrixRow[i];
+
+            switch (matrixValue) {
+                case "1":   results[i] = binaryValue;
+                            break;
+                case "2":   results[i] = perform02(binaryValue);
+                            break;
+                case "3":   results[i] = perform03(binaryValue);
+            }
+        }
+
+        // Perform XOR on results
+        String result1 = CipherUtils.binary_XOR(results[0], results[1]);
+        String result2 = CipherUtils.binary_XOR(result1, results[2]);
+        String result3 = CipherUtils.binary_XOR(result2, results[3]);
+
+        return result3;
+    }
+
+    private String[][] getInvertedState(String[][] state) {
+        String[][] columnState = new String[blockSideLength][blockSideLength];
+
+        for (int i = 0; i < blockSideLength; i++) {
+            for (int j = 0; j < blockSideLength; j++) {
+                columnState[i][j] = state[j][i];
+            }
+        }
+
+        return columnState;
+    }
+
+    /**
+     * Perform the 03 operation.
+     * @param binary    The binary string.
+     * @return          The result of 03.
+     */
+    private String perform03(String binary) {
+        return CipherUtils.binary_XOR(binary, perform02(binary));
+    }
+
+    /**
+     * Perform the 02 operation.
+     * @param binary    The binary string.
+     * @return          The result of 02.
+     */
+    private String perform02(String binary) {
+        final String binary27 = CipherUtils.decimalToBinaryString(27);
+        String result;
+
+        if (binary.substring(0,1).equals("0")) {
+            result = CipherUtils.shiftBinaryStringLeft(binary, 1);
+        } else {
+            String shifted = CipherUtils.shiftBinaryStringLeft(binary, 1);
+            result = CipherUtils.binary_XOR(shifted, binary27);
+        }
+
+        return result;
     }
 
     /**
@@ -227,27 +322,27 @@ public class Cipher_AES extends BaseCipher {
     private class RoundKeyGenerator {
 
         private int numRounds;
-        private List<String[]> roundKeys;
-        private String[] initialKey;
+        private List<String[][]> roundKeys;
+        private String[][] initialKey;
 
         /**
          * Constructor.
          * @param key   The key to generate round keys from.
          */
-        private RoundKeyGenerator(String[] key) {
+        private RoundKeyGenerator(String[][] key) {
             this.initialKey = key;
             roundKeys = performKeyExpansion();
         }
 
-        private String[] getFirstKey() {
+        private String[][] getFirstKey() {
             return roundKeys.get(0);
         }
 
-        private String[] getLastKey() {
+        private String[][] getLastKey() {
             return roundKeys.get(roundKeys.size() -1);
         }
 
-        private String[] getRoundKey(int roundNumber) {
+        private String[][] getRoundKey(int roundNumber) {
             return roundKeys.get(roundNumber);
         }
 
@@ -267,10 +362,10 @@ public class Cipher_AES extends BaseCipher {
          * Generate a list of round keys based on the initial key.
          * @return  The list of round keys.
          */
-        private List<String[]> performKeyExpansion() {
+        private List<String[][]> performKeyExpansion() {
             numRounds = calculateNumRounds();
 
-            List<String[]> keys = new ArrayList<>();
+            List<String[][]> keys = new ArrayList<>();
 
             for (int i = 0; i < numRounds + 1; i++) {
                 keys.add(initialKey);   // TODO: Just use the initial key for now,
