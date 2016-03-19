@@ -7,21 +7,32 @@ import java.util.List;
 
 public class Cipher_AES extends BaseCipher {
 
-    private static final String[][] DEFAULT_KEY = { {"2b", "28", "ab", "09"},
-                                                    {"7e", "ae", "f7", "cf"},
-                                                    {"15", "d2", "15", "4f"},
-                                                    {"16", "a6", "88", "3c"} };
+    private static final String[][] DEFAULT_KEY = { {"2b", "7e", "15", "16"},
+                                                    {"28", "ae", "d2", "a6"},
+                                                    {"ab", "f7", "15", "88"},
+                                                    {"09", "cf", "47", "3c"} };
 
-    // Matrix used for mix coulmns
+    // Matrix used for mix columns
     private final String[][] MIX_COLUMN_MATRIX = {  {"2", "3", "1", "1"},
                                                     {"1", "2", "3", "1"},
                                                     {"1", "1", "2", "3"},
                                                     {"3", "1", "1", "2"} };
 
-    private final String[][] MIX_COLUMN_TEST = {    {"d4", "e0", "b8", "1e"},
-                                                    {"bf", "b4", "41", "27"},
-                                                    {"5d", "52", "11", "98"},
-                                                    {"30", "ae", "f1", "e5"} };
+    private final String[][] MIX_COLUMN_TEST = {    {"d4", "bf", "5d", "30"},
+                                                    {"e0", "b4", "52", "ae"},
+                                                    {"b8", "41", "11", "f1"},
+                                                    {"1e", "27", "98", "e5"} };
+
+    private final String[][] ROUND_KEY_TEST_KEY = { {"a0", "fa", "fe", "17"},
+                                                    {"88", "54", "2c", "b1"},
+                                                    {"23", "a3", "39", "39"},
+                                                    {"2a", "6c", "76", "05"} };
+
+    private final String[][] ROUND_KEY_TEST_STATE = {   {"04", "66", "81", "e5"},
+                                                        {"e0", "cb", "19", "9a"},
+                                                        {"48", "f8", "d3", "26"},
+                                                        {"e5", "9a", "7a", "4c"} };
+
 
     // S-Box used for sub bytes
     private final String S_BOX[][] = {  {"63", "7c", "77", "7b", "f2", "6b", "6f", "c5", "30", "01", "67", "2b", "fe", "d7", "ab", "76"},
@@ -116,14 +127,11 @@ public class Cipher_AES extends BaseCipher {
 
         String[][] inputBlock = new String[blockSideLength][blockSideLength];
 
-        int charIndex;
-
+        int charIndex = 0;
         for (int i = 0; i < blockSideLength; i++) {
-            charIndex = i;
-
             for (int j = 0; j < blockSideLength; j++) {
                 inputBlock[i][j] = Integer.toHexString((int) input.charAt(charIndex));
-                charIndex += blockSideLength;
+                charIndex ++;
             }
         }
 
@@ -140,11 +148,18 @@ public class Cipher_AES extends BaseCipher {
     }
 
     /**
-     *
-     * @param state
-     * @param roundKey
+     * Perform the add round key operation on the current state.
+     * @param state     The current state.
+     * @param roundKey  The key to XOR with the state.
      */
     private void addRoundKey(String[][] state, String[][] roundKey) {
+        roundKey = ROUND_KEY_TEST_KEY;
+        state = ROUND_KEY_TEST_STATE;
+        for (int i = 0; i < blockSideLength; i++) {
+            for (int j = 0; j < blockSideLength; j++) {
+                state[i][j] = CipherUtils.hex_XOR(state[i][j], roundKey[i][j]);
+            }
+        }
     }
 
     /**
@@ -176,11 +191,17 @@ public class Cipher_AES extends BaseCipher {
      * @param state The current state.
      */
     private void shiftRows(String[][] state) {
+        // Invert the 2d array for row oriented processing
+        String[][] invertedState = getInvertedArray(state);
+
         // For each row
         for (int i = 0; i < blockSideLength; i++) {
             // Shift the current row by the current index
-            state[i] = circularShiftRowLeft(state[i], i);
+            invertedState[i] = circularShiftRowLeft(invertedState[i], i);
         }
+
+        // Re-invert the 2d array for further column oriented processing
+        state = getInvertedArray(invertedState);
     }
 
     /**
@@ -201,17 +222,12 @@ public class Cipher_AES extends BaseCipher {
 
     /**
      * Perform a mix columns operation on the current state.
-     * 01:  No operation
-     * 02:  If left most bit is 0, shift left only.
-     *      If left most bit is 1, shift left and XOR with 27
-     * 03:  (01) XOR (O2)
      * @param state The state.
      */
     private void mixColumns(String[][] state) {
         state = MIX_COLUMN_TEST;
 
         // Invert the state to get columns
-        String[][] columnState = getInvertedState(state);
         String[][] mixedColumnState = new String[blockSideLength][blockSideLength];
 
         // For each column in the column state
@@ -220,7 +236,7 @@ public class Cipher_AES extends BaseCipher {
 
             // Convert current column to binary
             for (int j = 0; j < blockSideLength; j++) {
-                binaryColumn[j] = CipherUtils.hexToBinaryString(columnState[i][j]);
+                binaryColumn[j] = CipherUtils.hexToBinaryString(state[i][j]);
             }
 
             String[] resultColumn = new String[blockSideLength];
@@ -241,22 +257,21 @@ public class Cipher_AES extends BaseCipher {
             }
         }
 
-        // Invert the state back to normal orientation
-        state = getInvertedState(mixedColumnState);
+        state = mixedColumnState;
     }
 
     /**
      * Perform the mix column operation.
-     * @param binaryColumn  The colum on binary strings.
+     * @param column        The column of binary strings.
      * @param matrixRow     The row from the galois matrix.
      * @return              The result of the operation.
      */
-    private String performMixColumn(String[] binaryColumn, String[] matrixRow) {
+    private String performMixColumn(String[] column, String[] matrixRow) {
         String[] results = new String[blockSideLength];
 
-        // Populate binary results
+        // Populate results
         for (int i = 0; i < blockSideLength; i++) {
-            String binaryValue = binaryColumn[i];
+            String binaryValue = column[i];
             String matrixValue = matrixRow[i];
 
             switch (matrixValue) {
@@ -276,16 +291,21 @@ public class Cipher_AES extends BaseCipher {
         return result3;
     }
 
-    private String[][] getInvertedState(String[][] state) {
-        String[][] columnState = new String[blockSideLength][blockSideLength];
+    /**
+     * Invert the columns and rows of a 2d array.
+     * @param array The array to invert.
+     * @return      The inverted array.
+     */
+    private String[][] getInvertedArray(String[][] array) {
+        String[][] invertedArray = new String[blockSideLength][blockSideLength];
 
         for (int i = 0; i < blockSideLength; i++) {
             for (int j = 0; j < blockSideLength; j++) {
-                columnState[i][j] = state[j][i];
+                invertedArray[i][j] = array[j][i];
             }
         }
 
-        return columnState;
+        return invertedArray;
     }
 
     /**
@@ -294,11 +314,13 @@ public class Cipher_AES extends BaseCipher {
      * @return          The result of 03.
      */
     private String perform03(String binary) {
-        return CipherUtils.binary_XOR(binary, perform02(binary));
+        return CipherUtils.hex_XOR(binary, perform02(binary));
     }
 
     /**
      * Perform the 02 operation.
+     * If left most bit is 0, shift left only.
+     * If left most bit is 1, shift left and XOR with 27
      * @param binary    The binary string.
      * @return          The result of 02.
      */

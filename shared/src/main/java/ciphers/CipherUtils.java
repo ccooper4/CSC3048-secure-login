@@ -25,6 +25,15 @@ public class CipherUtils {
         return shiftedBinary;
     }
 
+    public static String hex_XOR(String string1, String string2) {
+        BigInteger int1 = BigInteger.valueOf(hexToDecimal(string1));
+        BigInteger int2 = BigInteger.valueOf(hexToDecimal(string2));
+
+        BigInteger result = int1.xor(int2);
+
+        return getFormattedHexString(Integer.toHexString(result.intValue()));
+    }
+
     /**
      * Perform an exclusive or operation on two binary strings.
      * e.g. (00100000) XOR (11110000) -> (11010000)
