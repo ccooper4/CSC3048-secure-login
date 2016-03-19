@@ -13,6 +13,16 @@ public class AESTest extends BaseCipherTest {
     @Override
     public void testEncryption() {
 //        testEncryption("mark frequency  ", "expected result");
+
+//        m   q c
+//        a f u y
+//        r r e
+//        k e n
+
+//        6d 20 71 63
+//        61 66 75 79
+//        72 72 65 20
+//        6b 65 6e 20
     }
 
     @Test
