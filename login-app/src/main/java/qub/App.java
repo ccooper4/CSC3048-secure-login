@@ -1,5 +1,9 @@
 package qub;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +13,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.util.Assert;
 import qub.domain.User;
 import qub.service.IUserService;
+import ui.login.LoginManager;
+import java.io.IOException;
 
 @SpringBootApplication // same as @Configuration @EnableAutoConfiguration @ComponentScan
-public class App implements CommandLineRunner {
-//public class qub.App extends Application implements CommandLineRunner {
+public class App extends Application implements CommandLineRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(App.class);
 
     @Autowired
     IUserService userService;
@@ -21,22 +28,8 @@ public class App implements CommandLineRunner {
         SpringApplication.run(App.class);
     }
 
-//    @Override
-//    public void start(Stage stage) throws IOException {
-//        Scene scene = new Scene(new StackPane());
-//
-//        LoginManager loginManager = new LoginManager(scene);
-//        loginManager.showLoginScreen();
-//
-//        stage.setScene(scene);
-//        stage.show();
-//    }
-
-    private static final Logger log = LoggerFactory.getLogger(App.class);
-
     @Override
     public void run(String... strings) throws Exception {
-//        launch(strings);
         log.info("Application started");
 
         // Testing the db
@@ -67,6 +60,19 @@ public class App implements CommandLineRunner {
         // Delete
         userService.deleteUser("new_email");
         Assert.isNull(userService.getUserByEmail("new_email"));
+
+        // Start the UI
+        launch(strings);
     }
 
+    @Override
+    public void start(Stage stage) throws IOException {
+        Scene scene = new Scene(new StackPane());
+
+        LoginManager loginManager = new LoginManager(scene);
+        loginManager.showLoginScreen();
+
+        stage.setScene(scene);
+        stage.show();
+    }
 }
