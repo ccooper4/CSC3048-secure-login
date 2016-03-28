@@ -11,6 +11,10 @@
 
     <artifactId>login-app</artifactId>
 
+    <properties>
+        <mainClass>qub.App</mainClass>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>qub</groupId>
