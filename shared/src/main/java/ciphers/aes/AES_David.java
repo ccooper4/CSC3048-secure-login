@@ -56,7 +56,7 @@ public class AES_David {
         return "ChangeMe";
     }
 
-    public static void keyExpansion(String key, int Nk, int Nr, int Nb) {
+    public static String[] keyExpansion(String key, int Nk, int Nr, int Nb) {
         String w[] = new String[44];
         String temp = "";
 
@@ -68,91 +68,95 @@ public class AES_David {
         }
         i = Nk; //4
 
-        System.err.println(Arrays.deepToString(w));
+        //System.out.println(Arrays.deepToString(w));
 
         while (i < Nb * (Nr + 1)) {
-            System.out.println("\n-------------------------------------------while " + i + " < " + (Nb * (Nr + 1)));
+            //System.out.println("\n-------------------------------------------while " + i + " < " + (Nb * (Nr + 1)));
             temp = w[i - 1];
-            System.out.println("temp =  " + temp);
+            //System.out.println("temp =  " + temp);
             if (i % Nk == 0) {
-                System.out.println("needs roted");
+                //System.out.println("needs roted");
                 temp = applyRotation(temp, rotatePermutation);
-                System.out.println("needs sub worded");
+                //System.out.println("needs sub worded");
                 temp = applySubWord(temp);
-                System.out.println("needs RCon[i/nK]");
+                //System.out.println("needs RCon[i/nK]");
                 String rcon = generateRcon(i, Nk, 2);
-                System.out.println("needs Xored temp and sub");
+                //System.out.println("needs Xored temp and sub");
                 temp = applyXorToSubwordAndRcon(temp, rcon);
 
             } else if ((Nk > 6) && (i % Nk == 4)) {
                 //temp = SubWord(temp);
             }
-            System.out.println("needs Xored temp and w[i-nK]");
+            //System.out.println("needs Xored temp and w[i-nK]");
             w[i] = bigBinaryToHex(xorStrings(temp, w[i - Nk]));
-            System.out.println("result for round " + i + " = " + w[i]);
+            //System.out.println("result for round " + i + " = " + w[i]);
             i++;
 
         }
+        
+        return w;
+        
     }
 
     public static String generateRcon(int i, int nK, int x) {
-        String res = "";
+        
+        String res = "";        
+        
+        //System.out.println("\t Generating Rcon for " + i + "," + nK + "," + x);
 
         int val = i / nK;
-        val = (int) Math.pow(x, val - 1);
+        //val = (int) Math.pow(x, val - 1);
+        
+        //System.out.println("\t val i/nK =  " + val);
+                
+//        res = Integer.toString(val);
+//        for (int k = res.length(); k < 8; k++) {
+//            res = "0" + res;
+//        }
+//        String hex = "";      
+//        System.out.println("\t res = " + res);
+//        System.out.println("\t hex 1 = " + res.substring(0, 4));
+//        System.out.println("\t hex 2 = " + res.substring(4, 8));
+//        hex = hex + hexToDecimal(res.substring(0, 4));
+//        hex = hex + hexToDecimal(res.substring(4, 8));
+//        System.out.println("\tRCon = " + hex + "000000");
+        
+        switch (val) {
+            case 1:
+                res = "01000000";
+                break;
+            case 2:
+                res = "02000000";
+                break;
+            case 3:
+                res = "04000000";
+                break;
+            case 4:
+                res = "08000000";
+                break;
+            case 5:
+                res = "10000000";
+                break;
+            case 6:
+                res = "20000000";
+                break;
+            case 7:
+                res = "40000000";
+                break;
+            case 8:
+                res = "80000000";
+                break;
+            case 9:
+                res = "1B000000";
+                break;
+            case 10:
+                res = "36000000";
+                break;
 
-        res = Integer.toString(val);
-
-        for (int k = res.length(); k < 8; k++) {
-            res = "0" + res;
         }
 
-        String hex = "";
-        
-        System.out.println("\t res = " + res);
-        System.out.println("\t hex 1 = " + res.substring(0, 4));
-        System.out.println("\t hex 2 = " + res.substring(4, 8));
-
-        hex = hex + hexToDecimal(res.substring(0, 4));
-        hex = hex + hexToDecimal(res.substring(4, 8));
-
-        System.out.println("\tRCon = " + hex + "000000");
-        
-//        switch (val) {
-//            case 1:
-//                res = "01000000";
-//                break;
-//            case 2:
-//                res = "02000000";
-//                break;
-//            case 3:
-//                res = "04000000";
-//                break;
-//            case 4:
-//                res = "08000000";
-//                break;
-//            case 5:
-//                res = "10000000";
-//                break;
-//            case 6:
-//                res = "20000000";
-//                break;
-//            case 7:
-//                res = "40000000";
-//                break;
-//            case 8:
-//                res = "80000000";
-//                break;
-//            case 9:
-//                res = "1B000000";
-//                break;
-//            case 10:
-//                res = "36000000";
-//                break;
-//
-//        }
-
-        return hex + "000000";
+        //return hex + "000000";
+        return res;
 
     }
 
@@ -176,8 +180,8 @@ public class AES_David {
         String res = "";
         String array[] = new String[4];
         String[] copy = new String[4];
-        System.out.println("\t1. APPLYING ROTATION");
-        System.out.println("\tsource = " + source);
+        //System.out.println("\t1. APPLYING ROTATION");
+        //System.out.println("\tsource = " + source);
         for (int i = 0; i < 4; i++) {
             //System.out.println("\tlooppppp = " + i);
             array[i] = source.substring(i * 2, ((i * 2) + 2));
@@ -186,7 +190,7 @@ public class AES_David {
         for (int i = 0; i < rotatePermutation.length; i++) {
             array[i] = copy[rotatePermutation[i] - 1];
         }
-        System.out.println("\tfinal array = " + Arrays.deepToString(array));
+        //System.out.println("\tfinal array = " + Arrays.deepToString(array));
         for (int i = 0; i < 4; i++) {
             res = res + array[i].toString();
         }
@@ -195,8 +199,8 @@ public class AES_David {
 
     public static String applySubWord(String source) {
         String res = "";
-        System.out.println("\t2. APPLYING SUBWORD ");
-        System.out.println("\tApplying subword to : " + source);
+        //System.out.println("\t2. APPLYING SUBWORD ");
+        //System.out.println("\tApplying subword to : " + source);
         int x = -1;
         int y = -1;
         for (int i = 0; i < 4; i++) {
@@ -208,21 +212,21 @@ public class AES_David {
             res = res + sbox[y][x];
         }
 
-        System.out.println("\tSubbworded to : " + res);
+        //System.out.println("\tSubbworded to : " + res);
         return res;
     }
 
     public static String applyXorToSubwordAndRcon(String subword, String rcon) {
         String tmp = subword;
 
-        System.out.println("\tgot rcon as = " + rcon);
-        System.out.println("\tgot subword as = " + subword);
+        //System.out.println("\tgot rcon as = " + rcon);
+        //System.out.println("\tgot subword as = " + subword);
 
         String binaryRcon = hexToBinary(rcon.substring(0, 2));
         String binarySubword = hexToBinary(tmp.substring(0, 2));
 
-        System.out.println("\tbinary rcon      = " + rcon.substring(0, 2) + " = " + binaryRcon);
-        System.out.println("\tbinary subword   = " + subword.substring(0, 2) + " = " + binarySubword);
+       //System.out.println("\tbinary rcon      = " + rcon.substring(0, 2) + " = " + binaryRcon);
+        //System.out.println("\tbinary subword   = " + subword.substring(0, 2) + " = " + binarySubword);
 
         String Xor = "" + xorBinaryStrings(binaryRcon, binarySubword);
 //        for (int i = 0; i < 8; i++) {
@@ -231,7 +235,7 @@ public class AES_David {
 
         subword = binaryToHex(Xor) + tmp.substring(2, 8);
 
-        System.out.println("\tsubword XOR rcon = " + subword);
+        //System.out.println("\tsubword XOR rcon = " + subword);
 
         return subword;
     }
@@ -285,6 +289,11 @@ public class AES_David {
         String[] args = {plaintext};
 
         return main(args);
+    }
+    
+    public String[] keyExpander(String key, int Nk, int Nr, int Nb) {
+        //return keyExpansion("2B7E151628AED2A6ABF7158809CF4F3C", 4, numRounds, numBlocks);
+        return keyExpansion(key, Nk, Nr, Nb);
     }
 
     public String decrypt(String encryptedText) {
