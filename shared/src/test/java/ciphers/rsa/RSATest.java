@@ -12,7 +12,7 @@ public class RSATest extends BaseCipherTest {
     @Test
     @Override
     public void testEncryption() {
-//        testEncryption("plain text", "expected result");
+        testEncryption("ABCDEZabcdez-#%$", "expected result");
     }
 
     @Test
