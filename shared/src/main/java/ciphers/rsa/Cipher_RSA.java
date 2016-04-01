@@ -47,6 +47,7 @@ public class Cipher_RSA extends BaseCipher {
      * The character map.
      */
     private static final Map<Character , Integer> characterMap = new HashMap<Character, Integer>() {{
+        put(' ', 0);
         put('A', 1);
         put('B', 2);
         put('C', 3);
@@ -82,22 +83,28 @@ public class Cipher_RSA extends BaseCipher {
 
         String output = "";
 
-        List<String> blocks = mapTextToBlocks(plaintext);
-
-        if (blocks.size() % 2 != 0) {
-            //Add an empty block at the end.
-            blocks.add("00");
+        if (plaintext.length() % 2 != 0)
+        {
+            plaintext += " ";
         }
 
-        for (int i = 0; i < blocks.size(); i += 2) {
+        for (int i = 0; i < plaintext.length(); i += 2) {
 
-            String block = blocks.get(i) + blocks.get(i+1);
+            char blockChar1 = plaintext.charAt(i);
+            char blockChar2 = plaintext.charAt(i+1);
 
-            int numBlock = 21; //Integer.parseInt(block);
+            int blockNum1 = convertCharToNumber(blockChar1);
+            int blockNum2 = convertCharToNumber(blockChar2);
 
-            int cipher = applyExponentiationBySquaringDivision(numBlock, e, n);
+            String fullBlock = Integer.toString(blockNum1) + Integer.toString(blockNum2);
 
-            int x = 3;
+            long numBlock = Long.parseLong(fullBlock);
+
+            long cipher = applyExponentiationBySquaringDivision(numBlock, e, n);
+
+            long msg = applyExponentiationBySquaringDivision(cipher, d, n);
+
+            output += Long.toString(cipher);
 
         }
 
@@ -124,11 +131,11 @@ public class Cipher_RSA extends BaseCipher {
      * @param n The n number from the equation.
      * @return
      */
-    private int applyExponentiationBySquaringDivision(int num, int exponent, int n) {
+    private long applyExponentiationBySquaringDivision(long num, long exponent, long n) {
 
-        char[] binaryExponentChars = Integer.toBinaryString(exponent).toCharArray();
+        char[] binaryExponentChars = Long.toBinaryString(exponent).toCharArray();
 
-        Integer c = 1;
+        long c = 1;
 
         for (int i = binaryExponentChars.length - 1; i >= 0; i--)
         {
@@ -140,20 +147,6 @@ public class Cipher_RSA extends BaseCipher {
         }
 
         return c;
-    }
-
-    /**
-     * Takes a string and uses it to create a list of blocks, ready for RSA encryption/decryption.
-     * @param plainText The plain text.
-     * @return A list of blocks.
-     */
-    private List<String > mapTextToBlocks(String plainText)
-    {
-        IntStream characters = plainText.chars();
-
-        List<String> numberChars = characters.mapToObj(i -> String.format("%02d",convertCharToNumber(((char) i)))).collect(Collectors.toList());
-
-        return numberChars;
     }
 
     /**
