@@ -21,7 +21,7 @@ public class Cipher_SDES extends BaseCipher {
 
     static String inputWord = "markfrequency";
     static int[] plainText = {1, 0, 1, 1, 1, 1, 0, 1};
-    static int[] key = {1, 0, 1, 0, 0, 0, 0, 0, 1, 0};
+    static int[] key = {1, 1, 1, 1, 0, 1, 1, 0, 0, 0};
     static int[] ip = {2, 6, 3, 1, 4, 8, 5, 7};
     static int[] ep = {4, 1, 2, 3, 2, 3, 4, 1};
     static int[] inverse_ip = {4, 1, 3, 5, 7, 2, 8, 6};
