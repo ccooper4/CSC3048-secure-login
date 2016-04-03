@@ -20,6 +20,7 @@ public class Cipher_SDES extends BaseCipher {
      */
 
     static String inputWord = "markfrequency";
+    static String inputWordInBinary = "01101101011000010111001001101011011001100111001001100101011100010111010101100101011011100110001101111001"; //temp for testing
     static int[] plainText = {1, 0, 1, 1, 1, 1, 0, 1};
     static int[] key = {1, 1, 1, 1, 0, 1, 1, 0, 0, 0};
     static int[] ip = {2, 6, 3, 1, 4, 8, 5, 7};
