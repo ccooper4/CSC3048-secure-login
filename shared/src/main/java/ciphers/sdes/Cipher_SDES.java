@@ -4,25 +4,9 @@ import java.util.Arrays;
 
 public class Cipher_SDES extends BaseCipher {
 
-    //Temp implementation notes
-    /*
-    overview
-    IP > fk > SW > fk > EP-1
-
-    plain text string 8bits
-    10 bit key
-    k1 and k2 generated using functions shift and p10 and p8
-
-    keygen
-    P10(k)
-    Shiftp10(k)
-    k1= p8(shift(p10(k)))
-     */
-
-    static String inputWord = "markfrequency";
-    static String inputWordInBinary = "01101101011000010111001001101011011001100111001001100101011100010111010101100101011011100110001101111001"; //temp for testing
-    static int[] plainText = {1, 0, 1, 1, 1, 1, 0, 1};
-    static int[] key = {1, 1, 1, 1, 0, 1, 1, 0, 0, 0};
+    static int[] plainText = {1,1,0,0,1,0,0,1};
+    static int[] cipherText = {1,0,0,0,1,1,1,1};
+    static int[] key = {1,1,1,1,1,1,1,1,1,0};
     static int[] ip = {2, 6, 3, 1, 4, 8, 5, 7};
     static int[] ep = {4, 1, 2, 3, 2, 3, 4, 1};
     static int[] inverse_ip = {4, 1, 3, 5, 7, 2, 8, 6};
@@ -32,57 +16,81 @@ public class Cipher_SDES extends BaseCipher {
 
 
     static int[][] sBox1 = {  {1, 0, 3, 2},
-                              {3, 2, 1, 0},
-                              {0, 2, 1, 3},
-                              {3, 1, 3, 2} };
+            {3, 2, 1, 0},
+            {0, 2, 1, 3},
+            {3, 1, 3, 2} };
 
     static int[][] sBox2 = {  {0, 1, 2, 3},
-                              {2, 0, 1, 3},
-                              {3, 0, 1, 0},
-                              {2, 1, 0, 3} };
+            {2, 0, 1, 3},
+            {3, 0, 1, 0},
+            {2, 1, 0, 3} };
 
     static int[] temp10 = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-    static int[] temp8_1 = { -1, -1, -1, -1, -1, -1, -1, -1 };
-    static int[] temp8_2 = { -1, -1, -1, -1, -1, -1, -1, -1 };
-    static int[] temp4_1 = { -1, -1, -1, -1 };
-    static int[] temp4_2 = { -1, -1, -1, -1 };
-
+    static int[] p4Result = { -1, -1, -1, -1 };
+    static int[] f1Result = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+    static int[] f2Result = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
     static int[] k1 = { -1, -1, -1, -1, -1, -1, -1, -1 };
     static int[] k2 = { -1, -1, -1, -1, -1, -1, -1, -1 };
     static int[] IPP = { -1, -1, -1, -1, -1, -1, -1, -1 };
-
     static int[] left_nibble = {-1, -1, -1, -1};
     static int[] right_nibble = {-1, -1, -1, -1};
 
-    @Override
+    /**
+     * Encryption method
+     * @param notUsed
+     * @return
+     */
     public String encrypt(String notUsed) {
         System.out.println("\tPlaintext  = " + Arrays.toString(plainText));
 
         keyGeneration();
         initialPermutation();
-        kFunction();
-        functionFK();
-        functionFK1();
-        functionFK2();
+        f1Result = kFunction(k1);
+        f1Result = f1(f1Result);
+        //swap module stage
+        System.arraycopy(f1Result, 0, right_nibble, 0, f1Result.length / 2);
+        System.arraycopy(f1Result, 4, left_nibble, 0, f1Result.length / 2);
 
-        System.out.println("\tCiphertext = " + Arrays.toString(temp8_1));
-        return Arrays.toString(temp8_1);
+        for (int i = 4; i < IPP.length; i++) {
+            IPP[i] = right_nibble[i-4]; //+4 to give us right most half
+        }
+
+        f2Result = kFunction(k2);
+        f2Result = f2(f2Result);
+        f2Result = inversePermutation(f2Result);
+
+        System.out.println("\tCiphertext = " + Arrays.toString(f2Result));
+        return Arrays.toString(f2Result);
     }
 
-    @Override
-    public String decrypt(String notUsed) {
-        return "notImplemented";
+    /**
+     * Decryption method
+     * @param cText
+     * @return
+     */
+    public String decrypt(String cText) {
+        applyPermutation(cipherText, ip, IPP);
+        keyGeneration();
+        f2Result = kFunction(k2);
+        f2Result = f1(f2Result);
+        System.arraycopy(f2Result, 0, right_nibble, 0, f2Result.length / 2);
+        System.arraycopy(f2Result, 4, left_nibble, 0, f2Result.length / 2);
+
+        for (int i = 4; i < IPP.length; i++) {
+            IPP[i] = right_nibble[i-4]; //+4 to give us right most half
+        }
+        f1Result = kFunction(k1);
+        f1Result = f2(f1Result);
+        f1Result = inversePermutation(f1Result);
+
+        System.out.println("\tDecrypted = " + Arrays.toString(f1Result));
+        return Arrays.toString(f1Result);
     }
 
-
-    public String stringToAscii(String word){
-        return "";
-    }
-
-    //step 1
-    public static void keyGeneration(){
-        //step one generate keys k1, k2
-        //k1
+    /**
+     * Method to generation k1 & k2
+     */
+    private void keyGeneration(){
         //take key and apply p10 permutation, store in temp10
         applyPermutation(key, p10, temp10);
 
@@ -105,246 +113,152 @@ public class Cipher_SDES extends BaseCipher {
         applyPermutation(temp10, p8, k2);
     }
 
-    //step 2
-    public static void initialPermutation(){
-        //Do initial permutation with plaintext and ip, store in IPP
+    /**
+     * The initial Permutation
+     */
+    private void initialPermutation(){
         applyPermutation(plainText, ip, IPP);
+        System.out.println("IP: " + Arrays.toString(IPP));
     }
 
-    //step 3
-    public static void kFunction(){
-        //Do function k
-        for (int i = 0; i < temp4_1.length; i++) {
-            temp4_1[i] = IPP[i + 4];
+    /**
+     * Method for k function for both rounds
+     * @param key
+     * @return
+     */
+    private int[] kFunction(int[] key){
+        int[] rightIPP = new int[4];
+        int[] temp1 = new int[8];
+        int[] temp2 = new int[8];
+        int[] sboxCombined = new int[4];
+
+        for (int i = 0; i < rightIPP.length; i++) {
+            rightIPP[i] = IPP[i + 4]; //+4 to give us right most half
         }
 
-        //apply ep to right nibble, stroe in temp8_1
-        applyPermutation(temp4_1, ep, temp8_1);
+        //apply ep to right nibble, store in temp1 *only right most half*
+        applyPermutation(rightIPP, ep, temp1);
+        System.out.println("EP: " + Arrays.toString(temp1));
 
-        //XOR with k1
-        XOR(temp8_1, k1, temp8_1);
+        //XOR with key
+        XOR(temp1, key, temp1);
+        System.out.println("XOR with key: " + Arrays.toString(temp1));
 
-        //duplicate temp8_1 into temp8_2
-        System.arraycopy(temp8_1, 0, temp8_2, 0, temp8_1.length);
+        System.arraycopy(temp1, 4, temp2, 0, temp1.length / 2);
+        int sbox1 = getSboxValues(sBox1,temp1);
+        int sbox2 = getSboxValues(sBox2, temp2);
 
-        //Row (1,4)
-        rowColumnNibbles(temp8_1, 0, 3);
+        String sboxBinary = String.format("%2s", Integer.toBinaryString(sbox1)).replace(' ', '0');
+        sboxBinary += String.format("%2s", Integer.toBinaryString(sbox2)).replace(' ', '0');
 
-        //Col (2,3)
-        rowColumnNibbles(temp8_2, 1, 2);
+        System.out.println(sboxBinary);
 
-        //get sbox numbers
-        getSboxNumbers();
+        //combine the sbox values into array
+        int count = 0;
+        for (char ch: sboxBinary.toCharArray()) {
+            sboxCombined[count] = Integer.parseInt(Character.toString(ch));
+            count++;
+        }
 
-        decimalToBinary(temp8_1, 2, 3);
-        decimalToBinary(temp8_1, 6, 7);
-
-        combineSboxNumbers(temp8_1);
-
-        //take temp4(sboxes) and apply p4 permutation
-        applyPermutation(temp4_1, p4, temp4_1);
+        //take result from sboxes and apply p4 permutation
+        applyPermutation(sboxCombined, p4, p4Result);
+        System.arraycopy(p4Result, 0, sboxCombined, 0, p4Result.length);
+        System.out.println("P4: " + Arrays.toString(p4Result));
+        return sboxCombined;
     }
 
-    //step 4
-    public static void functionFK(){
-        for (int i = 0; i < temp4_1.length; i++) {
-            temp4_1[i] = IPP[i + 4];
+    /**
+     * Second part of round 1
+     * @param sboxCombined
+     * @return
+     */
+    private int[] f1(int[] sboxCombined){
+        for (int i = 0; i < sboxCombined.length; i++) {
+            sboxCombined[i] = (sboxCombined[i] ^ IPP[i]); //left half of initial permutation and XOR with p4result
         }
-    }
 
-    //step 5
-    public static void functionFK1(){
-        for (int i = 0; i < temp4_1.length; i++) {
-            temp4_1[i] = (temp4_1[i] ^ IPP[i]);
-        }
+        int[] temp = new int [4];
         for (int i = 4; i < IPP.length; i++) {
-            temp4_2[i - 4] = IPP[i];
+            temp[i - 4] = IPP[i]; //take right half of initial permutation
         }
 
-        //swap module stage
-        System.arraycopy(temp4_1, 0, right_nibble, 0, temp4_1.length);
-        System.arraycopy(temp4_2, 0, left_nibble, 0, temp4_1.length);
-        System.arraycopy(temp4_2, 0, temp4_1, 0, temp4_1.length);
+        int [] result = new int[8];
+        System.arraycopy(sboxCombined, 0, result, 0, sboxCombined.length);
+        System.arraycopy(temp, 0, result, 4, temp.length);
 
-        applyPermutation(temp4_1, ep, temp8_1);
-        XOR(temp8_1, k2, temp8_1);
-        System.arraycopy(temp8_1, 0, temp8_2, 0, temp8_1.length);
-
-        if (temp8_1[0] + temp8_1[3] == 2) {
-            temp8_1[0] = 11;
-            temp8_1[1] = 3;
-        } else if (temp8_1[0] + temp8_1[3] == 0) {
-            temp8_1[0] = 00;
-            temp8_1[1] = 0;
-        } else if (temp8_1[0] == 1) {
-            temp8_1[0] = 10;
-            temp8_1[1] = 2;
-        } else {
-            temp8_1[0] = 01;
-            temp8_1[1] = 1;
-        }
-
-        temp8_1[2] = -1;
-        temp8_1[3] = -1;
-
-        if (temp8_1[4] + temp8_1[7] == 2) {
-            temp8_1[4] = 11;
-            temp8_1[5] = 3;
-        } else if (temp8_1[4] + temp8_1[7] == 0) {
-            temp8_1[4] = 00;
-            temp8_1[5] = 0;
-        } else if (temp8_1[4] == 1) {
-            temp8_1[4] = 10;
-            temp8_1[5] = 2;
-        } else {
-            temp8_1[4] = 01;
-            temp8_1[5] = 1;
-        }
-        temp8_1[6] = -1;
-        temp8_1[7] = -1;
-
-        if (temp8_2[1] + temp8_2[2] == 2) {
-            temp8_2[0] = 11;
-            temp8_2[1] = 3;
-        } else if (temp8_2[1] + temp8_2[2] == 0) {
-            temp8_2[0] = 00;
-            temp8_2[1] = 0;
-        } else if (temp8_2[1] == 1) {
-            temp8_2[0] = 10;
-            temp8_2[1] = 2;
-        } else {
-            temp8_2[0] = 01;
-            temp8_2[1] = 1;
-        }
-
-        temp8_2[2] = -1;
-        temp8_2[3] = -1;
-
-        if (temp8_2[5] + temp8_2[6] == 2) {
-            temp8_2[4] = 11;
-            temp8_2[5] = 3;
-        } else if (temp8_2[5] + temp8_2[6] == 0) {
-            temp8_2[4] = 00;
-            temp8_2[5] = 0;
-        } else if (temp8_2[5] == 1) {
-            temp8_2[4] = 10;
-            temp8_2[5] = 2;
-        } else {
-            temp8_2[4] = 01;
-            temp8_2[5] = 1;
-        }
-        temp8_2[6] = -1;
-        temp8_2[0] = -1;
-
-        temp8_1[2] = sBox1[temp8_1[1]][temp8_2[1]];
-        temp8_1[6] = sBox2[temp8_1[5]][temp8_2[5]];
-
-        binaryToDecimal(temp8_1, 2);
-        binaryToDecimal(temp8_1, 6);
-
-        switch (temp8_1[3]) {
-            case 11:
-                temp4_1[0] = 1;
-                temp4_1[1] = 1;
-                break;
-            case 10:
-                temp4_1[0] = 1;
-                temp4_1[1] = 0;
-                break;
-            case 1:
-                temp4_1[0] = 0;
-                temp4_1[1] = 1;
-                break;
-            default:
-                temp4_1[0] = 0;
-                temp4_1[1] = 0;
-                break;
-        }
-
-        switch (temp8_1[7]) {
-            case 11:
-                temp4_1[2] = 1;
-                temp4_1[3] = 1;
-                break;
-            case 10:
-                temp4_1[2] = 1;
-                temp4_1[3] = 0;
-                break;
-            case 1:
-                temp4_1[2] = 0;
-                temp4_1[3] = 1;
-                break;
-            default:
-                temp4_1[2] = 0;
-                temp4_1[3] = 0;
-                break;
-        }
-
-        //take temp4(sboxes) and apply p4 permutation
-        applyPermutation(temp4_1, p4, temp4_1);
+        return result;
     }
 
-    public static void functionFK2(){
-        for (int i = 0; i < left_nibble.length; i++) {
-            left_nibble[i] = (left_nibble[i] ^ temp4_1[i]);
+    /**
+     * Second part of round 2
+     * @param sboxCombined
+     * @return
+     */
+    private int[] f2(int[] sboxCombined){
+        for (int i = 0; i < sboxCombined.length; i++) {
+            sboxCombined[i] = (sboxCombined[i] ^ left_nibble[i]); //left half of initial permutation and XOR with p4result
         }
 
-        for (int i = 0; i < left_nibble.length; i++) {
-            temp8_1[i] = left_nibble[i];
-        }
-        for (int i = 0; i < right_nibble.length; i++) {
-            temp8_1[i + 4] = right_nibble[i];
-        }
-        System.arraycopy(temp8_1, 0, temp8_2, 0, temp8_1.length);
+        int[] combinedHalves = new int[8];
+        System.arraycopy(sboxCombined, 0, combinedHalves, 0, sboxCombined.length);
+        System.arraycopy(right_nibble, 0, combinedHalves, 4, right_nibble.length); //combine the XOR of above and right nibble from earlier
+
+        //Now inverse permutation of the combined halves
+        return combinedHalves;
     }
 
-    public static String inversePermutation(){
-        applyPermutation(temp8_2, inverse_ip, temp8_1);
-        return Arrays.toString(temp8_1);
+    /**
+     * Method to get the sbox values in the given row and column
+     * @param sBox
+     * @param rolCol
+     * @return
+     */
+    private int getSboxValues(int[][] sBox, int[] rolCol){
+        //First get sbox row
+        String row = Integer.toString(rolCol[0]);
+        row += Integer.toString(rolCol[3]);
+
+        //Then get sbox column
+        String col = Integer.toString(rolCol[1]);
+        col += Integer.toString(rolCol[2]);
+
+        int sboxCol = Integer.parseInt(col, 2);
+        int sboxRow = Integer.parseInt(row, 2);
+        return sBox[sboxRow][sboxCol];
     }
 
-
-    public static void binaryToDecimal(int[] array, int pos) {
-        switch (array[pos]) {
-            case 3:
-                array[pos + 1] = 11;
-                break;
-            case 2:
-                array[pos + 1] = 10;
-                break;
-            case 1:
-                array[pos + 1] = 1;
-                break;
-            default:
-                array[pos + 1] = 0;
-                break;
-        }
+    /**
+     * Method to apply the inverse permutation
+     * @param array
+     * @return
+     */
+    private int [] inversePermutation(int[] array){
+        int[] destArray = new int[8];
+        applyPermutation(array, inverse_ip, destArray);
+        System.out.println("IP: " + Arrays.toString(destArray));
+        return destArray;
     }
 
-    public static void decimalToBinary(int[] array, int srcPos, int destPos) {
-        switch (array[srcPos]) {
-            case 3:
-                array[destPos] = 11;
-                break;
-            case 2:
-                array[destPos] = 10;
-                break;
-            case 1:
-                array[destPos] = 1;
-                break;
-            default:
-                array[destPos] = 0;
-                break;
-        }
-    }
-
-    public static void applyPermutation(int[] source, int[] permutation, int[] destination) {
+    /**
+     * Method to apply a give permutation
+     * @param source
+     * @param permutation
+     * @param destination
+     */
+    private void applyPermutation(int[] source, int[] permutation, int[] destination) {
         for (int i = 0; i < permutation.length; i++) {
             destination[i] = source[permutation[i] - 1];
         }
     }
 
-    public static void shiftArrayElementsLeft(int[] array, int startElement, int numElement, int shiftLeftAmount) {
+    /**
+     * Method to shift array elements left
+     * @param array
+     * @param startElement
+     * @param numElement
+     * @param shiftLeftAmount
+     */
+    private void shiftArrayElementsLeft(int[] array, int startElement, int numElement, int shiftLeftAmount) {
         int[] arrayCopy = new int[array.length];
         System.arraycopy(array, 0, arrayCopy, 0, array.length);
 
@@ -353,87 +267,18 @@ public class Cipher_SDES extends BaseCipher {
         }
     }
 
-    public static void rowColumnNibbles(int[] array, int ele1, int ele2) {
-        if (array[ele1] + array[ele2] == 2) {
-            array[0] = 11;
-            array[1] = 3;
-        } else if (array[ele1] + array[ele2] == 0) {
-            array[0] = 00;
-            array[1] = 0;
-        } else if (array[ele1] == 1) {
-            array[0] = 10;
-            array[1] = 2;
-        } else {
-            array[0] = 01;
-            array[1] = 1;
-        }
-        ele1 = ele1 + 4;
-        ele2 = ele2 + 4;
-
-        if (array[ele1] + array[ele2] == 2) {
-            array[4] = 11;
-            array[5] = 3;
-        } else if (array[ele1] + array[ele2] == 0) {
-            array[4] = 00;
-            array[5] = 0;
-        } else if (array[ele1] == 1) {
-            array[4] = 10;
-            array[5] = 2;
-        } else {
-            array[4] = 01;
-            array[5] = 1;
-        }
-    }
-
-    public static void getSboxNumbers() {
-        temp8_1[2] = sBox1[temp8_1[1]][temp8_2[1]];
-        temp8_1[6] = sBox2[temp8_1[5]][temp8_2[5]];
-    }
-
-    public static void combineSboxNumbers(int[] array) {
-        switch (array[3]) {
-            case 11:
-                temp4_1[0] = 1;
-                temp4_1[1] = 1;
-                break;
-            case 10:
-                temp4_1[0] = 1;
-                temp4_1[1] = 0;
-                break;
-            case 1:
-                temp4_1[0] = 0;
-                temp4_1[1] = 1;
-                break;
-            default:
-                temp4_1[0] = 0;
-                temp4_1[1] = 0;
-                break;
-        }
-
-        switch (array[7]) {
-            case 11:
-                temp4_1[2] = 1;
-                temp4_1[3] = 1;
-                break;
-            case 10:
-                temp4_1[2] = 1;
-                temp4_1[3] = 0;
-                break;
-            case 1:
-                temp4_1[2] = 0;
-                temp4_1[3] = 1;
-                break;
-            default:
-                temp4_1[2] = 0;
-                temp4_1[3] = 0;
-                break;
-        }
-    }
-
-    public static void XOR(int[] input1, int[] input2, int[] destination) {
+    /**
+     * Method to perform XOR
+     * @param input1
+     * @param input2
+     * @param destination
+     * @return
+     */
+    private int[] XOR(int[] input1, int[] input2, int[] destination) {
         for (int i = 0; i < input1.length; i++) {
             destination[i] = (input1[i] ^ input2[i]);
         }
+        return destination;
     }
 
 }
