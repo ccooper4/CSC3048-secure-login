@@ -1,23 +1,40 @@
 package ciphers.sdes;
 
 import ciphers.BaseCipherTest;
+import org.junit.Assert;
 import org.junit.Test;
 
-public class SDESTest extends BaseCipherTest {
+import java.util.ArrayList;
+
+public class SDESTest {
+    Cipher_SDES cipher;
+    ArrayList<int[]> expected;
+    ArrayList<int[]> actualResult;
 
     public SDESTest() {
         cipher = new Cipher_SDES();
     }
 
     @Test
-    @Override
     public void testEncryption() {
-//        testEncryption("plain text", "expected result");
+        setup();
+        actualResult = cipher.encryptWord("wait");
+
+        for(int i = 0; i < expected.size(); i++){
+            Assert.assertArrayEquals(expected.get(i), actualResult.get(i));
+        }
     }
 
     @Test
-    @Override
     public void testDecryption() {
 //        testDecryption("cipher text", "expected result");
+    }
+
+    public void setup(){
+        expected = new ArrayList<>();
+        expected.add(new int[]{1,0,1,0,0,1,1,0});
+        expected.add(new int[]{1,0,0,1,1,1,0,1});
+        expected.add(new int[]{1,1,0,0,0,1,1,1});
+        expected.add(new int[]{1,0,0,0,1,1,1,0});
     }
 }

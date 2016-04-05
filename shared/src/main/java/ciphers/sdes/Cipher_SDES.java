@@ -1,11 +1,10 @@
 package ciphers.sdes;
-import ciphers.BaseCipher;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Cipher_SDES extends BaseCipher {
+public class Cipher_SDES{
 
     static int[] plainText = {1,1,0,0,1,0,0,1};
     static int[] cipherText = {1,0,0,0,1,1,1,1};
@@ -85,7 +84,6 @@ public class Cipher_SDES extends BaseCipher {
         return f2Result;
     }
 
-    @Override
     public String encrypt(String plaintext) {
         return null;
     }
