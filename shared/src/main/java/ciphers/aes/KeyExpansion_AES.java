@@ -1,12 +1,10 @@
 package ciphers.aes;
 
-import java.util.Arrays;
-
 /**
  *
- * @author Dave
+ * @author David
  */
-public class AES_David {
+public class KeyExpansion_AES {
 
     static String plainText = null;
 
@@ -39,6 +37,51 @@ public class AES_David {
     {"8c", "a1", "89", "0d", "bf", "e6", "42", "68", "41", "99", "2d", "0f", "b0", "54", "bb", "16"}
     };
 
+    static String[][] w_final = {{"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""}};
+
     public static String main(String[] args) {
         plainText = args[0];
 
@@ -54,9 +97,9 @@ public class AES_David {
         System.out.println("Ending AES_David");
 
         return "ChangeMe";
-    }
+    } 
 
-    public static String[] keyExpansion(String key, int Nk, int Nr, int Nb) {
+    public static String[][] keyExpansion(String key, int Nk, int Nr, int Nb) {
         String w[] = new String[44];
         String temp = "";
 
@@ -93,7 +136,24 @@ public class AES_David {
 
         }
 
-        return w;
+        int count = 0;
+        for (String w1 : w) {
+            
+            String tmp[] = new String[4];
+            
+            tmp[0] = w1.substring(0, 2);
+            tmp[1] = w1.substring(2, 4);
+            tmp[2] = w1.substring(4, 6);
+            tmp[3] = w1.substring(6, 8);
+                    
+            
+            w_final[count] = tmp.clone();
+            
+            count++;
+        }
+
+        //return w;
+        return w_final;
 
     }
 
