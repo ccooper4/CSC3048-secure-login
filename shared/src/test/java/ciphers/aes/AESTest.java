@@ -1,7 +1,6 @@
 package ciphers.aes;
 
 import ciphers.BaseCipherTest;
-import java.util.Arrays;
 import org.junit.Test;
 
 public class AESTest extends BaseCipherTest {
@@ -34,12 +33,10 @@ public class AESTest extends BaseCipherTest {
     
     @Test
     public void testKeyExpansion() {
-        
-        //keyExpansion("2B7E151628AED2A6ABF7158809CF4F3C", 4, numRounds, numBlocks);
-        
-        String[][] res = KeyExpansion_AES.keyExpansion("2B7E151628AED2A6ABF7158809CF4F3C", 4, 10, 4);
-        
-        System.out.println(Arrays.deepToString(res));
-        
+        KeyExpansion_AES keyExpansion_aes = new KeyExpansion_AES();
+
+//        String[][] expandedKeys = keyExpansion_aes.keyExpansion("2B7E1516 28AED2A6 ABF71588 09CF4F3C", 4, 10, 4);
+
+//        System.out.println(Arrays.deepToString(expandedKeys));
     }
 }
