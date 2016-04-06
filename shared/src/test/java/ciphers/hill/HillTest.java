@@ -11,19 +11,19 @@ public class HillTest extends BaseCipherTest {
 
     @Test
     public void testEncryption() {
-//        
-//        Hill_David testEncryptionObj = new Hill_David();
-//        
-//        String plainText  = "pay more money";
-//        String cipherText = "lns hdle wmtrw";
-//        
-//        String res = testEncryptionObj.encrypt(plainText);
-//        
-//        Assert.assertTrue(res.equals(cipherText));
-//        
-//        System.out.println("Input of  : " + plainText);
-//        System.out.println("should result in");
-//        System.out.println("Output of : " + cipherText);
+        
+        Hill_David testEncryptionObj = new Hill_David();
+        
+        String plainText  = "pay more money";
+        String cipherText = "lns hdle wmtrw";
+        
+        String res = testEncryptionObj.encrypt(plainText);
+        
+        Assert.assertTrue(res.equals(cipherText));
+        
+        System.out.println("Input of  : " + plainText);
+        System.out.println("should result in");
+        System.out.println("Output of : " + cipherText);
     }
 
     @Test

@@ -3,10 +3,8 @@ package ciphers.hill;
 import ciphers.BaseCipher;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.apache.commons.math3.*;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 
 /**
@@ -18,26 +16,26 @@ public class Hill_David extends BaseCipher {
         //uses default key
     }
     
-    public Hill_David(double[][] key) {
+    public Hill_David(int[][] key) {
         setKey(key);
     }
 
-    public static void setKey(double[][] key) {
+    public static void setKey(int[][] key) {
         Hill_David.key = key;
     }   
     
     private static int matrixDimension = 3;
 
-    private static double[][] key = {
+    private static int[][] key = {
         {17, 17, 05},
         {21, 18, 21},
         {02, 02, 19}
     };
     
-    private static double[][] keyInverse = {
-        {0, 0, 0},
-        {0, 0, 0},
-        {0, 0, 0}
+    private static int[][] keyInverse = {
+        {4, 9, 15},
+        {15, 17, 6},
+        {24, 0, 17}
     };
 
     private static int blockPos = 0;
@@ -50,15 +48,8 @@ public class Hill_David extends BaseCipher {
     public String decrypt(String cipherText) {
         
         ArrayList<Integer> spacePositions = new ArrayList<>();
-        
-        RealMatrix m = new Array2DRowRealMatrix(key, false);
-        
-        RealMatrix keyInverseMatrix = new LUDecomposition(m).getSolver().getInverse();
-        
-        System.out.println("key = " + Arrays.deepToString(key));
-        //System.out.println("realmatrix = " + m.toString());
-        //System.out.println("inverse = " + keyInverseMatrix.toString());
-        keyInverse = keyInverseMatrix.getData();
+                
+        keyInverse = ciphers.MatrixOperations.inverse(key);
         System.out.println("keyInverse = " + Arrays.deepToString(keyInverse));        
                 
         System.out.println("\nStarting decrypt BennyHill_David");
@@ -95,6 +86,7 @@ public class Hill_David extends BaseCipher {
                     }
                     //mod the total
                     blockSum[vert] = blockSum[vert] % 26;
+                    System.out.print(digitToChar(blockSum[vert]));
                 }
 
                 //convert the modded digit to a char and add to plainText
