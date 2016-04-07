@@ -31,7 +31,7 @@ public class Cipher_RSA extends BaseCipher {
     /**
      * The value of E.
      */
-    private int e = 7;
+    private int e;
 
     /**
      * The value of N.
@@ -87,6 +87,8 @@ public class Cipher_RSA extends BaseCipher {
         {
             plaintext += " ";
         }
+
+        e = calculateEFromEuclidGcd(d, w);
 
         for (int i = 0; i < plaintext.length(); i += 2) {
 
@@ -182,6 +184,41 @@ public class Cipher_RSA extends BaseCipher {
 
         //Otherwise, map back via ASCII
         return (char)individualCharacter;
+    }
+
+    /**
+     * Returns the GCD of 2 numbers, as calculated via Euclid's algorithm.
+     * @param a The first number.
+     * @param b The second number.
+     * @return The greatest common divider of A and B.
+     */
+    private int calculateEFromEuclidGcd(int a, int b) {
+
+        int prevAi = 1;
+        int ai = 0;
+
+        int prevBi = 0;
+        int bi = 1;
+
+        while (b != 0)
+        {
+            int remainder = a % b;
+            int quotient = Math.floorDiv(a,b);
+
+            int newAi = prevAi - quotient * ai;
+            int newBi = prevBi - quotient * bi;
+
+            prevAi = ai;
+            ai = newAi;
+            prevBi = bi;
+            bi = newBi;
+
+            a = b;
+            b = remainder;
+        }
+
+        return prevAi;
+
     }
 
     //endregion
