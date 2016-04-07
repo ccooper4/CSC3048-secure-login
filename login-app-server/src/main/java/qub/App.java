@@ -67,12 +67,8 @@ public class App extends Application implements CommandLineRunner {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Scene scene = new Scene(new StackPane());
 
-        LoginManager loginManager = new LoginManager(scene);
-        loginManager.showLoginScreen();
 
-        stage.setScene(scene);
-        stage.show();
+
     }
 }
