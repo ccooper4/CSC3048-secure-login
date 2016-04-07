@@ -2,7 +2,6 @@ package ciphers.aes;
 
 import ciphers.BaseCipher;
 import ciphers.CipherUtils;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Cipher_AES extends BaseCipher {
@@ -35,7 +34,7 @@ public class Cipher_AES extends BaseCipher {
 
 
     // S-Box used for sub bytes
-    private final String S_BOX[][] = {  {"63", "7c", "77", "7b", "f2", "6b", "6f", "c5", "30", "01", "67", "2b", "fe", "d7", "ab", "76"},
+    public static final String S_BOX[][] = {  {"63", "7c", "77", "7b", "f2", "6b", "6f", "c5", "30", "01", "67", "2b", "fe", "d7", "ab", "76"},
                                         {"ca", "82", "c9", "7d", "fa", "59", "47", "f0", "ad", "d4", "a2", "af", "9c", "a4", "72", "c0"},
                                         {"b7", "fd", "93", "26", "36", "3f", "f7", "cc", "34", "a5", "e5", "f1", "71", "d8", "31", "15"},
                                         {"04", "c7", "23", "c3", "18", "96", "05", "9a", "07", "12", "80", "e2", "eb", "27", "b2", "75"},
@@ -344,7 +343,7 @@ public class Cipher_AES extends BaseCipher {
     private class RoundKeyGenerator {
 
         private int numRounds;
-        private List<String[][]> roundKeys;
+        private List<String[][]> roundKeys; // 4x4 arrays in list - 11 of these
         private String[][] initialKey;
 
         /**
@@ -376,8 +375,7 @@ public class Cipher_AES extends BaseCipher {
          * Calculate the number of rounds to perform based on the set encryption key.
          */
         private int calculateNumRounds() {
-            // TODO: Use key to calculate round count
-            return 10;
+            return 10; // TODO: Use key to calculate round count
         }
 
         /**
@@ -386,15 +384,8 @@ public class Cipher_AES extends BaseCipher {
          */
         private List<String[][]> performKeyExpansion() {
             numRounds = calculateNumRounds();
-
-            List<String[][]> keys = new ArrayList<>();
-
-            for (int i = 0; i < numRounds + 1; i++) {
-                keys.add(initialKey);   // TODO: Just use the initial key for now,
-                                        // TODO: replace with actual round key.
-            }
-
-            return keys;
+            KeyExpansion_AES keyExpansion_aes = new KeyExpansion_AES();
+            return keyExpansion_aes.keyExpansion(initialKey, 4, numRounds, 4);
         }
     }
 }

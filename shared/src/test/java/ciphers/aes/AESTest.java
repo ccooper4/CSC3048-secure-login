@@ -30,4 +30,13 @@ public class AESTest extends BaseCipherTest {
     public void testDecryption() {
 //        testDecryption("cipher text", "expected result");
     }
+    
+    @Test
+    public void testKeyExpansion() {
+        KeyExpansion_AES keyExpansion_aes = new KeyExpansion_AES();
+
+//        String[][] expandedKeys = keyExpansion_aes.keyExpansion("2B7E1516 28AED2A6 ABF71588 09CF4F3C", 4, 10, 4);
+
+//        System.out.println(Arrays.deepToString(expandedKeys));
+    }
 }
