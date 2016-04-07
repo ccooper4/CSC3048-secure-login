@@ -3,10 +3,11 @@ package ciphers;
 import java.math.*;
 
 public class ModMatrix {
+
     private int nrows;
     private int ncols;
     private BigInteger[][] data;
-    private final BigInteger mod= new BigInteger("26");
+    private final BigInteger mod = new BigInteger("26");
 
     public ModMatrix(BigInteger[][] dat) {
         this.data = dat;
@@ -67,7 +68,7 @@ public class ModMatrix {
         return transposedMatrix;
     }
 
-    // All operations are using Big Integers... Not Modular of anything
+    // All operations are using Big Integers
     public static BigInteger determinant(ModMatrix matrix) {
 
         if (matrix.size() == 1) {
@@ -77,7 +78,7 @@ public class ModMatrix {
             //return (matrix.getValueAt(0, 0) * matrix.getValueAt(1, 1)) - (matrix.getValueAt(0, 1) * matrix.getValueAt(1, 0));
             return (matrix.getValueAt(0, 0).multiply(matrix.getValueAt(1, 1))).subtract((matrix.getValueAt(0, 1).multiply(matrix.getValueAt(1, 0))));
         }
-        BigInteger sum = new BigInteger("0"); 
+        BigInteger sum = new BigInteger("0");
         for (int i = 0; i < matrix.getNcols(); i++) {
             sum = sum.add(changeSign(i).multiply(matrix.getValueAt(0, i).multiply(determinant(createSubMatrix(matrix, 0, i)))));
         }
@@ -86,7 +87,7 @@ public class ModMatrix {
 
     private static BigInteger changeSign(int i) {
         if (i % 2 == 0) {
-            return new BigInteger("1"); 
+            return new BigInteger("1");
         } else {
             return new BigInteger("-1");
         }
@@ -130,9 +131,11 @@ public class ModMatrix {
         BigInteger inv = d.modInverse(mod);
         for (int i = 0; i < nrows; i++) {
             for (int j = 0; j < ncols; j++) {
-                data[i][j] = (data[i][j].multiply(inv)).mod(mod); 
+                data[i][j] = (data[i][j].multiply(inv)).mod(mod);
             }
         }
         return this;
     }
 }
+
+//Source github.com/PraAnj/Modular-Matrix-Inverse-Java

@@ -17,12 +17,6 @@ public class MatrixOperations {
 
         ModMatrix obj2 = new ModMatrix(keyInverse);
         ModMatrix inverse2 = obj2.inverse(obj2);
-        //        for (int i = 0; i < inverse2.getNrows(); i++) {
-        //            for (int j = 0; j < inverse2.getNcols(); j++) {
-        //                    System.out.print(inverse2.getData()[i][j]+" ");
-        //            }
-        //            System.out.println("");
-        //        }
 
         keyInverse = inverse2.getData();
 
@@ -37,3 +31,5 @@ public class MatrixOperations {
     }
 
 }
+
+//Source github.com/PraAnj/Modular-Matrix-Inverse-Java

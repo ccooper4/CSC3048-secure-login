@@ -6,9 +6,16 @@ public class KeyExpansion_AES {
 
     private static int rotatePermutation[] = {2, 3, 4, 1};
 
-    public List<String[][]> keyExpansion(String[][] originalKey, int NK, int Nr, int Nb) {
+    public List<String[][]> keyExpansion(String[][] originalKey, int Nk, int Nr, int Nb) {
         String parsedString = ""; // TODO Make the array a string
-        return keyExpansion(parsedString, NK, Nr, Nb);
+
+        for (String[] strings : originalKey) {
+            for (String string : strings) {
+                parsedString += string;
+            }
+        }
+
+        return keyExpansion(parsedString, Nk, Nr, Nb);
     }
 
     private List<String[][]> keyExpansion(String key, int Nk, int Nr, int Nb) {
@@ -65,9 +72,22 @@ public class KeyExpansion_AES {
 
             count++;
         }
+        
+        String[][] tmp = new String[4][4];
+        List<String[][]> res = null;
+        
+        for (int j = 0; j < Nr + 1; j++) {
+            for (int k = 0; k < Nk; k++) {
+                tmp[k][0] = w_final[(Nr * 4) + k][0];
+                tmp[k][1] = w_final[(Nr * 4) + k][1];
+                tmp[k][2] = w_final[(Nr * 4) + k][2];
+                tmp[k][3] = w_final[(Nr * 4) + k][3];
+            }
+            res.add(tmp);
+        }
 
-        //return w;
-        return null; // TODO: return the list of round keys
+        //return w_final;
+        return res; 
 
     }
 
