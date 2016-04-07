@@ -2,19 +2,11 @@ package ciphers.hill;
 
 import ciphers.BaseCipher;
 import java.util.ArrayList;
-import java.util.Arrays;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.RealMatrix;
 
 /**
- * @author Dave
+ * @author David
  */
 public class Hill_David extends BaseCipher {
-
-    public Hill_David() {
-        //uses default key
-    }
     
     public Hill_David(int[][] key) {
         setKey(key);
@@ -22,43 +14,37 @@ public class Hill_David extends BaseCipher {
 
     public static void setKey(int[][] key) {
         Hill_David.key = key;
+        setKeyInverse(key);
+    }   
+
+    public static void setKeyInverse(int[][] key) {
+        Hill_David.keyInverse = ciphers.MatrixOperations.inverse(key);
     }   
     
-    private static int matrixDimension = 3;
+    private static final int MATRIXDIMENSION = 3;
 
-    private static int[][] key = {
-        {17, 17, 05},
-        {21, 18, 21},
-        {02, 02, 19}
-    };
-    
-    private static int[][] keyInverse = {
-        {4, 9, 15},
-        {15, 17, 6},
-        {24, 0, 17}
-    };
+    private static int[][] key = new int[MATRIXDIMENSION][MATRIXDIMENSION];    
+    private static int[][] keyInverse = new int[MATRIXDIMENSION][MATRIXDIMENSION];
 
     private static int blockPos = 0;
-    private static int[] block;
-    private static int[] blockSum;
+    private static int[] block = new int[MATRIXDIMENSION];
+    private static int[] blockSum  = new int[MATRIXDIMENSION];
     private static String plainText = "";
     private static String cipherText = "";
 
     @Override
     public String decrypt(String cipherText) {
         
+        plainText = "";
         ArrayList<Integer> spacePositions = new ArrayList<>();
-                
-        keyInverse = ciphers.MatrixOperations.inverse(key);
-        System.out.println("keyInverse = " + Arrays.deepToString(keyInverse));        
-                
+                               
         System.out.println("\nStarting decrypt BennyHill_David");
-        System.out.println("\tcipherText = " + cipherText);
+        System.out.println("cipherText = " + cipherText);
 
         char chr;
-
-        block = new int[matrixDimension];
-        blockSum = new int[matrixDimension];
+        
+        block = new int[MATRIXDIMENSION];
+        blockSum = new int[MATRIXDIMENSION];
 
         for (int pos = 0; pos < cipherText.length(); pos++) {
 
@@ -75,13 +61,13 @@ public class Hill_David extends BaseCipher {
             }
 
             //if the block/matrix is full
-            if (blockPos == matrixDimension) {
+            if (blockPos == MATRIXDIMENSION) {
                 blockPos = 0;
 
                 //for each row in the key
-                for (int vert = 0; vert < matrixDimension; vert++) {
+                for (int vert = 0; vert < MATRIXDIMENSION; vert++) {
                     //multiply it by the block/matrix and sum the results
-                    for (int i = 0; i < matrixDimension; i++) {
+                    for (int i = 0; i < MATRIXDIMENSION; i++) {
                         blockSum[vert] += keyInverse[vert][i] * block[i];
                     }
                     //mod the total
@@ -90,7 +76,7 @@ public class Hill_David extends BaseCipher {
                 }
 
                 //convert the modded digit to a char and add to plainText
-                for (int i = 0; i < matrixDimension; i++) {
+                for (int i = 0; i < MATRIXDIMENSION; i++) {
                     plainText += digitToChar(blockSum[i]);
                     blockSum[i] = 0;
                 }
@@ -112,6 +98,7 @@ public class Hill_David extends BaseCipher {
     @Override
     public String encrypt(String plainText) {
         
+        cipherText = "";
         ArrayList<Integer> spacePositions = new ArrayList<>();
 
         System.out.println("\nStarting encrypt BennyHill_David");
@@ -119,8 +106,8 @@ public class Hill_David extends BaseCipher {
 
         char chr;
 
-        block = new int[matrixDimension];
-        blockSum = new int[matrixDimension];
+        block = new int[MATRIXDIMENSION];
+        blockSum = new int[MATRIXDIMENSION];
 
         for (int pos = 0; pos < plainText.length(); pos++) {
 
@@ -137,13 +124,13 @@ public class Hill_David extends BaseCipher {
             }
 
             //if the block/matrix is full
-            if (blockPos == matrixDimension) {
+            if (blockPos == MATRIXDIMENSION) {
                 blockPos = 0;
 
                 //for each row in the key
-                for (int vert = 0; vert < matrixDimension; vert++) {
+                for (int vert = 0; vert < MATRIXDIMENSION; vert++) {
                     //multiply it by the block/matrix and sum the results
-                    for (int i = 0; i < matrixDimension; i++) {
+                    for (int i = 0; i < MATRIXDIMENSION; i++) {
                         blockSum[vert] += key[vert][i] * block[i];
                     }
                     //mod the total
@@ -151,7 +138,7 @@ public class Hill_David extends BaseCipher {
                 }
 
                 //convert the modded digit to a char and add to cipherText
-                for (int i = 0; i < matrixDimension; i++) {
+                for (int i = 0; i < MATRIXDIMENSION; i++) {
                     cipherText += digitToChar(blockSum[i]);
                     blockSum[i] = 0;
                 }
@@ -172,19 +159,11 @@ public class Hill_David extends BaseCipher {
     }
 
     public static char digitToChar(int i) {
-
-        char chr = (char) (i + 97);
-
-        return chr;
+        return (char) (i + 97);
     }
 
     public static int charToDigit(char chr) {
-
-        chr = Character.toLowerCase(chr);
-
-        int ascii = ((int) chr) - 97;
-
-        return ascii;
+        return ((int) Character.toLowerCase(chr)) - 97;
     }
 
 }
