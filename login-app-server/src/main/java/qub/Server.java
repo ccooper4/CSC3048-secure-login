@@ -1,9 +1,5 @@
 package qub;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +9,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.util.Assert;
 import qub.domain.User;
 import qub.service.IUserService;
-import ui.login.LoginManager;
-import java.io.IOException;
 
 @SpringBootApplication // same as @Configuration @EnableAutoConfiguration @ComponentScan
-public class App implements CommandLineRunner {
+public class Server implements CommandLineRunner {
 
-    private static final Logger log = LoggerFactory.getLogger(App.class);
+    private static final Logger log = LoggerFactory.getLogger(Server.class);
 
     @Autowired
     IUserService userService;
 
     public static void main(String[] args) {
-        SpringApplication.run(App.class);
+        SpringApplication.run(Server.class);
     }
 
     @Override

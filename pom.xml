@@ -17,8 +17,8 @@
 
     <modules>
         <module>shared</module>
-        <module>ui</module>
-        <module>login-app</module>
+        <module>login-app-ui</module>
+        <module>login-app-server</module>
     </modules>
 
     <properties>
