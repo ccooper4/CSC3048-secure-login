@@ -16,17 +16,17 @@ public class Cipher_RSA extends BaseCipher {
     /**
      * The P value for RSA.
      */
-    private static final int p = 19;
+    private static final int p = 257;
 
     /**
      * The Q value for RSA.
      */
-    private static final int q = 7;
+    private static final int q = 337;
 
     /**
      * The D value for RSA.
      */
-    private static final int d = 31;
+    private static final int d = 17;
 
     /**
      * The value of E.
@@ -88,7 +88,7 @@ public class Cipher_RSA extends BaseCipher {
             plaintext += " ";
         }
 
-        e = calculateEFromEuclidGcd(d, w);
+        e = calculateEFromEuclidGcd(d, w, w);
 
         for (int i = 0; i < plaintext.length(); i += 2) {
 
@@ -192,7 +192,7 @@ public class Cipher_RSA extends BaseCipher {
      * @param b The second number.
      * @return The greatest common divider of A and B.
      */
-    private int calculateEFromEuclidGcd(int a, int b) {
+    private int calculateEFromEuclidGcd(int a, int b, int w) {
 
         int prevAi = 1;
         int ai = 0;
@@ -202,8 +202,8 @@ public class Cipher_RSA extends BaseCipher {
 
         while (b != 0)
         {
-            int remainder = a % b;
-            int quotient = Math.floorDiv(a,b);
+            int quotient = a / b;
+            int remainder = a - quotient * b;
 
             int newAi = prevAi - quotient * ai;
             int newBi = prevBi - quotient * bi;
@@ -217,7 +217,14 @@ public class Cipher_RSA extends BaseCipher {
             b = remainder;
         }
 
-        return prevAi;
+        if (prevAi < 0)
+        {
+            return w + prevAi;
+        }
+        else
+        {
+            return prevAi;
+        }
 
     }
 
