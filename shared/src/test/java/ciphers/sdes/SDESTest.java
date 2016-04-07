@@ -27,7 +27,8 @@ public class SDESTest {
 
     @Test
     public void testDecryption() {
-//        testDecryption("cipher text", "expected result");
+        setup();
+        Assert.assertEquals(cipher.decryptWord(expected), "wait");
     }
 
     public void setup(){
