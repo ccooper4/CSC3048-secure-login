@@ -56,6 +56,22 @@ public class Cipher_SDES{
         return encrypted;
     }
 
+    public String decryptWord(ArrayList<int[]> cipherText)
+    {
+        String word = "";
+        for(int i = 0; i < cipherText.size(); i++){
+            int [] temp = decrypt(cipherText.get(i));
+            String temp2  = Arrays.toString(temp).replace(", ", "");
+            temp2 = temp2.replaceAll("\\[", "").replaceAll("\\]","");
+
+            int charCode = Integer.parseInt(temp2, 2);
+            word += new Character((char)charCode).toString();
+        }
+
+
+        return word;
+    }
+
     /**
      * Encryption method
      * @param input
@@ -93,7 +109,8 @@ public class Cipher_SDES{
      * @param cText
      * @return
      */
-    public String decrypt(String cText) {
+    public int[] decrypt(int[] cText) {
+        cipherText = cText;
         applyPermutation(cipherText, ip, IPP);
         keyGeneration();
         f2Result = kFunction(k2);
@@ -109,7 +126,7 @@ public class Cipher_SDES{
         f1Result = inversePermutation(f1Result);
 
         //System.out.println("\tDecrypted = " + Arrays.toString(f1Result));
-        return Arrays.toString(f1Result);
+        return f1Result;
     }
 
     /**
