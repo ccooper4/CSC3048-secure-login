@@ -39,7 +39,7 @@ public class Hill_David extends BaseCipher {
         ArrayList<Integer> spacePositions = new ArrayList<>();
                                
         System.out.println("\nStarting decrypt BennyHill_David");
-        System.out.println("cipherText = " + cipherText);
+        System.out.println("\tcipherText = " + cipherText);
 
         char chr;
         
@@ -72,7 +72,6 @@ public class Hill_David extends BaseCipher {
                     }
                     //mod the total
                     blockSum[vert] = blockSum[vert] % 26;
-                    System.out.print(digitToChar(blockSum[vert]));
                 }
 
                 //convert the modded digit to a char and add to plainText
