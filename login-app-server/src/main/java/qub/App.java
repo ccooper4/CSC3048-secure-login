@@ -17,7 +17,7 @@ import ui.login.LoginManager;
 import java.io.IOException;
 
 @SpringBootApplication // same as @Configuration @EnableAutoConfiguration @ComponentScan
-public class App extends Application implements CommandLineRunner {
+public class App implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(App.class);
 
@@ -60,15 +60,6 @@ public class App extends Application implements CommandLineRunner {
         // Delete
         userService.deleteUser("new_email");
         Assert.isNull(userService.getUserByEmail("new_email"));
-
-        // Start the UI
-        launch(strings);
     }
 
-    @Override
-    public void start(Stage stage) throws IOException {
-
-
-
-    }
 }
