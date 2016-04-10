@@ -7,16 +7,25 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.util.Assert;
+import org.springframework.util.SystemPropertyUtils;
 import qub.domain.User;
+import qub.networking.ClientConnection;
+import qub.networking.IGetServerClientEvents;
+import qub.networking.IListeningServer;
 import qub.service.IUserService;
 
+import java.util.Scanner;
+
 @SpringBootApplication // same as @Configuration @EnableAutoConfiguration @ComponentScan
-public class Server implements CommandLineRunner {
+public class Server implements CommandLineRunner, IGetServerClientEvents {
 
     private static final Logger log = LoggerFactory.getLogger(Server.class);
 
     @Autowired
     IUserService userService;
+
+    @Autowired
+    IListeningServer listeningServer;
 
     public static void main(String[] args) {
         SpringApplication.run(Server.class);
@@ -24,36 +33,42 @@ public class Server implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        log.info("Application started");
 
-        // Testing the db
-        String first = "First_test";
-        String last = "Last_test";
-        String email = "Email_test";
+        listeningServer.subscribeToNewClientEvents(this);
 
-        // Creation
-        userService.createUser(first, last, email);
+        listeningServer.startListening();
 
-        // Read
-        User user = userService.getUserByEmail(email);
-        Assert.notNull(user);
-        Assert.isTrue(user.getEmail().equals(email));
-        Assert.isTrue(user.getFirstName().equals(first));
-        Assert.isTrue(user.getLastName().equals(last));
+        Scanner consoleInput = new Scanner(System.in);
+        boolean closeServer = false;
 
-        // Read
-        Assert.isNull(userService.getUserByEmail("incorrect_email"));
+        log.info("CSC3048 - Login Application - Server started");
 
-        // Update
-        User updatedUser = new User(first, "new_last", "new_email");
-        userService.updateUser(email, updatedUser);
-        updatedUser = userService.getUserByEmail("new_email");
-        Assert.isTrue(updatedUser.getFirstName().equals(first));
-        Assert.isTrue(updatedUser.getLastName().equals("new_last"));
+        while (!closeServer) {
 
-        // Delete
-        userService.deleteUser("new_email");
-        Assert.isNull(userService.getUserByEmail("new_email"));
+            log.info("Server is listening. Enter quit and press Enter to stop the server.");
+
+            String nextConsoleInput = consoleInput.nextLine();
+
+            if (nextConsoleInput != null && nextConsoleInput == "quit") {
+                closeServer = true;
+            }
+        }
+
+        listeningServer.stopListening();
+
+        log.info("CSC3048 - Login Application - Server stopped.");
+
+
     }
 
+    /**
+     * Handles the event that is raised when a new client connects to the listening server.
+     * @param connection The object by which the new client can be accessed.
+     */
+    @Override
+    public void NewClient(ClientConnection connection) {
+
+        log.info("Handling new client.");
+
+    }
 }
