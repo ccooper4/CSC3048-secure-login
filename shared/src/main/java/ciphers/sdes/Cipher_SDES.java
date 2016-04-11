@@ -10,7 +10,7 @@ public class Cipher_SDES extends BaseCipher {
 
     static int[] plainText = {1,1,0,0,1,0,0,1};
     static int[] cipherText = {1,0,0,0,1,1,1,1};
-    static int[] key = {1,0,1,0,0,0,0,0,1,0};
+    static int[] key = {1,1,1,1,0,1,1,0,0,0};
     static int[] ip = {2, 6, 3, 1, 4, 8, 5, 7};
     static int[] ep = {4, 1, 2, 3, 2, 3, 4, 1};
     static int[] inverse_ip = {4, 1, 3, 5, 7, 2, 8, 6};
@@ -41,11 +41,10 @@ public class Cipher_SDES extends BaseCipher {
     public static ArrayList<int[]> encryptWord(String plainText)
     {
         ArrayList<int[]> encrypted = new ArrayList<>();
-        String s = "wait";
         String temp;
         int[] input = new int[8];
 
-        byte[] b = s.getBytes(StandardCharsets.US_ASCII);
+        byte[] b = plainText.getBytes(StandardCharsets.US_ASCII);
         for (byte currByte:b) {
             temp = String.format("%8s", Integer.toBinaryString(currByte)).replace(' ', '0');
             int count = 0;
@@ -109,9 +108,15 @@ public class Cipher_SDES extends BaseCipher {
     @Override
     public String encrypt(String plaintext) {
         String output = null;
+        ArrayList<int[]> result = encryptWord(plaintext);
+
+        for (int[] array:result){
+            output += Arrays.toString(array);
+        }
+
         // TODO
         logEncryption(plaintext, output);
-        return null;
+        return output;
     }
 
     /**
