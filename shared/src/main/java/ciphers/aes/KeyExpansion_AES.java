@@ -91,10 +91,13 @@ public class KeyExpansion_AES {
         
         System.out.println("this is w_finl + " + Arrays.deepToString(w));
 
-        String[][] tmp = new String[4][4];
         ArrayList<String[][]> res = new ArrayList<>();
 
+        String[][] tmp;
+
         for (int j = 0; j < Nr + 1; j++) {
+            tmp = new String[4][4];
+
             for (int k = 0; k < Nk; k++) {
                 tmp[k][0] = w_final[(j * 4) + k][0];
                 tmp[k][1] = w_final[(j * 4) + k][1];

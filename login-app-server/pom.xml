@@ -18,12 +18,6 @@
     <dependencies>
         <dependency>
             <groupId>qub</groupId>
-            <artifactId>ui</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>qub</groupId>
             <artifactId>shared</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
