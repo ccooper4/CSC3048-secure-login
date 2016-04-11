@@ -6,11 +6,12 @@ import java.util.List;
 
 public class KeyExpansion_AES {
 
-    private static int rotatePermutation[] = {2, 3, 4, 1};
+    private static final int[] ROTATEPERMUTATION = {2, 3, 4, 1};
 
     public List<String[][]> keyExpansion(String[][] originalKey, int Nk, int Nr, int Nb) {
-        String parsedString = ""; // TODO Make the array a string
-
+        
+        String parsedString = "";
+        
         for (String[] strings : originalKey) {
             for (String string : strings) {
                 parsedString += string;
@@ -21,8 +22,6 @@ public class KeyExpansion_AES {
     }
 
     private List<String[][]> keyExpansion(String key, int Nk, int Nr, int Nb) {
-
-        String[][] w_final = new String[44][4];
 
         String w[] = new String[44];
         String temp;
@@ -45,7 +44,7 @@ public class KeyExpansion_AES {
 
             if (i % Nk == 0) {
 
-                temp = applyRotation(temp, rotatePermutation);
+                temp = applyRotation(temp, ROTATEPERMUTATION);
 
                 temp = applySubWord(temp);
 
@@ -63,17 +62,18 @@ public class KeyExpansion_AES {
             i++;
 
         }
-
-        //chopArrays basically       
-        return chopArrays(w_final, Nk, Nr, w);
+  
+        return chopArrays(Nk, Nr, w);
 
     }
 
-    private List<String[][]> chopArrays(String[][] w_final, int Nk, int Nr, String[] w) {
-
-        int count = 0;
+    private List<String[][]> chopArrays(int Nk, int Nr, String[] w) {
         
-        System.out.println("this is w_____ + " + Arrays.deepToString(w));
+        String[][] w_final = new String[44][4];
+        
+        System.out.println("this is w______ + " + Arrays.deepToString(w));
+                
+        int count = 0;
         
         for (String w1 : w) {
 
@@ -89,7 +89,7 @@ public class KeyExpansion_AES {
             count++;
         }
         
-        System.out.println("this is w_finl + " + Arrays.deepToString(w));
+        System.out.println("this is w_final + " + Arrays.deepToString(w));
 
         ArrayList<String[][]> res = new ArrayList<>();
 
@@ -112,7 +112,7 @@ public class KeyExpansion_AES {
         System.out.println(res.size());
         
         for (int i = 0; i < Nr + 1; i++) {
-            System.out.println("Round " + i + Arrays.deepToString(res.get(0)));
+            System.out.println("Round " + i + Arrays.deepToString(res.get(i)));
         }
         
         return res;
