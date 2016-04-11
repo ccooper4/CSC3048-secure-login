@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.util.Assert;
-import org.springframework.util.SystemPropertyUtils;
-import qub.domain.User;
 import qub.networking.ClientConnection;
 import qub.networking.IGetServerClientEvents;
 import qub.networking.IListeningServer;
@@ -45,11 +42,11 @@ public class Server implements CommandLineRunner, IGetServerClientEvents {
 
         while (!closeServer) {
 
-            log.info("Server is listening. Enter quit and press Enter to stop the server.");
+            log.info("Server is listening. Type quit and press Enter to stop the server.");
 
             String nextConsoleInput = consoleInput.nextLine();
 
-            if (nextConsoleInput != null && nextConsoleInput == "quit") {
+            if (nextConsoleInput != null && nextConsoleInput.equals("quit")) {
                 closeServer = true;
             }
         }
