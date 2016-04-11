@@ -1,6 +1,8 @@
 package qub.networking;
 
 import org.springframework.stereotype.Service;
+import util.EncryptedLogger;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,6 +18,7 @@ import static util.EncryptedLogger.*;
 public class ListeningServer implements IListeningServer {
 
     //region Fields
+    private EncryptedLogger log = new EncryptedLogger(getClass());
 
     /**
      * The port to listen on.
@@ -75,7 +78,7 @@ public class ListeningServer implements IListeningServer {
             internalSocket = new ServerSocket(port);
         } catch (IOException e) {
 
-            error("A socket could not be created on port " + port, e);
+            log.error("A socket could not be created on port " + port, e);
 
         }
     }
@@ -106,7 +109,7 @@ public class ListeningServer implements IListeningServer {
             Thread listenThread = new Thread(listenThreadRunnable);
             listenThread.start();
 
-            info("Server started listening on port " + listenPort);
+            log.info("Server started listening on port " + listenPort);
         }
 
     }
@@ -116,7 +119,7 @@ public class ListeningServer implements IListeningServer {
         try {
             internalSocket.close();
         } catch (IOException e) {
-            error("Could not close the internal socket.", e);
+            log.error("Could not close the internal socket.", e);
         }
     }
 
@@ -145,24 +148,24 @@ public class ListeningServer implements IListeningServer {
         @Override
         public void run() {
 
-            info("Listening for connections on new thread.");
+            log.info("Listening for connections on new thread.");
 
             while (true) {
 
                 try {
                     Socket clientSocket = internalSocket.accept();
 
-                    info("Accepting connection from: " + clientSocket.getInetAddress().toString());
+                    log.info("Accepting connection from: " + clientSocket.getInetAddress().toString());
 
                     AcceptThread handlerThreadRunnable = new AcceptThread(clientSocket);
 
                     Thread handlerThread = new Thread(handlerThreadRunnable);
                     handlerThread.start();
 
-                    info("Started new Accept Thread to handle request.");
+                    log.info("Started new Accept Thread to handle request.");
 
                 } catch (IOException e) {
-                    error("An error occurred whilst trying to accept a connection from a client.", e);
+                    log.error("An log.error occurred whilst trying to accept a connection from a client.", e);
 
                 }
 
@@ -199,7 +202,7 @@ public class ListeningServer implements IListeningServer {
         @Override
         public void run() {
 
-            info("Handling newly accepted client.");
+            log.info("Handling newly accepted client.");
 
             ClientConnection connection = new ClientConnection(clientSocket);
 

@@ -15,13 +15,22 @@ import java.util.Date;
  */
 public class EncryptedLogger {
 
-    private static Logger log = LoggerFactory.getLogger(EncryptedLogger.class);
-    private static Cipher_AES aes = new Cipher_AES();
-    private static File file = new File("./log/log.txt");
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private static Logger log;
 
-    // Static initializer
-    static {
+    private Cipher_AES aes;
+    private File file = new File("log/log.txt");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+    public EncryptedLogger(Class clazz) {
+        log = LoggerFactory.getLogger(clazz);
+        ensureFileExists(file);
+    }
+
+    /**
+     * Ensure that the given file exists.
+     * @param file  The file ot check.
+     */
+    private void ensureFileExists(File file) {
         // If the log file doesn't exist
         if (!file.exists()) {
             try {
@@ -42,7 +51,7 @@ public class EncryptedLogger {
      * Info level messages - general information about the application.
      * @param message   The message to log.
      */
-    public static void info(String message) {
+    public void info(String message) {
         log.info(message);
         writeToDisk(message);
     }
@@ -52,14 +61,19 @@ public class EncryptedLogger {
      * @param message   The message to log.
      * @param throwable The exception to log.
      */
-    public static void error(String message, Throwable throwable) {
+    public void error(String message, Throwable throwable) {
         log.error(message, throwable);
         writeToDisk(message);
         writeToDisk(throwable.getMessage());
     }
 
-    private static void writeToDisk(String logInfo) {
+    private void writeToDisk(String logInfo) {
         try {
+            // Initialise the aes cipher.
+            if (aes == null) {
+                aes = new Cipher_AES();
+            }
+
             String timestamp = sdf.format(new Date());
             logInfo = timestamp + " : " + logInfo + "\n";
 //            String encryptedInfo = aes.encrypt(logInfo); TODO : Handle large strings with AES

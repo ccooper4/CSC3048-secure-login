@@ -8,12 +8,16 @@ import qub.networking.ClientConnection;
 import qub.networking.IGetServerClientEvents;
 import qub.networking.IListeningServer;
 import qub.service.IUserService;
+import util.EncryptedLogger;
+
 import java.util.Scanner;
 
 import static util.EncryptedLogger.*;
 
 @SpringBootApplication // same as @Configuration @EnableAutoConfiguration @ComponentScan
 public class Server implements CommandLineRunner, IGetServerClientEvents {
+    
+    private EncryptedLogger log = new EncryptedLogger(getClass());
 
     @Autowired
     IUserService userService;
@@ -35,11 +39,11 @@ public class Server implements CommandLineRunner, IGetServerClientEvents {
         Scanner consoleInput = new Scanner(System.in);
         boolean closeServer = false;
 
-        info("CSC3048 - Login Application - Server started");
+        log.info("CSC3048 - Login Application - Server started");
 
         while (!closeServer) {
 
-            info("Server is listening. Type quit and press Enter to stop the server.");
+            log.info("Server is listening. Type quit and press Enter to stop the server.");
 
             String nextConsoleInput = consoleInput.nextLine();
 
@@ -50,7 +54,7 @@ public class Server implements CommandLineRunner, IGetServerClientEvents {
 
         listeningServer.stopListening();
 
-        info("CSC3048 - Login Application - Server stopped.");
+        log.info("CSC3048 - Login Application - Server stopped.");
     }
 
     /**
@@ -60,7 +64,7 @@ public class Server implements CommandLineRunner, IGetServerClientEvents {
     @Override
     public void NewClient(ClientConnection connection) {
 
-        info("Handling new client.");
+        log.info("Handling new client.");
 
     }
 }

@@ -5,11 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import qub.domain.User;
 import qub.repositories.UserRepository;
-
-import static util.EncryptedLogger.*;
+import util.EncryptedLogger;
 
 @Service
 public class UserServiceImpl implements IUserService {
+    
+    private EncryptedLogger log = new EncryptedLogger(getClass());
 
     @Autowired
     private UserRepository userRepository;
@@ -31,10 +32,10 @@ public class UserServiceImpl implements IUserService {
         User user = userRepository.findByEmail(email);
 
         if (user == null) {
-            info("No user found with the email " + email);
+            log.info("No user found with the email " + email);
         } else {
             userRepository.delete(user);
-            info("Deleted user: " + user.toString());
+            log.info("Deleted user: " + user.toString());
         }
     }
 
@@ -46,11 +47,11 @@ public class UserServiceImpl implements IUserService {
         User originalUser = userRepository.findByEmail(email);
 
         if (originalUser == null) {
-            info("No user found with the email " + email);
+            log.info("No user found with the email " + email);
         } else {
             updatedUser.setId(originalUser.getId());
             userRepository.save(updatedUser);
-            info("User: " + originalUser.toString() + " updated to " + updatedUser.toString());
+            log.info("User: " + originalUser.toString() + " updated to " + updatedUser.toString());
         }
     }
 
@@ -63,12 +64,12 @@ public class UserServiceImpl implements IUserService {
         User user = userRepository.findByEmail(email);
 
         if (user != null) {
-            info("User already exists: " + user.toString());
+            log.info("User already exists: " + user.toString());
         } else {
             user = new User(firstName, lastName, email);
 
             userRepository.save(user);
-            info("User created: " + user.toString());
+            log.info("User created: " + user.toString());
         }
     }
 }
