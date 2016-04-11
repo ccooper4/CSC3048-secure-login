@@ -1,5 +1,6 @@
 package ciphers.aes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class KeyExpansion_AES {
@@ -73,8 +74,15 @@ public class KeyExpansion_AES {
             count++;
         }
         
+        //chopArrays basically       
+        return chopArrays(w_final, Nk, Nr); 
+
+    }
+
+    private List<String[][]> chopArrays(String[][] w_final, int Nk, int Nr) {
+        
         String[][] tmp = new String[4][4];
-        List<String[][]> res = null;
+        ArrayList<String[][]> res = new ArrayList<>();
         
         for (int j = 0; j < Nr + 1; j++) {
             for (int k = 0; k < Nk; k++) {
@@ -85,14 +93,8 @@ public class KeyExpansion_AES {
             }
             res.add(tmp);
         }
-
-        //return w_final;
-        return res; 
-
-    }
-
-    private List<String[][]> chopArrays(String[][] arrays, int seperator) {
-        return null;
+        
+        return res;
     }
 
     private String generateRcon(int i, int nK, int x) {
