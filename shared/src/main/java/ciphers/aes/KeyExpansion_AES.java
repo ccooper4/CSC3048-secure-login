@@ -78,10 +78,10 @@ public class KeyExpansion_AES {
         
         for (int j = 0; j < Nr + 1; j++) {
             for (int k = 0; k < Nk; k++) {
-                tmp[k][0] = w_final[(Nr * 4) + k][0];
-                tmp[k][1] = w_final[(Nr * 4) + k][1];
-                tmp[k][2] = w_final[(Nr * 4) + k][2];
-                tmp[k][3] = w_final[(Nr * 4) + k][3];
+                tmp[k][0] = w_final[(j * 4) + k][0];
+                tmp[k][1] = w_final[(j * 4) + k][1];
+                tmp[k][2] = w_final[(j * 4) + k][2];
+                tmp[k][3] = w_final[(j * 4) + k][3];
             }
             res.add(tmp);
         }
