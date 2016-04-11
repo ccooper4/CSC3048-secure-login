@@ -1,6 +1,8 @@
 package ciphers.playfair;
 
 import ciphers.BaseCipher;
+import ciphers.CipherUtils;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -8,7 +10,7 @@ import java.util.Set;
 /**
  * @author Dave
  */
-public class Playfair_David extends BaseCipher {
+public class Cipher_Playfair extends BaseCipher {
 
     static String keyword = "monarchy";
 
@@ -54,7 +56,7 @@ public class Playfair_David extends BaseCipher {
         //put keyword into matrix
         for (int i = 0; i < keyword.length(); i++) {
             matrix[i] = keyword.charAt(i);
-            alpha[charToDigit(keyword.charAt(i))] = true;
+            alpha[CipherUtils.charToDigit(keyword.charAt(i))] = true;
         }
         //fill matrix with unused letters
         for (int i = keyword.length(); i < matrix.length; i++) {
@@ -66,7 +68,7 @@ public class Playfair_David extends BaseCipher {
                         alpha[8] = true;
                         alpha[9] = true;
                     }
-                    matrix[i] = digitToChar(j);
+                    matrix[i] = CipherUtils.digitToChar(j);
                     alpha[j] = true;
                     break;
                 }
@@ -175,30 +177,28 @@ public class Playfair_David extends BaseCipher {
         return ret;
     }
 
-    public static char digitToChar(int i) {
-        
-        char chr = (char) (i + 97);
-        
-        return chr;
-    }
-
-    public static int charToDigit(char chr) {
-
-        chr = Character.toLowerCase(chr);
-        
-        int ascii = ((int) chr) - 97;
-
-        return ascii;
-    }
-
+    /**
+     *
+     * @param plaintext
+     * @return
+     */
     @Override
     public String encrypt(String plaintext) {
         String[] args = {plaintext};
-        return main(args);
+        String cipherText = main(args);
+        logEncryption(plaintext, cipherText);
+        return cipherText;
     }
 
+    /**
+     *
+     * @param encryptedText
+     * @return
+     */
     @Override
     public String decrypt(String encryptedText) {
+        String output = null;
+        logDecryption(encryptedText, output);
         return null;
     }
 }

@@ -1,4 +1,4 @@
-package ciphers;
+package ciphers.hill;
 
 import java.math.*;
 

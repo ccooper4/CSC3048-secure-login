@@ -93,6 +93,24 @@ public class CipherUtils {
         return String.format("%2s", hex).replace(' ', '0');
     }
 
+    /**
+     * Convert an integer digit to a char
+     * @param i The integer
+     * @return  The char representation.
+     */
+    public static char digitToChar(int i) {
+        return (char) (i + 97);
+    }
+
+    /**
+     * Convert a char to an integer digit.
+     * @param chr   The char.
+     * @return      The integer representation.
+     */
+    public static int charToDigit(char chr) {
+        return ((int) Character.toLowerCase(chr)) - 97;
+    }
+
     public static String getFormattedBinaryString(String binary) {
         return String.format("%8s", binary).replace(' ', '0');
     }

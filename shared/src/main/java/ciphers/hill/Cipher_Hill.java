@@ -1,24 +1,26 @@
 package ciphers.hill;
 
 import ciphers.BaseCipher;
+import ciphers.CipherUtils;
+
 import java.util.ArrayList;
 
 /**
  * @author David
  */
-public class Hill_David extends BaseCipher {
+public class Cipher_Hill extends BaseCipher {
     
-    public Hill_David(int[][] key) {
+    public Cipher_Hill(int[][] key) {
         setKey(key);
     }
 
     public static void setKey(int[][] key) {
-        Hill_David.key = key;
+        Cipher_Hill.key = key;
         setKeyInverse(key);
     }   
 
     public static void setKeyInverse(int[][] key) {
-        Hill_David.keyInverse = ciphers.MatrixOperations.inverse(key);
+        Cipher_Hill.keyInverse = MatrixOperations.inverse(key);
     }   
     
     private static final int MATRIXDIMENSION = 3;
@@ -53,7 +55,7 @@ public class Hill_David extends BaseCipher {
 
             //if its not a space then put it in the matrix/block
             if (chr != ' ') {
-                block[blockPos] = charToDigit(chr);
+                block[blockPos] = CipherUtils.charToDigit(chr);
                 blockPos++;
             } else {
                 //if it is a space then note the position for later
@@ -76,7 +78,7 @@ public class Hill_David extends BaseCipher {
 
                 //convert the modded digit to a char and add to plainText
                 for (int i = 0; i < MATRIXDIMENSION; i++) {
-                    plainText += digitToChar(blockSum[i]);
+                    plainText += CipherUtils.digitToChar(blockSum[i]);
                     blockSum[i] = 0;
                 }
             }
@@ -91,6 +93,7 @@ public class Hill_David extends BaseCipher {
         System.out.println("\tplainText  = " + plainText);
         System.out.println("Ending decrypt BennyHill_David");
 
+        logDecryption(cipherText, plainText);
         return plainText;
     }
 
@@ -115,7 +118,7 @@ public class Hill_David extends BaseCipher {
 
             //if its not a space then put it in the matrix/block
             if (chr != ' ') {
-                block[blockPos] = charToDigit(chr);
+                block[blockPos] = CipherUtils.charToDigit(chr);
                 blockPos++;
             } else {
                 //if it is a space then note the position for later
@@ -138,7 +141,7 @@ public class Hill_David extends BaseCipher {
 
                 //convert the modded digit to a char and add to cipherText
                 for (int i = 0; i < MATRIXDIMENSION; i++) {
-                    cipherText += digitToChar(blockSum[i]);
+                    cipherText += CipherUtils.digitToChar(blockSum[i]);
                     blockSum[i] = 0;
                 }
             }
@@ -151,18 +154,10 @@ public class Hill_David extends BaseCipher {
 
         //print final cipherText
         System.out.println("\tCiphertext = " + cipherText);
-        System.out.println("Ending Hill_David");
+        System.out.println("Ending Cipher_Hill");
 
+        logEncryption(plainText, cipherText);
         return cipherText;
 
     }
-
-    public static char digitToChar(int i) {
-        return (char) (i + 97);
-    }
-
-    public static int charToDigit(char chr) {
-        return ((int) Character.toLowerCase(chr)) - 97;
-    }
-
 }

@@ -27,7 +27,7 @@ public class HillTest extends BaseCipherTest {
     public void testEncryption() {
 
         System.out.println("-------------------------------------------------");
-        Hill_David testEncryptionObj = new Hill_David(key1);
+        Cipher_Hill testEncryptionObj = new Cipher_Hill(key1);
         String res = testEncryptionObj.encrypt(plainText1);
         System.out.println("Input of  : " + plainText1);
         System.out.println("should result in");
@@ -35,7 +35,7 @@ public class HillTest extends BaseCipherTest {
         System.out.println("Got       : " + res);
         Assert.assertTrue(res.equals(cipherText1));
         System.out.println("-------------------------------------------------");
-        testEncryptionObj = new Hill_David(key2);
+        testEncryptionObj = new Cipher_Hill(key2);
         res = testEncryptionObj.encrypt(plainText2);
         System.out.println("Input of  : " + plainText2);
         System.out.println("should result in");
@@ -43,7 +43,8 @@ public class HillTest extends BaseCipherTest {
         System.out.println("Got       : " + res);
         Assert.assertTrue(res.equals(cipherText2));
         System.out.println("-------------------------------------------------");
-        
+
+//        testEncryption("Plain text", "Cipher text");
     }
 
     @Test
@@ -51,7 +52,7 @@ public class HillTest extends BaseCipherTest {
     public void testDecryption() {
 
         System.out.println("-------------------------------------------------");
-        Hill_David testDecryptionObj = new Hill_David(key1);
+        Cipher_Hill testDecryptionObj = new Cipher_Hill(key1);
         String res = testDecryptionObj.decrypt(cipherText1);
         System.out.println("Input of  : " + cipherText1);
         System.out.println("should result in");
@@ -59,7 +60,7 @@ public class HillTest extends BaseCipherTest {
         System.out.println("Got       : " + res);
         Assert.assertTrue(res.equals(plainText1));
         System.out.println("-------------------------------------------------");
-        testDecryptionObj = new Hill_David(key2);
+        testDecryptionObj = new Cipher_Hill(key2);
         res = testDecryptionObj.decrypt(cipherText2);
         System.out.println("Input of  : " + cipherText2);
         System.out.println("should result in");
@@ -67,6 +68,8 @@ public class HillTest extends BaseCipherTest {
         System.out.println("Got       : " + res);
         Assert.assertTrue(res.equals(plainText2));
         System.out.println("-------------------------------------------------");
+
+//        testDecryption("Cipher text", "Plain text");
         
     }
 }
