@@ -79,11 +79,11 @@ public class Cipher_SDES extends BaseCipher {
      */
     public static int[] encrypt(int[] input) {
         plainText = input;
-        //System.out.println("\tPlaintext  = " + Arrays.toString(plainText));
         keyGeneration();
         initialPermutation();
         f1Result = kFunction(k1);
         f1Result = f1(f1Result);
+
         //swap module stage
         System.arraycopy(f1Result, 0, right_nibble, 0, f1Result.length / 2);
         System.arraycopy(f1Result, 4, left_nibble, 0, f1Result.length / 2);
@@ -153,7 +153,6 @@ public class Cipher_SDES extends BaseCipher {
         f1Result = f2(f1Result);
         f1Result = inversePermutation(f1Result);
 
-        //System.out.println("\tDecrypted = " + Arrays.toString(f1Result));
         return f1Result;
     }
 
@@ -188,7 +187,6 @@ public class Cipher_SDES extends BaseCipher {
      */
     private static void initialPermutation(){
         applyPermutation(plainText, ip, IPP);
-        //System.out.println("IP: " + Arrays.toString(IPP));
     }
 
     /**
@@ -208,11 +206,9 @@ public class Cipher_SDES extends BaseCipher {
 
         //apply ep to right nibble, store in temp1 *only right most half*
         applyPermutation(rightIPP, ep, temp1);
-        //System.out.println("EP: " + Arrays.toString(temp1));
 
         //XOR with key
         XOR(temp1, key, temp1);
-        //System.out.println("XOR with key: " + Arrays.toString(temp1));
 
         System.arraycopy(temp1, 4, temp2, 0, temp1.length / 2);
         int sbox1 = getSboxValues(sBox1,temp1);
@@ -221,7 +217,6 @@ public class Cipher_SDES extends BaseCipher {
         String sboxBinary = String.format("%2s", Integer.toBinaryString(sbox1)).replace(' ', '0');
         sboxBinary += String.format("%2s", Integer.toBinaryString(sbox2)).replace(' ', '0');
 
-        //System.out.println(sboxBinary);
 
         //combine the sbox values into array
         int count = 0;
@@ -233,7 +228,6 @@ public class Cipher_SDES extends BaseCipher {
         //take result from sboxes and apply p4 permutation
         applyPermutation(sboxCombined, p4, p4Result);
         System.arraycopy(p4Result, 0, sboxCombined, 0, p4Result.length);
-        //System.out.println("P4: " + Arrays.toString(p4Result));
         return sboxCombined;
     }
 
@@ -305,7 +299,6 @@ public class Cipher_SDES extends BaseCipher {
     private static int [] inversePermutation(int[] array){
         int[] destArray = new int[8];
         applyPermutation(array, inverse_ip, destArray);
-        //System.out.println("IP: " + Arrays.toString(destArray));
         return destArray;
     }
 
