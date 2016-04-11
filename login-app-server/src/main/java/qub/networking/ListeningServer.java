@@ -1,13 +1,13 @@
 package qub.networking;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+
+import static util.EncryptedLogger.*;
 
 /**
  * Implements a threaded server that can listen on a specified port.
@@ -36,11 +36,6 @@ public class ListeningServer implements IListeningServer {
      * Gets the list of objects that we should notify when we accept a new client.
      */
     private List<IGetServerClientEvents> subscribedNewClientObjects;
-
-    /**
-     * The logger for this class.
-     */
-    private static final Logger log = LoggerFactory.getLogger(ListeningServer.class);
 
     //endregion
 
@@ -80,9 +75,8 @@ public class ListeningServer implements IListeningServer {
             internalSocket = new ServerSocket(port);
         } catch (IOException e) {
 
-            log.error("A socket could not be created on port " + port);
+            error("A socket could not be created on port " + port, e);
 
-            e.printStackTrace();
         }
     }
 
@@ -112,7 +106,7 @@ public class ListeningServer implements IListeningServer {
             Thread listenThread = new Thread(listenThreadRunnable);
             listenThread.start();
 
-            log.info("Server started listening on port " + listenPort);
+            info("Server started listening on port " + listenPort);
         }
 
     }
@@ -122,8 +116,7 @@ public class ListeningServer implements IListeningServer {
         try {
             internalSocket.close();
         } catch (IOException e) {
-            log.error("Could not close the internal socket.");
-            e.printStackTrace();
+            error("Could not close the internal socket.", e);
         }
     }
 
@@ -152,28 +145,25 @@ public class ListeningServer implements IListeningServer {
         @Override
         public void run() {
 
-            log.info("Listening for connections on new thread.");
+            info("Listening for connections on new thread.");
 
             while (true) {
 
                 try {
                     Socket clientSocket = internalSocket.accept();
 
-                    log.info("Accepting connection from: " + clientSocket.getInetAddress().toString());
+                    info("Accepting connection from: " + clientSocket.getInetAddress().toString());
 
                     AcceptThread handlerThreadRunnable = new AcceptThread(clientSocket);
 
                     Thread handlerThread = new Thread(handlerThreadRunnable);
                     handlerThread.start();
 
-                    log.info("Started new Accept Thread to handle request.");
-
+                    info("Started new Accept Thread to handle request.");
 
                 } catch (IOException e) {
+                    error("An error occurred whilst trying to accept a connection from a client.", e);
 
-                    log.error("An error occurred whilst trying to accept a connection from a client.");
-
-                    e.printStackTrace();
                 }
 
             }
@@ -209,7 +199,7 @@ public class ListeningServer implements IListeningServer {
         @Override
         public void run() {
 
-            log.info("Handling newly accepted client.");
+            info("Handling newly accepted client.");
 
             ClientConnection connection = new ClientConnection(clientSocket);
 

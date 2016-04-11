@@ -39,10 +39,6 @@ public class Cipher_Playfair extends BaseCipher {
 
         keyword = removeDuplicateChars(keyword);
 
-        System.out.println("\nStarting PlayfairCipher_David");
-        System.out.println("\tKeyword    = " + keyword);
-        System.out.println("\tPlainText  = " + plainText);
-
         plainText = padSeqChars(plainText);
         //pad to even
         if (plainText.length() % 2 == 1) {
@@ -62,7 +58,6 @@ public class Cipher_Playfair extends BaseCipher {
         for (int i = keyword.length(); i < matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
                 if (!alpha[j]) {
-                    //System.out.println(digitToChar(j) + " has not been used");
                     //group i/j together
                     if ((j == 8) || (j == 9)) {
                         alpha[8] = true;
@@ -103,12 +98,10 @@ public class Cipher_Playfair extends BaseCipher {
                     if (matrix2D[i][j] == chrA) {
                         chrAi = i;
                         chrAj = j;
-                        //System.out.println("found chrA " + chrA + " at " + i + "," + j);
                     }
                     if (matrix2D[i][j] == chrB) {
                         chrBi = i;
                         chrBj = j;
-                        //System.out.println("found chrB " + chrB + " at " + i + "," + j);
                     }
                 }
             }
@@ -132,19 +125,11 @@ public class Cipher_Playfair extends BaseCipher {
             //same row take right
             //other take right, take left
         }
-
-        //System.out.println(Arrays.toString(matrix));
-        //System.out.println(Arrays.deepToString(matrix2D));
-        System.out.println("\tCiphertext = " + cipherText);
-        System.out.println("Ending PlayfairCipher_David");
         
         return cipherText;
-
     }
 
     public static String padSeqChars(String str) {
-
-        //System.out.println("\tconverting from " + str);
 
         for (int s = 0; s < plainText.length() - 1; s += 2) {
             char chrA = plainText.charAt(s);
@@ -155,8 +140,6 @@ public class Cipher_Playfair extends BaseCipher {
                 s--;
             }
         }
-
-        //System.out.println("\tconverted to " + str);
 
         return str;
     }

@@ -62,9 +62,6 @@ public class SDES_David extends BaseCipher {
 
     public static String main(String[] args) {
 
-        System.out.println("\nStarting SimpleDESCipher_David");
-        System.out.println("\tPlaintext  = " + Arrays.toString(plainText));
-
         //step one generate keys k1, k2
         //k1
         //take key and apply p10 permutation, store in temp10
@@ -137,7 +134,6 @@ public class SDES_David extends BaseCipher {
         //Do function frK2
         //get right nibble       
         System.arraycopy(temp4_2, 0, temp4_1, 0, temp4_1.length);
-        //System.out.println("right nibble = " + Arrays.toString(temp4_1));
 
         //apply ep to right nibble, store in temp8_1   
         applyPermutation(temp4_1, ep, temp8_1);
@@ -213,18 +209,14 @@ public class SDES_David extends BaseCipher {
         temp8_2[6] = -1;
         temp8_2[7] = -1;
 
-        //System.out.println("row = " + Arrays.toString(temp8_1));
-        //System.out.println("col = " + Arrays.toString(temp8_2));
         //get sbox numbers
         temp8_1[2] = s0[temp8_1[1]][temp8_2[1]];
         temp8_1[6] = s1[temp8_1[5]][temp8_2[5]];
 
-        //System.out.println("3rd element of nibble filled = " + Arrays.toString(temp8_1));
         binaryToDecimal(temp8_1, 2);
 
         binaryToDecimal(temp8_1, 6);
 
-        //System.out.println("row = " + Arrays.toString(temp8_1));
         switch (temp8_1[3]) {
             case 11:
                 temp4_1[0] = 1;
@@ -273,7 +265,6 @@ public class SDES_David extends BaseCipher {
             left_nibble[i] = (int) (left_nibble[i] ^ temp4_1[i]);
         }
 
-        //System.out.println("\tLR" + Arrays.toString(left_nibble) + Arrays.toString(right_nibble));
         for (int i = 0; i < left_nibble.length; i++) {
             temp8_1[i] = left_nibble[i];
         }
@@ -285,9 +276,6 @@ public class SDES_David extends BaseCipher {
         //apply inverese permutation
         //take temp8_2 and apply inverse permutation, store in temp8_1
         applyPermutation(temp8_2, inverse_ip, temp8_1);
-
-        System.out.println("\tCiphertext = " + Arrays.toString(temp8_1));
-        System.out.println("Ending SimpleDESCipher_David");
 
         return Arrays.toString(temp8_1);
     }

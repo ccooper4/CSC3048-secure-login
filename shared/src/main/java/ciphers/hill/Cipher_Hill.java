@@ -39,9 +39,6 @@ public class Cipher_Hill extends BaseCipher {
         
         plainText = "";
         ArrayList<Integer> spacePositions = new ArrayList<>();
-                               
-        System.out.println("\nStarting decrypt BennyHill_David");
-        System.out.println("\tcipherText = " + cipherText);
 
         char chr;
         
@@ -89,10 +86,6 @@ public class Cipher_Hill extends BaseCipher {
             plainText = plainText.substring(0, space) + " " + plainText.substring(space, plainText.length());
         });
 
-        //print final plainText
-        System.out.println("\tplainText  = " + plainText);
-        System.out.println("Ending decrypt BennyHill_David");
-
         logDecryption(cipherText, plainText);
         return plainText;
     }
@@ -102,9 +95,6 @@ public class Cipher_Hill extends BaseCipher {
         
         cipherText = "";
         ArrayList<Integer> spacePositions = new ArrayList<>();
-
-        System.out.println("\nStarting encrypt BennyHill_David");
-        System.out.println("\tPlaintext  = " + plainText);
 
         char chr;
 
@@ -151,10 +141,6 @@ public class Cipher_Hill extends BaseCipher {
         spacePositions.stream().forEach((space) -> {
             cipherText = cipherText.substring(0, space) + " " + cipherText.substring(space, cipherText.length());
         });
-
-        //print final cipherText
-        System.out.println("\tCiphertext = " + cipherText);
-        System.out.println("Ending Cipher_Hill");
 
         logEncryption(plainText, cipherText);
         return cipherText;

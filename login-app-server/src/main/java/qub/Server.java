@@ -1,7 +1,5 @@
 package qub;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,13 +8,12 @@ import qub.networking.ClientConnection;
 import qub.networking.IGetServerClientEvents;
 import qub.networking.IListeningServer;
 import qub.service.IUserService;
-
 import java.util.Scanner;
+
+import static util.EncryptedLogger.*;
 
 @SpringBootApplication // same as @Configuration @EnableAutoConfiguration @ComponentScan
 public class Server implements CommandLineRunner, IGetServerClientEvents {
-
-    private static final Logger log = LoggerFactory.getLogger(Server.class);
 
     @Autowired
     IUserService userService;
@@ -38,11 +35,11 @@ public class Server implements CommandLineRunner, IGetServerClientEvents {
         Scanner consoleInput = new Scanner(System.in);
         boolean closeServer = false;
 
-        log.info("CSC3048 - Login Application - Server started");
+        info("CSC3048 - Login Application - Server started");
 
         while (!closeServer) {
 
-            log.info("Server is listening. Type quit and press Enter to stop the server.");
+            info("Server is listening. Type quit and press Enter to stop the server.");
 
             String nextConsoleInput = consoleInput.nextLine();
 
@@ -53,9 +50,7 @@ public class Server implements CommandLineRunner, IGetServerClientEvents {
 
         listeningServer.stopListening();
 
-        log.info("CSC3048 - Login Application - Server stopped.");
-
-
+        info("CSC3048 - Login Application - Server stopped.");
     }
 
     /**
@@ -65,7 +60,7 @@ public class Server implements CommandLineRunner, IGetServerClientEvents {
     @Override
     public void NewClient(ClientConnection connection) {
 
-        log.info("Handling new client.");
+        info("Handling new client.");
 
     }
 }

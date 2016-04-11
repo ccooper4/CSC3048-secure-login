@@ -96,7 +96,6 @@ public class Cipher_SDES extends BaseCipher {
         f2Result = f2(f2Result);
         f2Result = inversePermutation(f2Result);
 
-        System.out.println("\tCiphertext = " + Arrays.toString(f2Result));
         return f2Result;
     }
 

@@ -60,7 +60,7 @@ public class SDESTest extends BaseCipherTest  {
         }
 
 //        TODO
-//        testEncryption("Plain text", "Cipher text");
+//        testEncryption("Plain text", "Expected Cipher text");
     }
 
     @Test
@@ -73,6 +73,6 @@ public class SDESTest extends BaseCipherTest  {
         Assert.assertEquals(cipher.decryptWord(expected2), "markfrequency");
 
 //        TODO
-//        testDecryption("Cipher text", "Plain text");
+//        testDecryption("Cipher text", "Expected plain text");
     }
 }

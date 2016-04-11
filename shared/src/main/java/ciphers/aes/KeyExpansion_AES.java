@@ -33,8 +33,6 @@ public class KeyExpansion_AES {
             i++;
         }
 
-        System.out.println("Initial Key = " + w[0] + w[1] + w[2] + w[3]);
-
         i = Nk; //4
 
         //num rounds*num blocks
@@ -54,7 +52,6 @@ public class KeyExpansion_AES {
 
             } else if ((Nk > 6) && (i % Nk == 4)) {
                 //temp = SubWord(temp);
-                System.out.println("row + " + i + "Something was commented out here");
             }
 
             w[i] = bigBinaryToHex(xorStrings(temp, w[i - Nk]));
@@ -70,8 +67,6 @@ public class KeyExpansion_AES {
     private List<String[][]> chopArrays(int Nk, int Nr, String[] w) {
         
         String[][] w_final = new String[44][4];
-        
-        System.out.println("this is w______ + " + Arrays.deepToString(w));
                 
         int count = 0;
         
@@ -88,8 +83,6 @@ public class KeyExpansion_AES {
 
             count++;
         }
-        
-        System.out.println("this is w_final + " + Arrays.deepToString(w));
 
         ArrayList<String[][]> res = new ArrayList<>();
 
@@ -104,15 +97,8 @@ public class KeyExpansion_AES {
                 tmp[k][2] = w_final[(j * 4) + k][2];
                 tmp[k][3] = w_final[(j * 4) + k][3];
             }
-            System.out.println("adding key for round " + j);
-            System.out.println(Arrays.deepToString(tmp));
-            res.add(tmp);
-        }
 
-        System.out.println(res.size());
-        
-        for (int i = 0; i < Nr + 1; i++) {
-            System.out.println("Round " + i + Arrays.deepToString(res.get(i)));
+            res.add(tmp);
         }
         
         return res;
