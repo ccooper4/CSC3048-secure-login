@@ -337,10 +337,14 @@ public class Cipher_AES extends BaseCipher {
         return result;
     }
 
+    public RoundKeyGenerator getKeyGenerator() {
+        return keyGen;
+    }
+
     /**
      * Inner class for round key generation.
      */
-    private class RoundKeyGenerator {
+    public class RoundKeyGenerator {
 
         private int numRounds;
         private List<String[][]> roundKeys; // 4x4 arrays in list - 11 of these
@@ -355,19 +359,19 @@ public class Cipher_AES extends BaseCipher {
             roundKeys = performKeyExpansion();
         }
 
-        private String[][] getFirstKey() {
+        public String[][] getFirstKey() {
             return roundKeys.get(0);
         }
 
-        private String[][] getLastKey() {
+        public String[][] getLastKey() {
             return roundKeys.get(roundKeys.size() -1);
         }
 
-        private String[][] getRoundKey(int roundNumber) {
+        public String[][] getRoundKey(int roundNumber) {
             return roundKeys.get(roundNumber);
         }
 
-        private int getNumRounds() {
+        public int getNumRounds() {
             return numRounds;
         }
 

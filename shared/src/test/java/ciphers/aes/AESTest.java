@@ -2,6 +2,7 @@ package ciphers.aes;
 
 import ciphers.BaseCipherTest;
 import org.junit.Test;
+import static org.junit.Assert.assertArrayEquals;
 
 public class AESTest extends BaseCipherTest {
 
@@ -12,17 +13,8 @@ public class AESTest extends BaseCipherTest {
     @Test
     @Override
     public void testEncryption() {
+        // TODO: Add expected result.
 //        testEncryption("mark frequency  ", "expected result");
-
-//        m   q c
-//        a f u y
-//        r r e
-//        k e n
-
-//        6d 20 71 63
-//        61 66 75 79
-//        72 72 65 20
-//        6b 65 6e 20
     }
 
     @Test
@@ -33,10 +25,14 @@ public class AESTest extends BaseCipherTest {
     
     @Test
     public void testKeyExpansion() {
-        KeyExpansion_AES keyExpansion_aes = new KeyExpansion_AES();
+        String[][] actualInitialRound = ((Cipher_AES) cipher).getKeyGenerator().getFirstKey();
+        String[][] actualFinalRound = ((Cipher_AES) cipher).getKeyGenerator().getLastKey();
 
-//        String[][] expandedKeys = keyExpansion_aes.keyExpansion("2B7E1516 28AED2A6 ABF71588 09CF4F3C", 4, 10, 4);
+        // TODO: Add expected values.
+        String[][] expectedInitialRound = null;
+        String[][] expectedFinalRound = null;
 
-//        System.out.println(Arrays.deepToString(expandedKeys));
+        assertArrayEquals(expectedInitialRound, actualInitialRound);
+        assertArrayEquals(expectedFinalRound, actualFinalRound);
     }
 }
