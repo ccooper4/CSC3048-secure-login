@@ -1,6 +1,7 @@
 package ciphers.aes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class KeyExpansion_AES {
@@ -33,8 +34,11 @@ public class KeyExpansion_AES {
             i++;
         }
 
+        System.out.println("Initial Key = " + w[0] + w[1] + w[2] + w[3]);
+
         i = Nk; //4
 
+        //num rounds*num blocks
         while (i < Nb * (Nr + 1)) {
 
             temp = w[i - 1];
@@ -51,6 +55,7 @@ public class KeyExpansion_AES {
 
             } else if ((Nk > 6) && (i % Nk == 4)) {
                 //temp = SubWord(temp);
+                System.out.println("row + " + i + "Something was commented out here");
             }
 
             w[i] = bigBinaryToHex(xorStrings(temp, w[i - Nk]));
@@ -59,7 +64,17 @@ public class KeyExpansion_AES {
 
         }
 
+        //chopArrays basically       
+        return chopArrays(w_final, Nk, Nr, w);
+
+    }
+
+    private List<String[][]> chopArrays(String[][] w_final, int Nk, int Nr, String[] w) {
+
         int count = 0;
+        
+        System.out.println("this is w_____ + " + Arrays.deepToString(w));
+        
         for (String w1 : w) {
 
             String tmp[] = new String[4];
@@ -74,16 +89,11 @@ public class KeyExpansion_AES {
             count++;
         }
         
-        //chopArrays basically       
-        return chopArrays(w_final, Nk, Nr); 
+        System.out.println("this is w_finl + " + Arrays.deepToString(w));
 
-    }
-
-    private List<String[][]> chopArrays(String[][] w_final, int Nk, int Nr) {
-        
         String[][] tmp = new String[4][4];
         ArrayList<String[][]> res = new ArrayList<>();
-        
+
         for (int j = 0; j < Nr + 1; j++) {
             for (int k = 0; k < Nk; k++) {
                 tmp[k][0] = w_final[(j * 4) + k][0];
@@ -91,7 +101,15 @@ public class KeyExpansion_AES {
                 tmp[k][2] = w_final[(j * 4) + k][2];
                 tmp[k][3] = w_final[(j * 4) + k][3];
             }
+            System.out.println("adding key for round " + j);
+            System.out.println(Arrays.deepToString(tmp));
             res.add(tmp);
+        }
+
+        System.out.println(res.size());
+        
+        for (int i = 0; i < Nr + 1; i++) {
+            System.out.println("Round " + i + Arrays.deepToString(res.get(0)));
         }
         
         return res;
