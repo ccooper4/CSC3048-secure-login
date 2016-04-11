@@ -6,10 +6,10 @@ import java.util.List;
 
 public class Cipher_AES extends BaseCipher {
 
-    private static final String[][] DEFAULT_KEY = { {"2b", "7e", "15", "16"},
+    public static final String[][] DEFAULT_KEY = { {"2b", "7e", "15", "16"},
                                                     {"28", "ae", "d2", "a6"},
                                                     {"ab", "f7", "15", "88"},
-                                                    {"09", "cf", "47", "3c"} };
+                                                    {"09", "cf", "4f", "3c"} };
 
     // Matrix used for mix columns
     private final String[][] MIX_COLUMN_MATRIX = {  {"2", "3", "1", "1"},
@@ -134,6 +134,18 @@ public class Cipher_AES extends BaseCipher {
             }
         }
 
+        for (int i = 0; i < blockSideLength; i++) {
+            for (int j = 0; j < blockSideLength; j++) {
+                String value = inputBlock[i][j];
+
+                if (value.length() < 2) {
+                    value = 0 + value;
+                }
+
+                inputBlock[i][j] = value;
+            }
+        }
+
         return inputBlock;
     }
 
@@ -152,8 +164,8 @@ public class Cipher_AES extends BaseCipher {
      * @param roundKey  The key to XOR with the state.
      */
     private void addRoundKey(String[][] state, String[][] roundKey) {
-        roundKey = ROUND_KEY_TEST_KEY;
-        state = ROUND_KEY_TEST_STATE;
+//        roundKey = ROUND_KEY_TEST_KEY;
+//        state = ROUND_KEY_TEST_STATE;
         for (int i = 0; i < blockSideLength; i++) {
             for (int j = 0; j < blockSideLength; j++) {
                 state[i][j] = CipherUtils.hex_XOR(state[i][j], roundKey[i][j]);
@@ -224,7 +236,7 @@ public class Cipher_AES extends BaseCipher {
      * @param state The state.
      */
     private void mixColumns(String[][] state) {
-        state = MIX_COLUMN_TEST;
+//        state = MIX_COLUMN_TEST;
 
         // Invert the state to get columns
         String[][] mixedColumnState = new String[blockSideLength][blockSideLength];
