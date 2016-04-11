@@ -13,15 +13,14 @@ public class AESTest extends BaseCipherTest {
     @Test
     @Override
     public void testEncryption() {
-        // TODO: Add expected result.
-//        testEncryption("mark frequency  ", "expected result");
-//        testEncryption("2Cö¨\u0088Z0\u008D11\u0098¢à7\u00074", "expected result");
+        testEncryption("mark frequency  ", "@8{³&\u0000³Z²8\fF\u001FÀÃr");
+        testEncryption("2Cö¨\u0088Z0\u008D11\u0098¢à7\u00074", "9%\u0084\u001D\u0002Ü\tûÜ\u0011\u0085\u0097\u0019j\u000B2");
     }
 
     @Test
     @Override
     public void testDecryption() {
-//        testDecryption("cipher text", "expected result");
+//        testDecryption("@8{³&\u0000³Z²8\fF\u001FÀÃr", "mark frequency  ");
     }
     
     @Test

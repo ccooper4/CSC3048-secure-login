@@ -74,9 +74,9 @@ public class Cipher_AES extends BaseCipher {
     public String encrypt(String plaintext) {
         String[][] state = getInputBlock(plaintext);
 
-        addRoundKey(state, keyGen.getFirstKey());
-        performRounds(state);
-        performFinalRound(state);
+        state = addRoundKey(state, keyGen.getFirstKey());
+        state = performRounds(state);
+        state = performFinalRound(state);
 
         String output = getOutputString(state);
         logEncryption(plaintext, output);
@@ -87,7 +87,7 @@ public class Cipher_AES extends BaseCipher {
     public String decrypt(String encryptedText) {
         String output = null;
         logDecryption(encryptedText, output);
-        return null;
+        return output;
     }
 
     /**
@@ -96,9 +96,9 @@ public class Cipher_AES extends BaseCipher {
      * @return      The processed state.
      */
     private String[][] performFinalRound(String[][] state) {
-        subBytes(state);
-        shiftRows(state);
-        addRoundKey(state, keyGen.getLastKey());
+        state = subBytes(state);
+        state = shiftRows(state);
+        state = addRoundKey(state, keyGen.getLastKey());
         return state;
     }
 
@@ -106,13 +106,15 @@ public class Cipher_AES extends BaseCipher {
      * Perform a designated number of rounds.
      * @param state     The initial state to perform the rounds on.
      */
-    private void performRounds(String[][] state) {
+    private String[][] performRounds(String[][] state) {
         for (int i = 1; i < keyGen.getNumRounds(); i++) {
-            subBytes(state);
-            shiftRows(state);
-            mixColumns(state);
-            addRoundKey(state, keyGen.getRoundKey(i));
+            state = subBytes(state);
+            state = shiftRows(state);
+            state = mixColumns(state);
+            state = addRoundKey(state, keyGen.getRoundKey(i));
         }
+
+        return state;
     }
 
     /**
@@ -134,6 +136,7 @@ public class Cipher_AES extends BaseCipher {
             }
         }
 
+        // Account for small values, prefix zero
         for (int i = 0; i < blockSideLength; i++) {
             for (int j = 0; j < blockSideLength; j++) {
                 String value = inputBlock[i][j];
@@ -155,7 +158,14 @@ public class Cipher_AES extends BaseCipher {
      * @return      The output text
      */
     private String getOutputString(String[][] state) {
-        return null;
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < blockSideLength; i++) {
+            for (int j = 0; j < blockSideLength; j++) {
+                output.append(String.valueOf((char)Integer.parseInt((state[i][j]), 16)));
+            }
+        }
+
+        return output.toString();
     }
 
     /**
@@ -163,21 +173,20 @@ public class Cipher_AES extends BaseCipher {
      * @param state     The current state.
      * @param roundKey  The key to XOR with the state.
      */
-    private void addRoundKey(String[][] state, String[][] roundKey) {
-//        roundKey = ROUND_KEY_TEST_KEY;
-//        state = ROUND_KEY_TEST_STATE;
+    private String[][] addRoundKey(String[][] state, String[][] roundKey) {
         for (int i = 0; i < blockSideLength; i++) {
             for (int j = 0; j < blockSideLength; j++) {
                 state[i][j] = CipherUtils.hex_XOR(state[i][j], roundKey[i][j]);
             }
         }
+        return state;
     }
 
     /**
      * Perform the substitute bytes operation using the declared s-box.
      * @param state The state to transform.
      */
-    private void subBytes(String[][] state) {
+    private String[][] subBytes(String[][] state) {
         for (int i = 0; i < blockSideLength; i++) {
             for (int j = 0; j < blockSideLength; j++) {
 
@@ -194,6 +203,8 @@ public class Cipher_AES extends BaseCipher {
                 state[i][j] = lookup;
             }
         }
+
+        return state;
     }
 
     /**
@@ -201,7 +212,7 @@ public class Cipher_AES extends BaseCipher {
      * Shift row 0 0 places, shift row 1 1 place, shift row 2 2 places and shift row 3 3 places.
      * @param state The current state.
      */
-    private void shiftRows(String[][] state) {
+    private String[][] shiftRows(String[][] state) {
         // Invert the 2d array for row oriented processing
         String[][] invertedState = getInvertedArray(state);
 
@@ -212,7 +223,7 @@ public class Cipher_AES extends BaseCipher {
         }
 
         // Re-invert the 2d array for further column oriented processing
-        state = getInvertedArray(invertedState);
+        return getInvertedArray(invertedState);
     }
 
     /**
@@ -235,7 +246,7 @@ public class Cipher_AES extends BaseCipher {
      * Perform a mix columns operation on the current state.
      * @param state The state.
      */
-    private void mixColumns(String[][] state) {
+    private String[][] mixColumns(String[][] state) {
 //        state = MIX_COLUMN_TEST;
 
         // Invert the state to get columns
@@ -268,7 +279,7 @@ public class Cipher_AES extends BaseCipher {
             }
         }
 
-        state = mixedColumnState;
+        return mixedColumnState;
     }
 
     /**
