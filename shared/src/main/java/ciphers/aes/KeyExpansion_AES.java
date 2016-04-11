@@ -112,7 +112,7 @@ public class KeyExpansion_AES {
         System.out.println(res.size());
         
         for (int i = 0; i < Nr + 1; i++) {
-            System.out.println("Round " + i + Arrays.deepToString(res.get(0)));
+            System.out.println("Round " + i + Arrays.deepToString(res.get(i)));
         }
         
         return res;

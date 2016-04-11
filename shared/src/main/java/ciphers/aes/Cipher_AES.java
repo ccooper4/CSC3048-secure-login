@@ -9,7 +9,7 @@ public class Cipher_AES extends BaseCipher {
     private static final String[][] DEFAULT_KEY = { {"2b", "7e", "15", "16"},
                                                     {"28", "ae", "d2", "a6"},
                                                     {"ab", "f7", "15", "88"},
-                                                    {"09", "cf", "47", "3c"} };
+                                                    {"09", "cf", "4f", "3c"} };
 
     // Matrix used for mix columns
     private final String[][] MIX_COLUMN_MATRIX = {  {"2", "3", "1", "1"},
