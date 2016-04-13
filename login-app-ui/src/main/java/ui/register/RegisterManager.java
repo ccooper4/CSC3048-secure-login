@@ -1,4 +1,4 @@
-package ui.login;
+package ui.register;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -26,7 +26,7 @@ public class RegisterManager {
         try {
             FXMLLoader loader = Loader.getFXML("register");
             scene.setRoot(loader.load());
-            LoginController controller = loader.<RegisterController>getController();
+            RegisterController controller = loader.<RegisterController>getController();
             controller.initManager(this);
         } catch (IOException ex) {
             LogUtils.getInstance().error("IOException", ex);
