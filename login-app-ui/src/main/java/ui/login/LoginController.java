@@ -1,15 +1,17 @@
 package ui.login;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import util.EncryptedLogger;
 
 /**
  * Controls the login screen
  */
 public class LoginController {
+
+    private EncryptedLogger log = new EncryptedLogger(getClass());
+
     @FXML
     private TextField user;
     @FXML
@@ -21,13 +23,10 @@ public class LoginController {
     }
 
     public void initManager(final LoginManager loginManager) {
-        loginButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String sessionID = authorize();
-                if (sessionID != null) {
-                    loginManager.authenticated(sessionID);
-                }
+        loginButton.setOnAction(event -> {
+            String sessionID1 = authorize();
+            if (sessionID1 != null) {
+                loginManager.authenticated(sessionID1);
             }
         });
     }
@@ -40,6 +39,7 @@ public class LoginController {
      */
     private String authorize() {
         if ("open".equals(user.getText()) && "sesame".equals(password.getText())) {
+            log.info("User: " + user.getText() + " logged in");
             return generateSessionID();
         } else {
             return null;

@@ -2,9 +2,8 @@ package ui.register;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import util.LogUtils;
 import ui.Loader;
-import ui.main.MainViewController;
+import util.EncryptedLogger;
 
 import java.io.IOException;
 
@@ -13,6 +12,7 @@ import java.io.IOException;
  */
 public class RegisterManager {
     private Scene scene;
+    private EncryptedLogger log = new EncryptedLogger(RegisterManager.class);
 
     public RegisterManager(Scene scene) {
         this.scene = scene;
@@ -29,7 +29,7 @@ public class RegisterManager {
             RegisterController controller = loader.<RegisterController>getController();
             controller.initManager(this);
         } catch (IOException ex) {
-            LogUtils.getInstance().error("IOException", ex);
+           log.error("IOException", ex);
         }
     }
 }

@@ -2,7 +2,7 @@ package ui.login;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import util.LogUtils;
+import util.EncryptedLogger;
 import ui.Loader;
 import ui.main.MainViewController;
 
@@ -12,6 +12,8 @@ import java.io.IOException;
  * Manages control flow for logins
  */
 public class LoginManager {
+
+    private EncryptedLogger log = new EncryptedLogger(getClass());
     private Scene scene;
 
     public LoginManager(Scene scene) {
@@ -38,10 +40,10 @@ public class LoginManager {
         try {
             FXMLLoader loader = Loader.getFXML("login");
             scene.setRoot(loader.load());
-            LoginController controller = loader.<LoginController>getController();
+            LoginController controller = loader.getController();
             controller.initManager(this);
         } catch (IOException ex) {
-            LogUtils.getInstance().error("IOException", ex);
+            log.error("IOException", ex);
         }
     }
 
@@ -50,10 +52,10 @@ public class LoginManager {
             FXMLLoader loader = Loader.getFXML("mainview");
             scene.setRoot(loader.load());
 
-            MainViewController controller = loader.<MainViewController>getController();
+            MainViewController controller = loader.getController();
             controller.initSessionID(this, sessionID);
         } catch (IOException ex) {
-            LogUtils.getInstance().error("IOException", ex);
+            log.error("IOException", ex);
         }
     }
 }
