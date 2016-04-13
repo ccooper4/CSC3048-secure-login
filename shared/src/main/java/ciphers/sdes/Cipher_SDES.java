@@ -8,37 +8,37 @@ import java.util.Arrays;
 
 public class Cipher_SDES extends BaseCipher {
 
-    static int[] plainText = {1,1,0,0,1,0,0,1};
-    static int[] cipherText = {1,0,0,0,1,1,1,1};
-    static int[] key = {1,1,1,1,0,1,1,0,0,0};
-    static int[] ip = {2, 6, 3, 1, 4, 8, 5, 7};
-    static int[] ep = {4, 1, 2, 3, 2, 3, 4, 1};
-    static int[] inverse_ip = {4, 1, 3, 5, 7, 2, 8, 6};
-    static int[] p10 = {3, 5, 2, 7, 4, 10, 1, 9, 8, 6};
-    static int[] p8 = {6, 3, 7, 4, 8, 5, 10, 9};
-    static int[] p4 = {2, 4, 3, 1};
+    private int[] plainText = {1,1,0,0,1,0,0,1};
+    private int[] cipherText = {1,0,0,0,1,1,1,1};
+    private int[] key = {1,1,1,1,0,1,1,0,0,0};
+    private int[] ip = {2, 6, 3, 1, 4, 8, 5, 7};
+    private int[] ep = {4, 1, 2, 3, 2, 3, 4, 1};
+    private int[] inverse_ip = {4, 1, 3, 5, 7, 2, 8, 6};
+    private int[] p10 = {3, 5, 2, 7, 4, 10, 1, 9, 8, 6};
+    private int[] p8 = {6, 3, 7, 4, 8, 5, 10, 9};
+    private int[] p4 = {2, 4, 3, 1};
 
-    static int[][] sBox1 = {  {1, 0, 3, 2},
+    private final int[][] sBox1 = {  {1, 0, 3, 2},
             {3, 2, 1, 0},
             {0, 2, 1, 3},
             {3, 1, 3, 2} };
 
-    static int[][] sBox2 = {  {0, 1, 2, 3},
+    private final int[][] sBox2 = {  {0, 1, 2, 3},
             {2, 0, 1, 3},
             {3, 0, 1, 0},
             {2, 1, 0, 3} };
 
-    static int[] temp10 = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-    static int[] p4Result = { -1, -1, -1, -1 };
-    static int[] f1Result = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-    static int[] f2Result = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-    static int[] k1 = { -1, -1, -1, -1, -1, -1, -1, -1 };
-    static int[] k2 = { -1, -1, -1, -1, -1, -1, -1, -1 };
-    static int[] IPP = { -1, -1, -1, -1, -1, -1, -1, -1 };
-    static int[] left_nibble = {-1, -1, -1, -1};
-    static int[] right_nibble = {-1, -1, -1, -1};
+    private int[] temp10 = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+    private int[] p4Result = { -1, -1, -1, -1 };
+    private int[] f1Result = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+    private int[] f2Result = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+    private int[] k1 = { -1, -1, -1, -1, -1, -1, -1, -1 };
+    private int[] k2 = { -1, -1, -1, -1, -1, -1, -1, -1 };
+    private int[] IPP = { -1, -1, -1, -1, -1, -1, -1, -1 };
+    private int[] left_nibble = {-1, -1, -1, -1};
+    private int[] right_nibble = {-1, -1, -1, -1};
 
-    public static ArrayList<int[]> encryptWord(String plainText)
+    public ArrayList<int[]> encryptWord(String plainText)
     {
         ArrayList<int[]> encrypted = new ArrayList<>();
         String temp;
@@ -77,7 +77,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param input
      * @return
      */
-    public static int[] encrypt(int[] input) {
+    public int[] encrypt(int[] input) {
         plainText = input;
         keyGeneration();
         initialPermutation();
@@ -158,7 +158,7 @@ public class Cipher_SDES extends BaseCipher {
     /**
      * Method to generation k1 & k2
      */
-    private static void keyGeneration(){
+    private void keyGeneration(){
         //take key and apply p10 permutation, store in temp10
         applyPermutation(key, p10, temp10);
 
@@ -184,7 +184,7 @@ public class Cipher_SDES extends BaseCipher {
     /**
      * The initial Permutation
      */
-    private static void initialPermutation(){
+    private void initialPermutation(){
         applyPermutation(plainText, ip, IPP);
     }
 
@@ -193,7 +193,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param key
      * @return
      */
-    private static int[] kFunction(int[] key){
+    private int[] kFunction(int[] key){
         int[] rightIPP = new int[4];
         int[] temp1 = new int[8];
         int[] temp2 = new int[8];
@@ -235,7 +235,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param sboxCombined
      * @return
      */
-    private static int[] f1(int[] sboxCombined){
+    private int[] f1(int[] sboxCombined){
         for (int i = 0; i < sboxCombined.length; i++) {
             sboxCombined[i] = (sboxCombined[i] ^ IPP[i]); //left half of initial permutation and XOR with p4result
         }
@@ -257,7 +257,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param sboxCombined
      * @return
      */
-    private static int[] f2(int[] sboxCombined){
+    private int[] f2(int[] sboxCombined){
         for (int i = 0; i < sboxCombined.length; i++) {
             sboxCombined[i] = (sboxCombined[i] ^ left_nibble[i]); //left half of initial permutation and XOR with p4result
         }
@@ -276,7 +276,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param rolCol
      * @return
      */
-    private static int getSboxValues(int[][] sBox, int[] rolCol){
+    private int getSboxValues(int[][] sBox, int[] rolCol){
         //First get sbox row
         String row = Integer.toString(rolCol[0]);
         row += Integer.toString(rolCol[3]);
@@ -295,7 +295,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param array
      * @return
      */
-    private static int [] inversePermutation(int[] array){
+    private int [] inversePermutation(int[] array){
         int[] destArray = new int[8];
         applyPermutation(array, inverse_ip, destArray);
         return destArray;
@@ -307,7 +307,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param permutation
      * @param destination
      */
-    private static void applyPermutation(int[] source, int[] permutation, int[] destination) {
+    private void applyPermutation(int[] source, int[] permutation, int[] destination) {
         for (int i = 0; i < permutation.length; i++) {
             destination[i] = source[permutation[i] - 1];
         }
@@ -320,7 +320,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param numElement
      * @param shiftLeftAmount
      */
-    private static void shiftArrayElementsLeft(int[] array, int startElement, int numElement, int shiftLeftAmount) {
+    private void shiftArrayElementsLeft(int[] array, int startElement, int numElement, int shiftLeftAmount) {
         int[] arrayCopy = new int[array.length];
         System.arraycopy(array, 0, arrayCopy, 0, array.length);
 
@@ -336,7 +336,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param destination
      * @return
      */
-    private static int[] XOR(int[] input1, int[] input2, int[] destination) {
+    private int[] XOR(int[] input1, int[] input2, int[] destination) {
         for (int i = 0; i < input1.length; i++) {
             destination[i] = (input1[i] ^ input2[i]);
         }
