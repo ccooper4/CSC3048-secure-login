@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane prefHeight="168.0" prefWidth="231.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.login.LoginController">
+<StackPane prefHeight="168.0" prefWidth="231.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.login.RegisterController">
     <children>
         <StackPane>
             <children>
@@ -16,10 +16,10 @@
                             <children>
                                 <Label text="First name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                                 <Label text="Last name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                <TextField fx:id="user" promptText="Use &quot;open&quot; to login" text="open" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                                <TextField fx:id="password" promptText="Use &quot;sesame&quot; to login" text="sesame" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField fx:id="fName" promptText="Use &quot;open&quot; to register" text="firstname" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <TextField fx:id="sName" promptText="Use &quot;sesame&quot; to register" text="secondname" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="Email:" GridPane.rowIndex="2" />
-                        <TextField fx:id="password1" promptText="Use &quot;sesame&quot; to login" text="sesame" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="email" promptText="Use &quot;sesame&quot; to login" text="email" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                             </children>
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="109.0" />
@@ -33,7 +33,7 @@
                         </GridPane>
                         <StackPane prefHeight="35.0" prefWidth="249.0">
                      <children>
-                        <Button id="loginButton" fx:id="logoutButton" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Logout" />
+                        <Button id="registerButton" fx:id="registerButton" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Register" />
                      </children>
                         </StackPane>
                     </children>
