@@ -3,10 +3,22 @@ package cipher.ciphers.aes;
 import java.util.ArrayList;
 import java.util.List;
 
+/**Key expansion code for AES
+ *
+ * @author David Fee
+ */
 public class KeyExpansion_AES {
 
     private static final int[] ROTATEPERMUTATION = {2, 3, 4, 1};
 
+    /** main key expansion method
+     *
+     * @param originalKey initial algorithm key
+     * @param Nk number of keys
+     * @param Nr Number of rounds
+     * @param Nb Number of blocks
+     * @return list of each key for each round
+     */
     public List<String[][]> keyExpansion(String[][] originalKey, int Nk, int Nr, int Nb) {
         
         String parsedString = "";
@@ -104,6 +116,9 @@ public class KeyExpansion_AES {
     }
 
     private String generateRcon(int i, int nK, int x) {
+        
+        //to calculate do left-shift followed with a conditional XOR with a constant
+        //rcon = (rcon left shift) ^ (0x11b & -(rcon>>7));
 
         String res = "";
 
