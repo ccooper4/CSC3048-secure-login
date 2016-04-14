@@ -13,4 +13,6 @@ public interface IUserService {
     User getUserByLoginId(String loginId);
 
     User createUser(String firstName, String lastName, String password);
+
+    User createAdminUser(String firstName, String lastName, String password);
 }

@@ -1,5 +1,7 @@
 package qub.domain;
 
+import qub.util.UserRole;
+
 import javax.persistence.*;
 
 /**
@@ -10,6 +12,8 @@ public class User extends BaseEntity {
 
     private String loginId;
     private String password;
+
+    private String role;
 
     private String firstName;
     private String lastName;
@@ -41,6 +45,18 @@ public class User extends BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole userRole) {
+        setRole(userRole.toString());
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getLastName() {

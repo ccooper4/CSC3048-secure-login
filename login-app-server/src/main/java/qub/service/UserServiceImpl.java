@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 import qub.domain.User;
 import qub.repositories.UserRepository;
 import qub.util.LoginIdGenerator;
+import qub.util.UserRole;
 import util.EncryptedLogger;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     public User createUser(String firstName, String lastName, String password) {
+        return createUser(firstName, lastName, password, UserRole.USER);
+    }
+
+    public User createAdminUser(String firstName, String lastName, String password) {
+        return createUser(firstName, lastName, password, UserRole.ADMIN);
+    }
+
+    private User createUser(String firstName, String lastName, String password, UserRole userRole) {
         User newUser = new User(firstName, lastName);
 
         // Generate a new user id
@@ -52,6 +61,7 @@ public class UserServiceImpl implements IUserService {
 
         newUser.setLoginId(newLoginId);
         newUser.setPassword(password);
+        newUser.setRole(userRole);
 
         saveUser(newUser);
         return newUser;

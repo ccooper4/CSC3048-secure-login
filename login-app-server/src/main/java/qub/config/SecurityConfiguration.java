@@ -20,11 +20,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder authentication) throws Exception {
 
-        String usersQuery = "select LOGIN_ID,PASSWORD from USER where LOGIN_ID=?";
+        String usersQuery = "SELECT LOGIN_ID, PASSWORD, 'true' FROM USER WHERE LOGIN_ID=?";
+        String authoritiesQuery = "SELECT LOGIN_ID, ROLE from USER where LOGIN_ID=?";
 
         authentication.jdbcAuthentication()
                         .dataSource(dataSource)
-                        .usersByUsernameQuery(usersQuery);
+                        .usersByUsernameQuery(usersQuery)
+                        .authoritiesByUsernameQuery(authoritiesQuery);
     }
 
     @Override
