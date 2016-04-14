@@ -5,8 +5,8 @@ import org.junit.Test;
 
 public class HillTest extends BaseCipherTest {
     
-    private String plainText = "pay more moneys";
-    private String cipherText = "lwo hxvo movwq";
+    private String plainText  = "pay more moneyss";
+    private String cipherText = "lwo hxvo movwqii";
 
     private String plainText1 = "pay more money";
     private String cipherText1 = "lns hdle wmtrw";
@@ -32,12 +32,12 @@ public class HillTest extends BaseCipherTest {
         testEncryption(plainText, cipherText);
     }
     
-//    @Test
-//    public void testEncryption2() {        
-//        cipher = new Cipher_Hill(key1);
-//        testEncryption(plainText1, cipherText1);
-//    }
-//    
+    @Test
+    public void testEncryption2() {        
+        cipher = new Cipher_Hill(key1);
+        testEncryption(plainText1, cipherText1);
+    }
+  
 //    @Test
 //    public void testEncryption3() {
 //        cipher = new Cipher_Hill(key2);
