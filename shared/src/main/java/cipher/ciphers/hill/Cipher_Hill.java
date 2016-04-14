@@ -4,10 +4,10 @@ import cipher.ciphers.BaseCipher;
 import cipher.util.CipherUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.jboss.logging.annotations.LogMessage;
 
-/**
- * @author David
+/**Hill cipher code
+ *
+ * @author Dave
  */
 public class Cipher_Hill extends BaseCipher {
 
@@ -20,6 +20,9 @@ public class Cipher_Hill extends BaseCipher {
     private static int[] block = new int[matrixDimension];
     private static int[] blockSum = new int[matrixDimension];
 
+    /** Default constructor for Hill cipher using assignment provided key
+     *
+     */
     public Cipher_Hill() {
         int[][] key = {
             {15, 10, 29},
@@ -29,15 +32,27 @@ public class Cipher_Hill extends BaseCipher {
         setKey(key);
     }
 
+    /**Custom constructor for Hill cipher using parameter provided key
+     *
+     * @param key is the key provided for the cipher
+     */
     public Cipher_Hill(int[][] key) {
         setKey(key);
     }
 
+    /**Sets the key for the Hill cipher using the passed param key
+     *
+     * @param key is the key provided for the cipher
+     */
     public void setKey(int[][] key) {
         Cipher_Hill.key = key;
         setKeyInverse(key);
     }
 
+    /**Sets the inverse key for the Hill cipher using the passed param key
+     *
+     * @param key is the key provided for the cipher
+     */
     public void setKeyInverse(int[][] key) {
         try {
             Cipher_Hill.keyInverse = MatrixOperations.inverse(key);
@@ -47,14 +62,27 @@ public class Cipher_Hill extends BaseCipher {
         }                
     }    
     
+    /** gets the matrixDimension
+     *
+     * @return
+     */
     public int getMatrixDimension() {
         return matrixDimension;
     }
 
+    /** Sets the matric dimension
+     *
+     * @param matrixDimension the square size of the matrix
+     */
     public void setMatrixDimension(int matrixDimension) {
         Cipher_Hill.matrixDimension = matrixDimension;
     }
 
+    /**Method to decrypt encrypted text
+     *
+     * @param cipherText is the text to be decoded
+     * @return returns the unencoded cipherText
+     */
     @Override
     public String decrypt(String cipherText) {
         if (Cipher_Hill.keyInverse == null) {
@@ -64,11 +92,23 @@ public class Cipher_Hill extends BaseCipher {
         }
     }
 
+    /**Method to encrypt plaint text
+     *
+     * @param plainText is the text to be encrypted
+     * @return returns the encryptes cipherText
+     */
     @Override
     public String encrypt(String plainText) {
         return process(plainText, key, "Encrypting plainText");
     }
 
+    /**Method is used to apply a key cipher to the text
+     *
+     * @param text is the String on which the key will be applied to
+     * @param key is either the key or the inverse key,depends on encrypt/decrpt
+     * @param conversion is for providing which way the conversion is being done
+     * @return the encrypted/decrypted text
+     */
     public String process(String text, int[][] key, String conversion) {
         String result = "";
         ArrayList<Integer> spacePositions = new ArrayList<>();
