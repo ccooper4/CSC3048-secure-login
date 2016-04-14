@@ -21,14 +21,27 @@ public class UserLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        User andrew = new User("Andrew", "Fletcher", "afletcher@test.com");
-        User chris = new User("Chris", "Cooper", "ccooper@test.com");
-        User david = new User("David", "Fee", "dfee@test.com");
-        User rory = new User("Rory", "Powell", "rpowell@test.com");
 
-        userRepository.save(andrew);
-        userRepository.save(chris);
-        userRepository.save(david);
-        userRepository.save(rory);
+        // Create users if they do not exist
+
+        if (userRepository.findByFirstName("Andrew").isEmpty()) {
+            User andrew = new User("Andrew", "Fletcher", "afletcher@test.com");
+            userRepository.save(andrew);
+        }
+
+        if (userRepository.findByFirstName("Chris").isEmpty()) {
+            User chris = new User("Chris", "Cooper", "ccooper@test.com");
+            userRepository.save(chris);
+        }
+
+        if (userRepository.findByFirstName("David").isEmpty()) {
+            User david = new User("David", "Fee", "dfee@test.com");
+            userRepository.save(david);
+        }
+
+        if (userRepository.findByFirstName("Rory").isEmpty()) {
+            User rory = new User("Rory", "Powell", "rpowell@test.com");
+            userRepository.save(rory);
+        }
     }
 }
