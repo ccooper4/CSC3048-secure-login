@@ -10,6 +10,10 @@ public abstract class BaseCipher {
 
     public abstract String decrypt(String encryptedText);
     
+    protected void logMessage(String input) {
+        log.info(input);
+    }
+    
     protected void log(String input, String output, String conversion) {
         log.info(conversion + " [" + input + "] using: " + getClass().getSimpleName());
         log.info("Result: " + output);

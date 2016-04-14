@@ -2,31 +2,30 @@ package cipher.ciphers.hill;
 
 import cipher.ciphers.BaseCipher;
 import cipher.util.CipherUtils;
-
 import java.util.ArrayList;
+import java.util.Arrays;
+import org.jboss.logging.annotations.LogMessage;
 
 /**
  * @author David
  */
 public class Cipher_Hill extends BaseCipher {
 
-    private static final int MATRIXDIMENSION = 3;
+    private static int matrixDimension = 3;
 
-    private static int[][] key = new int[MATRIXDIMENSION][MATRIXDIMENSION];
-    private static int[][] keyInverse = new int[MATRIXDIMENSION][MATRIXDIMENSION];
+    private static int[][] key = new int[matrixDimension][matrixDimension];
+    private static int[][] keyInverse = new int[matrixDimension][matrixDimension];
 
     private static int blockPos = 0;
-    private static int[] block = new int[MATRIXDIMENSION];
-    private static int[] blockSum = new int[MATRIXDIMENSION];
+    private static int[] block = new int[matrixDimension];
+    private static int[] blockSum = new int[matrixDimension];
 
     public Cipher_Hill() {
-
         int[][] key = {
             {15, 10, 29},
             {8, 17, 23},
             {38, 13, 5}
         };
-
         setKey(key);
     }
 
@@ -34,37 +33,50 @@ public class Cipher_Hill extends BaseCipher {
         setKey(key);
     }
 
-    public static void setKey(int[][] key) {
+    public void setKey(int[][] key) {
         Cipher_Hill.key = key;
         setKeyInverse(key);
     }
 
-    public static void setKeyInverse(int[][] key) {
-        Cipher_Hill.keyInverse = MatrixOperations.inverse(key);
+    public void setKeyInverse(int[][] key) {
+        try {
+            Cipher_Hill.keyInverse = MatrixOperations.inverse(key);
+        } catch (Exception e) {
+            logMessage("Cannot invert key. " + Arrays.deepToString(key));
+            Cipher_Hill.keyInverse = null;
+        }                
+    }    
+    
+    public int getMatrixDimension() {
+        return matrixDimension;
+    }
+
+    public void setMatrixDimension(int matrixDimension) {
+        Cipher_Hill.matrixDimension = matrixDimension;
     }
 
     @Override
     public String decrypt(String cipherText) {
-
-        return process(cipherText, keyInverse, "Encrypted cipherText");
+        if (Cipher_Hill.keyInverse == null) {
+            return "Cannot decrypt as the provided key is not invertible yet";
+        } else {
+            return process(cipherText, keyInverse, "Encrypted cipherText");
+        }
     }
 
     @Override
     public String encrypt(String plainText) {
-
-        return process(plainText, key, "Encrypted plainText");
-
+        return process(plainText, key, "Encrypting plainText");
     }
 
     public String process(String text, int[][] key, String conversion) {
-
         String result = "";
         ArrayList<Integer> spacePositions = new ArrayList<>();
 
         char chr;
 
-        block = new int[MATRIXDIMENSION];
-        blockSum = new int[MATRIXDIMENSION];
+        block = new int[matrixDimension];
+        blockSum = new int[matrixDimension];
 
         for (int pos = 0; pos < text.length(); pos++) {
 
@@ -81,13 +93,13 @@ public class Cipher_Hill extends BaseCipher {
             }
 
             //if the block/matrix is full
-            if (blockPos == MATRIXDIMENSION) {
+            if (blockPos == matrixDimension) {
                 blockPos = 0;
 
                 //for each row in the key
-                for (int vert = 0; vert < MATRIXDIMENSION; vert++) {
+                for (int vert = 0; vert < matrixDimension; vert++) {
                     //multiply it by the block/matrix and sum the results
-                    for (int i = 0; i < MATRIXDIMENSION; i++) {
+                    for (int i = 0; i < matrixDimension; i++) {
                         blockSum[vert] += key[vert][i] * block[i];
                     }
                     //mod the total
@@ -95,7 +107,7 @@ public class Cipher_Hill extends BaseCipher {
                 }
 
                 //convert the modded digit to a char and add to cipherText
-                for (int i = 0; i < MATRIXDIMENSION; i++) {
+                for (int i = 0; i < matrixDimension; i++) {
                     result += CipherUtils.digitToChar(blockSum[i]);
                     blockSum[i] = 0;
                 }
