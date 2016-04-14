@@ -6,6 +6,8 @@ import org.springframework.util.Assert;
 import qub.domain.User;
 import qub.repositories.UserRepository;
 import util.EncryptedLogger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -23,6 +25,15 @@ public class UserServiceImpl implements IUserService {
         Assert.notNull(email, "The email must not be null");
 
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public User getUserByName(String name) {
+        Assert.notNull(name, "The name must not be null");
+
+        List<User> users = new ArrayList<>(userRepository.findByFirstName(name));
+
+        return users.get(0);
     }
 
     @Override

@@ -6,6 +6,8 @@ public interface IUserService {
 
     User getUserByEmail(String email);
 
+    User getUserByName(String name);
+
     void deleteUser(String email);
 
     void updateUser(String email, User updatedUser);
