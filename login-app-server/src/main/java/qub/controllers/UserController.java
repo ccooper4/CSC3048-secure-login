@@ -22,7 +22,7 @@ public class UserController {
     private IUserService userService;
 
     @RequestMapping(value = "/currentUser", method = RequestMethod.GET)
-    public String getCurrentUser(){
+    public String getCurrentUser() {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();

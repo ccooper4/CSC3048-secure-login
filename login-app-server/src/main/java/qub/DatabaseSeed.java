@@ -12,12 +12,12 @@ import qub.repositories.UserRepository;
  * Load the default users into the in memory database upon application startup.
  */
 @Component
-public class UserLoader implements ApplicationListener<ContextRefreshedEvent> {
+public class DatabaseSeed implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
     private UserRepository userRepository;
 
-    private Logger log = Logger.getLogger(UserLoader.class);
+    private Logger log = Logger.getLogger(DatabaseSeed.class);
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
