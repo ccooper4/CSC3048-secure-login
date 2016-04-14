@@ -2,16 +2,15 @@ package qub.service;
 
 import qub.domain.User;
 
+import java.util.List;
+
 public interface IUserService {
 
-    User getUserByEmail(String email);
+    List<User> getUsersByFirstName(String name);
 
-    User getUserByName(String name);
+    User saveUser(User user);
 
-    void deleteUser(String email);
+    User getUserByLoginId(String loginId);
 
-    void updateUser(String email, User updatedUser);
-
-    void createUser(String firstName, String lastName, String email);
-
+    User createUser(String firstName, String lastName, String password);
 }

@@ -16,13 +16,13 @@ public class H2Configuration {
         return registrationBean;
     }
 
-//    @Bean(name = "dataSource")
-//    public DriverManagerDataSource dataSource() {
-//        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-//        driverManagerDataSource.setDriverClassName("org.h2.Driver");
-//        driverManagerDataSource.setUrl("jdbc:h2:file:~/h2/data");
-//        driverManagerDataSource.setUsername("sa");
-//        driverManagerDataSource.setPassword("");
-//        return driverManagerDataSource;
-//    }
+    @Bean(name = "dataSource")
+    public DriverManagerDataSource dataSource() {
+        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+        driverManagerDataSource.setDriverClassName("org.h2.Driver");
+        driverManagerDataSource.setUrl("jdbc:h2:file:~/h2/data");
+        driverManagerDataSource.setUsername("sa");
+        driverManagerDataSource.setPassword("");
+        return driverManagerDataSource;
+    }
 }

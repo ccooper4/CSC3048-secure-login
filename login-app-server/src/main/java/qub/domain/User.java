@@ -1,40 +1,46 @@
 package qub.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+/**
+ * A User of the application
+ */
 @Entity
-public class User {
+public class User extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private String loginId;
+    private String password;
 
     private String firstName;
     private String lastName;
-    private String email;
 
     // For use by spring data
     protected User() {}
 
-    public User(Long id) {
-        this.id = id;
-    }
-
-    public User(String firstName, String lastName, String email) {
+    /**
+     * Constructor.
+     * @param firstName The first name.
+     * @param lastName  The last name.
+     */
+    public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
     }
 
-    public String getEmail() {
-        return email;
+    public String getLoginId() {
+        return loginId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getLastName() {
@@ -53,18 +59,10 @@ public class User {
         this.firstName = firstName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
     @Override
     public String toString() {
-        return String.format("User[id=%d, firstName='%s', lastName='%s', email='%s']",
-                                id, firstName, lastName, email);
+        return String.format("User[id=%d, firstName='%s', lastName='%s']",
+                                id, firstName, lastName);
     }
 
 }

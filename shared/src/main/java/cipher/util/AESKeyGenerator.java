@@ -1,6 +1,6 @@
 package cipher.util;
 
-import java.util.Random;
+import static cipher.util.RandomNumberGen.getRandom;
 
 /**
  *  Utility class for generating a random key to be used for AES encryption
@@ -10,7 +10,7 @@ public class AESKeyGenerator {
     private static final int DEFAULT_KEY_SIZE = 16;
     private static final String[] DATASET = {  "1", "2", "3", "4", "5", "6", "7", "8", "9",
                                                 "a", "b", "c", "d", "e", "f"};
-    private static Random random = new Random();
+
 
     /**
      * Generate a new AES key using the default size of 128 bits / 16 bytes.
@@ -46,16 +46,6 @@ public class AESKeyGenerator {
         }
 
         return key;
-    }
-
-    /**
-     * Generate a random number between the bounds set (inclusive).
-     * @param min   The lower bound.
-     * @param max   The upper bound.
-     * @return      The random number.
-     */
-    private static int getRandom(int min, int max) {
-        return random.nextInt((max - min) + 1) + min;
     }
 
 }
