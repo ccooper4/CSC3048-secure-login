@@ -99,7 +99,6 @@ public class Cipher_Hill extends BaseCipher {
      */
     @Override
     public String encrypt(String plainText) {
-        System.out.println("Encrpyting : " + plainText);
         return process(plainText, key, "Encrypting plainText");
     }
 
@@ -140,7 +139,6 @@ public class Cipher_Hill extends BaseCipher {
 
             //for each char in the plainText
             chr = text.charAt(pos);
-            System.out.println("cahr:"+chr);
 
             //if its not a space then put it in the matrix/block
             if (chr != ' ') {
@@ -154,7 +152,6 @@ public class Cipher_Hill extends BaseCipher {
             //if the block/matrix is full
             if (blockPos == matrixDimension) {
                 blockPos = 0;
-                System.out.println("in");
 
                 //for each row in the key
                 for (int vert = 0; vert < matrixDimension; vert++) {
@@ -180,6 +177,7 @@ public class Cipher_Hill extends BaseCipher {
         }
         
         result = result.substring(0, initalTextLength - 1);
+        text = text.substring(0, initalTextLength - 1);
 
         log(text, result, conversion);
         
