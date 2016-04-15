@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import qub.domain.User;
 import qub.repositories.UserRepository;
+import qub.util.LoginIdGenerator;
 import util.EncryptedLogger;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,66 +22,39 @@ public class UserServiceImpl implements IUserService {
     protected UserServiceImpl() {}
 
     @Override
-    public User getUserByEmail(String email) {
-        Assert.notNull(email, "The email must not be null");
-
-        return userRepository.findByEmail(email);
-    }
-
-    @Override
-    public User getUserByName(String name) {
+    public List<User> getUsersByFirstName(String name) {
         Assert.notNull(name, "The name must not be null");
+        return new ArrayList<>(userRepository.findByFirstName(name));
+    }
 
-        List<User> users = new ArrayList<>(userRepository.findByFirstName(name));
-
-        return users.get(0);
+    public User saveUser(User user) {
+        Assert.notNull(user, "The user must not be null");
+        userRepository.save(user);
+        return user;
     }
 
     @Override
-    public void deleteUser(String email) {
-        Assert.notNull(email, "The email must not be null");
-
-        User user = userRepository.findByEmail(email);
-
-        if (user == null) {
-            log.info("No user found with the email " + email);
-        } else {
-            userRepository.delete(user);
-            log.info("Deleted user: " + user.toString());
-        }
+    public User getUserByLoginId(String loginId) {
+        Assert.notNull(loginId, "The login id must not be null");
+        return userRepository.findByLoginId(loginId);
     }
 
-    @Override
-    public void updateUser(String email, User updatedUser) {
-        Assert.notNull(email, "The email name must not be null");
-        Assert.notNull(updatedUser, "The updated user must not be null");
+    public User createUser(String firstName, String lastName, String password) {
+        User newUser = new User(firstName, lastName);
 
-        User originalUser = userRepository.findByEmail(email);
+        // Generate a new user id
+        String newLoginId = LoginIdGenerator.newId();
 
-        if (originalUser == null) {
-            log.info("No user found with the email " + email);
-        } else {
-            updatedUser.setId(originalUser.getId());
-            userRepository.save(updatedUser);
-            log.info("User: " + originalUser.toString() + " updated to " + updatedUser.toString());
+        // Ensure ID does not already exist
+        while (getUserByLoginId(newLoginId) != null) {
+            newLoginId = LoginIdGenerator.newId();
         }
+
+        newUser.setLoginId(newLoginId);
+        newUser.setPassword(password);
+
+        saveUser(newUser);
+        return newUser;
     }
 
-    @Override
-    public void createUser(String firstName, String lastName, String email) {
-        Assert.notNull(firstName, "The first name must not be null");
-        Assert.notNull(lastName, "The last name must not be null");
-        Assert.notNull(email, "The email name must not be null");
-
-        User user = userRepository.findByEmail(email);
-
-        if (user != null) {
-            log.info("User already exists: " + user.toString());
-        } else {
-            user = new User(firstName, lastName, email);
-
-            userRepository.save(user);
-            log.info("User created: " + user.toString());
-        }
-    }
 }

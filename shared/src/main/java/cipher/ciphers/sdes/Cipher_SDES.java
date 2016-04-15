@@ -5,6 +5,7 @@ import cipher.ciphers.BaseCipher;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Cipher_SDES extends BaseCipher {
 
@@ -57,7 +58,12 @@ public class Cipher_SDES extends BaseCipher {
         return encrypted;
     }
 
-    public String decryptWord(ArrayList<int[]> cipherText)
+    /**
+     * Method to decrypt a binary ciper input
+     * @param cipherText
+     * @return
+     */
+    public String decryptWord(List<int[]> cipherText)
     {
         String word = "";
         for(int i = 0; i < cipherText.size(); i++){
@@ -82,7 +88,7 @@ public class Cipher_SDES extends BaseCipher {
         keyGeneration();
         initialPermutation();
         f1Result = kFunction(k1);
-        f1Result = f1(f1Result);
+        f1Result = functionK1(f1Result);
 
         //swap module stage
         System.arraycopy(f1Result, 0, right_nibble, 0, f1Result.length / 2);
@@ -93,7 +99,7 @@ public class Cipher_SDES extends BaseCipher {
         }
 
         f2Result = kFunction(k2);
-        f2Result = f2(f2Result);
+        f2Result = functionK2(f2Result);
         f2Result = inversePermutation(f2Result);
 
         return f2Result;
@@ -106,14 +112,11 @@ public class Cipher_SDES extends BaseCipher {
      */
     @Override
     public String encrypt(String plaintext) {
-        String output = null;
-        ArrayList<int[]> result = encryptWord(plaintext);
+        String output;
+        ArrayList<int[]> binaryValues = encryptWord(plaintext);
 
-        for (int[] array:result){
-            output += Arrays.toString(array);
-        }
+        output = convertBinaryArraysToBinaryString(binaryValues);
 
-        // TODO
         logEncryption(plaintext, output);
         return output;
     }
@@ -125,10 +128,12 @@ public class Cipher_SDES extends BaseCipher {
      */
     @Override
     public String decrypt(String encryptedText) {
-        String output = null;
-        // TODO
+        List<int[]> binaryEntries = convertBinaryStringToBinaryArrays(encryptedText);
+
+        String output = decryptWord(binaryEntries);
+
         logDecryption(encryptedText, output);
-        return null;
+        return output;
     }
 
     /**
@@ -141,7 +146,7 @@ public class Cipher_SDES extends BaseCipher {
         applyPermutation(cipherText, ip, IPP);
         keyGeneration();
         f2Result = kFunction(k2);
-        f2Result = f1(f2Result);
+        f2Result = functionK1(f2Result);
         System.arraycopy(f2Result, 0, right_nibble, 0, f2Result.length / 2);
         System.arraycopy(f2Result, 4, left_nibble, 0, f2Result.length / 2);
 
@@ -149,7 +154,7 @@ public class Cipher_SDES extends BaseCipher {
             IPP[i] = right_nibble[i-4]; //+4 to give us right most half
         }
         f1Result = kFunction(k1);
-        f1Result = f2(f1Result);
+        f1Result = functionK2(f1Result);
         f1Result = inversePermutation(f1Result);
 
         return f1Result;
@@ -235,7 +240,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param sboxCombined
      * @return
      */
-    private int[] f1(int[] sboxCombined){
+    private int[] functionK1(int[] sboxCombined){
         for (int i = 0; i < sboxCombined.length; i++) {
             sboxCombined[i] = (sboxCombined[i] ^ IPP[i]); //left half of initial permutation and XOR with p4result
         }
@@ -257,7 +262,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param sboxCombined
      * @return
      */
-    private int[] f2(int[] sboxCombined){
+    private int[] functionK2(int[] sboxCombined){
         for (int i = 0; i < sboxCombined.length; i++) {
             sboxCombined[i] = (sboxCombined[i] ^ left_nibble[i]); //left half of initial permutation and XOR with p4result
         }
@@ -341,5 +346,58 @@ public class Cipher_SDES extends BaseCipher {
             destination[i] = (input1[i] ^ input2[i]);
         }
         return destination;
+    }
+
+    /**
+     * Convert a binary strings representation from string to array.
+     * It is assumed that each binary entry in the string is seperated by a " ".
+     * @param binaryStrings The string containing many binary strings.
+     * @return              The array representation.
+     */
+    private List<int[]> convertBinaryStringToBinaryArrays(String binaryStrings) {
+        String[] words = binaryStrings.split("\\s+");
+
+        List<int[]> binaryEntries = new ArrayList<>();
+        int[] binaryEntry;
+
+        // For all the binary strings
+        for (String binaryString : words) {
+            binaryEntry = new int[8];
+
+            // For each character in the string - extract int value
+            for (int i = 0; i < binaryString.length(); i++){
+                String character = String.valueOf(binaryString.charAt(i));
+                binaryEntry[i] = Integer.valueOf(character);
+            }
+
+            binaryEntries.add(binaryEntry);
+        }
+
+        return binaryEntries;
+    }
+
+    /**
+     * Convert a list of binary array entries (where 1 array = 8 binary bits)
+     * to plaintext binary strings
+     * @param binaryArrays  The array's of binary
+     * @return              The binary string
+     */
+    private String convertBinaryArraysToBinaryString(ArrayList<int[]> binaryArrays) {
+
+        String binaryStrings = "";
+
+        for (int[] binaryEntry : binaryArrays) {
+
+            // Convert binary array to string
+            String binaryString = "";
+            for (int bit : binaryEntry) {
+                binaryString = binaryString.concat(String.valueOf(bit));
+            }
+
+            // Concatenate the result
+            binaryStrings = binaryStrings.concat(binaryString + " ");
+        }
+
+        return binaryStrings;
     }
 }

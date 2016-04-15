@@ -23,8 +23,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
      */
     Collection<User> findByFirstName(@Param("firstName") String first);
 
-    Collection<User> findByLastName(@Param("lastName") String last);
-
-    User findByEmail(@Param("email") String email);
-
+    User findByLoginId(@Param("loginId") String loginId);
 }
