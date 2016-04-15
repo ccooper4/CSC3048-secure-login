@@ -3,7 +3,8 @@ package cipher.ciphers.aes;
 import java.util.ArrayList;
 import java.util.List;
 
-/**Key expansion code for AES
+/**
+ * Key expansion code for AES
  *
  * @author David Fee
  */
@@ -11,7 +12,8 @@ public class KeyExpansion_AES {
 
     private static final int[] ROTATEPERMUTATION = {2, 3, 4, 1};
 
-    /** main key expansion method
+    /**
+     * main key expansion method
      *
      * @param originalKey initial algorithm key
      * @param Nk number of keys
@@ -20,9 +22,9 @@ public class KeyExpansion_AES {
      * @return list of each key for each round
      */
     public List<String[][]> keyExpansion(String[][] originalKey, int Nk, int Nr, int Nb) {
-        
+
         String parsedString = "";
-        
+
         for (String[] strings : originalKey) {
             for (String string : strings) {
                 parsedString += string;
@@ -45,6 +47,11 @@ public class KeyExpansion_AES {
         }
 
         i = Nk; //4
+        
+        String rcon = "";
+        for (int j = 1; j < 10; j++) {
+            rcon = generateRcon(i, Nk, i);
+        }       
 
         //num rounds*num blocks
         while (i < Nb * (Nr + 1)) {
@@ -56,9 +63,7 @@ public class KeyExpansion_AES {
                 temp = applyRotation(temp, ROTATEPERMUTATION);
 
                 temp = applySubWord(temp);
-
-                String rcon = generateRcon(i, Nk, 2);
-
+                
                 temp = applyXorToSubwordAndRcon(temp, rcon);
 
             } else if ((Nk > 6) && (i % Nk == 4)) {
@@ -70,17 +75,17 @@ public class KeyExpansion_AES {
             i++;
 
         }
-  
+
         return chopArrays(Nk, Nr, w);
 
     }
 
     private List<String[][]> chopArrays(int Nk, int Nr, String[] w) {
-        
+
         String[][] w_final = new String[44][4];
-                
+
         int count = 0;
-        
+
         for (String w1 : w) {
 
             String tmp[] = new String[4];
@@ -111,54 +116,61 @@ public class KeyExpansion_AES {
 
             res.add(tmp);
         }
-        
+
         return res;
     }
 
-    private String generateRcon(int i, int nK, int x) {
-        
+    public String generateRcon(int round, int nK, int x) {
+
         //to calculate do left-shift followed with a conditional XOR with a constant
         //rcon = (rcon left shift) ^ (0x11b & -(rcon>>7));
-
+        //Convert to binary
+        //• If leftmost bit is zero, shift left
+        //• Iif leftmost bit is one, shift left and XOR with 00011011
+        //• Convert back to hex        
         String res = "";
 
-        int val = i / nK;
+        int val = round / nK;
 
-        switch (val) {
-            case 1:
-                res = "01000000";
-                break;
-            case 2:
-                res = "02000000";
-                break;
-            case 3:
-                res = "04000000";
-                break;
-            case 4:
-                res = "08000000";
-                break;
-            case 5:
-                res = "10000000";
-                break;
-            case 6:
-                res = "20000000";
-                break;
-            case 7:
-                res = "40000000";
-                break;
-            case 8:
-                res = "80000000";
-                break;
-            case 9:
-                res = "1B000000";
-                break;
-            case 10:
-                res = "36000000";
-                break;
+        System.out.println("round = " + round);
 
+        int tmp = (int) Math.pow(2, round - 1);
+
+        String binString = Integer.toBinaryString(tmp);
+        while (binString.length() < 8) {
+            binString = "0" + binString;
         }
 
-        //return hex + "000000";
+        if (round > 8) {
+
+            System.out.println("\tbinString = " + binString);
+            if (binString.charAt(0) == '0') {
+                binString = binString.substring(round - 8);
+            } else {
+                binString = binString.substring(round - 8);
+                if (round == 10) {
+                    binString = generateRcon(round - 1, nK, x);
+                    //System.out.println("got previous rcon value = " + binString);
+                    binString = hexToBinary(binString) + "0";
+                    binString = binString.substring(1);
+                    System.out.println("round 10 = " + binString);
+                } else {
+                    binString = xorBinaryStrings(binString, "00011011");
+                }
+            }
+        } else {
+            System.out.println("\tbinString = " + binString);
+        }
+
+        while (binString.length() < 8) {
+            binString = "0" + binString;
+        }
+
+        String thp = binaryToHex(binString.substring(0, 4));
+        res = thp + binaryToHex(binString.substring(4, 8));
+
+        System.out.println("\tres = " + res);
+
         return res;
 
     }
