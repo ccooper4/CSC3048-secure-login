@@ -5,6 +5,7 @@ import cipher.ciphers.BaseCipher;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Cipher_SDES extends BaseCipher {
 
@@ -62,7 +63,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param cipherText
      * @return
      */
-    public String decryptWord(ArrayList<int[]> cipherText)
+    public String decryptWord(List<int[]> cipherText)
     {
         String word = "";
         for(int i = 0; i < cipherText.size(); i++){
@@ -105,20 +106,17 @@ public class Cipher_SDES extends BaseCipher {
     }
 
     /**
-     * Method to encrypt a plain text string
+     *
      * @param plaintext
      * @return
      */
     @Override
     public String encrypt(String plaintext) {
-        String output = null;
-        ArrayList<int[]> result = encryptWord(plaintext);
+        String output;
+        ArrayList<int[]> binaryValues = encryptWord(plaintext);
 
-        for (int[] array:result){
-            output += Arrays.toString(array);
-        }
+        output = convertBinaryArraysToBinaryString(binaryValues);
 
-        // TODO
         logEncryption(plaintext, output);
         return output;
     }
@@ -130,10 +128,12 @@ public class Cipher_SDES extends BaseCipher {
      */
     @Override
     public String decrypt(String encryptedText) {
-        String output = null;
-        // TODO
+        List<int[]> binaryEntries = convertBinaryStringToBinaryArrays(encryptedText);
+
+        String output = decryptWord(binaryEntries);
+
         logDecryption(encryptedText, output);
-        return null;
+        return output;
     }
 
     /**
@@ -346,5 +346,58 @@ public class Cipher_SDES extends BaseCipher {
             destination[i] = (input1[i] ^ input2[i]);
         }
         return destination;
+    }
+
+    /**
+     * Convert a binary strings representation from string to array.
+     * It is assumed that each binary entry in the string is seperated by a " ".
+     * @param binaryStrings The string containing many binary strings.
+     * @return              The array representation.
+     */
+    private List<int[]> convertBinaryStringToBinaryArrays(String binaryStrings) {
+        String[] words = binaryStrings.split("\\s+");
+
+        List<int[]> binaryEntries = new ArrayList<>();
+        int[] binaryEntry;
+
+        // For all the binary strings
+        for (String binaryString : words) {
+            binaryEntry = new int[8];
+
+            // For each character in the string - extract int value
+            for (int i = 0; i < binaryString.length(); i++){
+                String character = String.valueOf(binaryString.charAt(i));
+                binaryEntry[i] = Integer.valueOf(character);
+            }
+
+            binaryEntries.add(binaryEntry);
+        }
+
+        return binaryEntries;
+    }
+
+    /**
+     * Convert a list of binary array entries (where 1 array = 8 binary bits)
+     * to plaintext binary strings
+     * @param binaryArrays  The array's of binary
+     * @return              The binary string
+     */
+    private String convertBinaryArraysToBinaryString(ArrayList<int[]> binaryArrays) {
+
+        String binaryStrings = "";
+
+        for (int[] binaryEntry : binaryArrays) {
+
+            // Convert binary array to string
+            String binaryString = "";
+            for (int bit : binaryEntry) {
+                binaryString = binaryString.concat(String.valueOf(bit));
+            }
+
+            // Concatenate the result
+            binaryStrings = binaryStrings.concat(binaryString + " ");
+        }
+
+        return binaryStrings;
     }
 }
