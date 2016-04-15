@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import qub.domain.user.User;
 import qub.service.IUserService;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * The controller for handling users.
@@ -30,20 +27,8 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
 
-        User user = userService.getUsersByFirstName(name).get(0);
+        User user = userService.getUserByLoginId(name);
 
         return gson.toJson(user);
-    }
-
-    @RequestMapping(value="/signOut", method = RequestMethod.GET)
-    public void logout (HttpServletRequest request) throws ServletException {
-
-        SecurityContextHolder.clearContext();
-
-        HttpSession session = request.getSession(false);
-
-        if (session != null) {
-            session.invalidate();
-        }
     }
 }
