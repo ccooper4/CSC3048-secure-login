@@ -1,6 +1,6 @@
 package qub.service;
 
-import qub.domain.User;
+import qub.domain.user.User;
 
 import java.util.List;
 

@@ -37,5 +37,9 @@ public class DatabaseSeed implements ApplicationListener<ContextRefreshedEvent> 
         if (userService.getUsersByFirstName("Rory").isEmpty()) {
             userService.createAdminUser("Rory", "Powell", password);
         }
+
+        if (userService.getUsersByFirstName("Fred").isEmpty()) {
+            userService.createUser("Fred", "Fredricks", password);
+        }
     }
 }
