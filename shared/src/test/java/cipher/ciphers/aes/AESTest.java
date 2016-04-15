@@ -4,7 +4,6 @@ import cipher.ciphers.BaseCipherTest;
 import cipher.util.AESKeyGenerator;
 import org.junit.Ignore;
 import org.junit.Test;
-
 import java.util.Arrays;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -34,9 +33,9 @@ public class AESTest extends BaseCipherTest {
     @Test
     @Override
     public void testDecryption() {
-//        testDecryption("@8{³&\u0000³Z²8\fF\u001FÀÃr", "mark frequency  ");
+        testDecryption("@8{³&\u0000³Z²8\fF\u001FÀÃr", "mark frequency  ");
     }
-    
+
     @Test
     public void testKeyExpansion() {
         String[][] actualInitialRound = ((Cipher_AES) cipher).getKeyGenerator().getFirstKey();
@@ -85,5 +84,19 @@ public class AESTest extends BaseCipherTest {
         }
 
         log.info(Arrays.deepToString(matrix) + "\n");
+    }
+    @Test
+    public void testRconGeneration() {
+//        KeyExpansion_AES keaes = new KeyExpansion_AES();
+//        keaes.generateRcon(1, 4, 1);
+//        keaes.generateRcon(2, 4, 2);
+//        keaes.generateRcon(3, 4, 3);
+//        keaes.generateRcon(4, 4, 4);
+//        keaes.generateRcon(5, 4, 5);
+//        keaes.generateRcon(6, 4, 6);
+//        keaes.generateRcon(7, 4, 7);
+//        keaes.generateRcon(8, 4, 8);
+//        keaes.generateRcon(9, 4, 9);
+//        keaes.generateRcon(10, 4, 10);
     }
 }
