@@ -45,22 +45,22 @@ public class SDESTest extends BaseCipherTest  {
     @Test
     @Override
     public void testEncryption() {
-        //First word to test
-        actualResult = cipher.encryptWord("wait");
-
-        for(int i = 0; i < expected.size(); i++){
-            Assert.assertArrayEquals(expected.get(i), actualResult.get(i));
-        }
-
         //Second word to test
         actualResult = cipher.encryptWord("markfrequency");
 
         for(int i = 0; i < expected.size(); i++){
             Assert.assertArrayEquals(expected2.get(i), actualResult.get(i));
         }
+    }
 
-//        TODO
-//        testEncryption("Plain text", "Expected Cipher text");
+    @Test
+    public void testEncryptionExtra() {
+        //First word to test
+        actualResult = cipher.encryptWord("wait");
+
+        for(int i = 0; i < expected.size(); i++){
+            Assert.assertArrayEquals(expected.get(i), actualResult.get(i));
+        }
     }
 
     @Test
@@ -71,8 +71,5 @@ public class SDESTest extends BaseCipherTest  {
 
         //Second word to decrypt
         Assert.assertEquals(cipher.decryptWord(expected2), "markfrequency");
-
-//        TODO
-//        testDecryption("Cipher text", "Expected plain text");
     }
 }

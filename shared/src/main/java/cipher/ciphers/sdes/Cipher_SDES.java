@@ -57,6 +57,11 @@ public class Cipher_SDES extends BaseCipher {
         return encrypted;
     }
 
+    /**
+     * Method to decrypt a binary ciper input
+     * @param cipherText
+     * @return
+     */
     public String decryptWord(ArrayList<int[]> cipherText)
     {
         String word = "";
@@ -82,7 +87,7 @@ public class Cipher_SDES extends BaseCipher {
         keyGeneration();
         initialPermutation();
         f1Result = kFunction(k1);
-        f1Result = f1(f1Result);
+        f1Result = functionK1(f1Result);
 
         //swap module stage
         System.arraycopy(f1Result, 0, right_nibble, 0, f1Result.length / 2);
@@ -93,14 +98,14 @@ public class Cipher_SDES extends BaseCipher {
         }
 
         f2Result = kFunction(k2);
-        f2Result = f2(f2Result);
+        f2Result = functionK2(f2Result);
         f2Result = inversePermutation(f2Result);
 
         return f2Result;
     }
 
     /**
-     *
+     * Method to encrypt a plain text string
      * @param plaintext
      * @return
      */
@@ -141,7 +146,7 @@ public class Cipher_SDES extends BaseCipher {
         applyPermutation(cipherText, ip, IPP);
         keyGeneration();
         f2Result = kFunction(k2);
-        f2Result = f1(f2Result);
+        f2Result = functionK1(f2Result);
         System.arraycopy(f2Result, 0, right_nibble, 0, f2Result.length / 2);
         System.arraycopy(f2Result, 4, left_nibble, 0, f2Result.length / 2);
 
@@ -149,7 +154,7 @@ public class Cipher_SDES extends BaseCipher {
             IPP[i] = right_nibble[i-4]; //+4 to give us right most half
         }
         f1Result = kFunction(k1);
-        f1Result = f2(f1Result);
+        f1Result = functionK2(f1Result);
         f1Result = inversePermutation(f1Result);
 
         return f1Result;
@@ -235,7 +240,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param sboxCombined
      * @return
      */
-    private int[] f1(int[] sboxCombined){
+    private int[] functionK1(int[] sboxCombined){
         for (int i = 0; i < sboxCombined.length; i++) {
             sboxCombined[i] = (sboxCombined[i] ^ IPP[i]); //left half of initial permutation and XOR with p4result
         }
@@ -257,7 +262,7 @@ public class Cipher_SDES extends BaseCipher {
      * @param sboxCombined
      * @return
      */
-    private int[] f2(int[] sboxCombined){
+    private int[] functionK2(int[] sboxCombined){
         for (int i = 0; i < sboxCombined.length; i++) {
             sboxCombined[i] = (sboxCombined[i] ^ left_nibble[i]); //left half of initial permutation and XOR with p4result
         }
