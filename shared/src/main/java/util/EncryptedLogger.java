@@ -1,6 +1,6 @@
 package util;
 
-import cipher.ciphers.aes.Cipher_AES;
+import cipher.util.AESWrapper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +15,7 @@ import java.util.Date;
 public class EncryptedLogger {
 
     private static Logger log;
-
-    private Cipher_AES aes;
+    private AESWrapper aesWrapper = new AESWrapper();
     private File file = new File("log/log.txt");
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
@@ -68,18 +67,15 @@ public class EncryptedLogger {
 
     private void writeToDisk(String logInfo) {
         try {
-            // Initialise the aes cipher.
-            if (aes == null) {
-                aes = new Cipher_AES();
-            }
-
             String timestamp = sdf.format(new Date());
             logInfo = timestamp + " : " + logInfo + "\n";
-//            String encryptedInfo = aes.encrypt(logInfo); TODO : Handle large strings with AES
-            String encryptedInfo = logInfo;
+
+            String encryptedInfo = aesWrapper.encrypt(logInfo);
+
             FileUtils.writeStringToFile(file, encryptedInfo, true);
         } catch (IOException e) {
             log.error("Error encrypting log message", e);
         }
     }
+
 }

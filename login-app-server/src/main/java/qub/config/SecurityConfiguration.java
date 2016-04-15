@@ -36,10 +36,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // Use HTTP Basic
             .httpBasic()
             .and()
-                // Allow login and console
+                // Allow login / logout by default + console
                 .authorizeRequests()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/console/**").permitAll()
+                .antMatchers("/signOut/**").permitAll()
             .and()
                 // Secure others
                 .authorizeRequests()
