@@ -41,6 +41,17 @@ public class LoginController {
         }
     }
 
+    /**
+     * Show the usage policy
+     */
+    public void showPolicyView() {
+        navManager.showPolicyScreen();
+    }
+
+    public void setUserField(String loginID) {
+        this.user.setText(loginID);
+    }
+
     //endregion
 
 }
