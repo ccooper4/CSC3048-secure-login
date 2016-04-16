@@ -72,6 +72,6 @@ public class RegisterController {
     }
 
     public void showRegisterView(ActionEvent actionEvent) {
-        navManager.goBackRegistration();
+        navManager.goBack();
     }
 }
