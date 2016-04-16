@@ -10,50 +10,49 @@ public class AuthResult implements Serializable {
     //region Private Fields
 
     /**
-     * The username.
+     * The Success flag.
      */
-    private String userName;
+    private boolean success;
 
     /**
-     * The password
+     * The error info.
      */
-    private String passWord;
+    private String error;
 
     //endregion
 
     //region Getters & Setters
 
     /**
-     * Gets the username.
-     * @return The username.
+     * Gets Is Success.
+     * @return A true or false value.
      */
-    public String getUserName() {
-        return userName;
+    public boolean isSuccess() {
+        return success;
     }
 
     /**
-     * Sets the username.
-     * @param userName The new username.
+     * Sets the success flag.
+     * @param success The flag value.
      */
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     /**
-     * Gets the password.
-     * @return The password.
+     * Gets the error text.
+     * @return The error text.
      */
-    public String getPassWord() {
-        return passWord;
+    public String getError() {
+        return error;
     }
 
-
     /**
-     * Sets the password.
-     * @param passWord The password.
+     * Sets the error text.
+     * @param error The error text.
      */
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setError(String error) {
+        this.error = error;
     }
 
     //endregion

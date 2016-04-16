@@ -31,18 +31,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-            // Use HTTP Basic
-            .httpBasic()
-            .and()
-                // Allow login and console
-                .authorizeRequests()
-                .antMatchers("/login/**").permitAll()
-                .antMatchers("/console/**").permitAll()
-            .and()
-                // Secure others
-                .authorizeRequests()
-                    .anyRequest()
-                    .authenticated();
+            // Allow login and console
+            .authorizeRequests()
+            .antMatchers("/login/**").permitAll()
+            .antMatchers("/console/**").permitAll()
+        .and()
+            // Secure others
+            .authorizeRequests()
+            .anyRequest()
+            .authenticated();
 
         // Needed to view h2 console
         http.csrf().disable();
