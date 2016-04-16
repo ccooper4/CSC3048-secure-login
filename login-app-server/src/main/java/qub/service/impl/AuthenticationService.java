@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import qub.security.AuthToken;
 import qub.domain.user.User;
 import qub.service.IAuthenticationService;
-import qub.service.IHMACSigningService;
+import qub.service.ICryptoHashingService;
+import qub.service.IUserService;
 import util.StringConstants;
 
 import javax.xml.bind.DatatypeConverter;
@@ -23,7 +24,13 @@ public class AuthenticationService implements IAuthenticationService {
      * The HMAC Signing Service.
      */
     @Autowired
-    private IHMACSigningService signingService;
+    private ICryptoHashingService signingService;
+
+    /**
+     * The user service.
+     */
+    @Autowired
+    private IUserService userService;
 
     //endregion
 
@@ -34,6 +41,7 @@ public class AuthenticationService implements IAuthenticationService {
      * @param userDetails The user details.
      * @return A valid, HMAC signed AuthToken.
      */
+    @Override
     public String createTokenForUser(User userDetails) {
 
         AuthToken token = new AuthToken(userDetails);
@@ -88,6 +96,29 @@ public class AuthenticationService implements IAuthenticationService {
         AuthToken tokenObj = AuthToken.constructFromJson(tokenText);
 
         return tokenObj;
+    }
+
+    /**
+     * Verifies the user's credentials.
+     * @param userId The username.
+     * @param password The password.
+     * @return A boolean indicating if the credentials are valid.
+     */
+    @Override
+    public boolean verifyUserCredentials(String userId, String password) {
+
+        User foundUser = userService.getUserByLoginId(userId);
+
+        if (foundUser == null) {
+            return false;
+        }
+
+        String storedHash = foundUser.getPassword();
+
+        boolean passwordValid = signingService.verifyStringAgainstHash(password, storedHash);
+
+        return passwordValid;
+
     }
 
     //endregion

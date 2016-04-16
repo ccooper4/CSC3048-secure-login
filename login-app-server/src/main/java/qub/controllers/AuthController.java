@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import qub.domain.user.User;
 import qub.service.IAuthenticationService;
+import qub.service.ICryptoHashingService;
 import qub.service.IUserService;
 import util.StringConstants;
 
@@ -39,13 +40,16 @@ public class AuthController {
     private IAuthenticationService authenticationService;
 
     /**
+     * The Crypto Service.
+     */
+    @Autowired
+    private ICryptoHashingService cryptoHashingService;
+
+    /**
      * The Auth Manager.
      */
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Value("${secretKey}")
-    private byte[] secretKey;
 
     //endregion
 
@@ -54,24 +58,15 @@ public class AuthController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public @ResponseBody AuthResult login(@RequestBody final Credential loginInfo, HttpServletResponse response) {
 
-        UsernamePasswordAuthenticationToken loginData = new UsernamePasswordAuthenticationToken(loginInfo.getUserName(), loginInfo.getPassWord());
+        String hash = cryptoHashingService.hashString("Test");
 
-        Authentication res;
+        boolean validCreds = authenticationService.verifyUserCredentials(loginInfo.getUserName(), loginInfo.getPassWord());
+
         AuthResult returnResult = new AuthResult();
 
-        try {
-            res = authenticationManager.authenticate(loginData);
-        } catch (BadCredentialsException e) {
-            returnResult.setSuccess(false);
-            returnResult.setError("Credentials could not be verified.");
-            return returnResult;
-        }
+        if (validCreds) {
 
-        if (res.isAuthenticated()) {
-
-            SecurityContextHolder.getContext().setAuthentication(res);
-
-            User userInfo = userService.getUserByLoginId(res.getName());
+            User userInfo = userService.getUserByLoginId(loginInfo.getUserName());
 
             String token = authenticationService.createTokenForUser(userInfo);
 

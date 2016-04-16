@@ -23,4 +23,12 @@ public interface IAuthenticationService {
      */
     AuthToken validateTokenFromUser(String tokenHeader);
 
+    /**
+     * Verifies the user's credentials.
+     * @param userId The username.
+     * @param password The password.
+     * @return A boolean indicating if the credentials are valid.
+     */
+    boolean verifyUserCredentials(String userId, String password);
+
 }
