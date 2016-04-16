@@ -20,4 +20,6 @@ public interface IServerConnector {
      */
     boolean login(String loginId, String password);
 
+    boolean logout();
+
 }

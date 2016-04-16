@@ -21,6 +21,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
 
         Scene scene = new Scene(new StackPane(), 500, 300);
+        scene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("css/style.css").toExternalForm());
 
         NavigationManager navManager = new NavigationManager(scene);
         navManager.showLoginScreen();

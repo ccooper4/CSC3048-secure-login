@@ -1,27 +1,23 @@
 package ui.controllers;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import network.IServerConnector;
+import network.ServerConnector;
 import ui.managers.NavigationManager;
 
 /**
  * Controls the main application screen
  */
-public class MainViewController {
+public class HomeController {
 
     private NavigationManager navManager;
-
-    @FXML
-    private Button logoutButton;
+    private IServerConnector serverConnector = new ServerConnector();
 
     public void setNavigationManager(NavigationManager loginManager) {
         this.navManager = loginManager;
     }
 
     public void logout() {
-
-        // perform logout logic.
-
+        serverConnector.logout();
         navManager.showLoginScreen();
     }
 }

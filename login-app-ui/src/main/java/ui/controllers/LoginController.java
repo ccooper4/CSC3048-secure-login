@@ -5,7 +5,6 @@ import javafx.scene.control.TextField;
 import network.IServerConnector;
 import network.ServerConnector;
 import ui.managers.NavigationManager;
-import util.EncryptedLogger;
 
 /**
  * Controls the login screen
@@ -14,9 +13,7 @@ public class LoginController {
 
     //region Private fields
 
-    private EncryptedLogger log = new EncryptedLogger(getClass());
     private IServerConnector serverConnector = new ServerConnector();
-
     private NavigationManager navManager;
 
     @FXML
@@ -40,7 +37,7 @@ public class LoginController {
     public void login() {
         boolean success = serverConnector.login(user.getText(), password.getText());
         if (success) {
-            navManager.showMainView();
+            navManager.showHomeScreen();
         }
     }
 
