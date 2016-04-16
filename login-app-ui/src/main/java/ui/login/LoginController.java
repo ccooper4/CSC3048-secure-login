@@ -2,7 +2,6 @@ package ui.login;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import network.IServerConnector;
 import network.ServerConnector;
@@ -25,27 +24,27 @@ public class LoginController {
     @FXML
     private Button loginButton;
     @FXML
-    private Hyperlink register;
+    private Button registerButton;
 
     //endregion
 
     //region Public methods
 
     public void initManager(final LoginManager loginManager) {
+
+        // Set login action event
         loginButton.setOnAction(event -> {
             boolean success = login();
             if (success) {
                 loginManager.showMainView();
-            } else {
-                // TODO
             }
         });
 
-        register.setOnAction(event -> {
-            loginManager.showRegisterScreen();
+        // Set register action event
+        registerButton.setOnAction(event -> {
+            loginManager.showRegisterView();
         });
     }
-
 
     //endregion
 

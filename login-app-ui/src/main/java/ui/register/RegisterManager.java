@@ -26,7 +26,7 @@ public class RegisterManager {
         try {
             FXMLLoader loader = Loader.getFXML("register");
             scene.setRoot(loader.load());
-            RegisterController controller = loader.<RegisterController>getController();
+            RegisterController controller = loader.getController();
             controller.initManager(this);
         } catch (IOException ex) {
            log.error("IOException", ex);

@@ -20,7 +20,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        Scene scene = new Scene(new StackPane());
+        Scene scene = new Scene(new StackPane(), 500, 300);
 
         LoginManager loginManager = new LoginManager(scene);
         loginManager.showLoginScreen();
