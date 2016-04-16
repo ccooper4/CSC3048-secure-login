@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.layout.FlowPane?>
-<StackPane prefWidth="231.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.register.RegisterController">
+<StackPane prefWidth="231.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.RegisterController">
     <children>
         <StackPane>
             <children>
@@ -53,13 +53,13 @@
 
                         <!-- Buttons-->
                         <FlowPane alignment="CENTER">
-                            <Button fx:id="cancelButton" text="Cancel">
+                            <Button fx:id="cancelButton" text="Cancel" onAction="#cancelRegistration">
                                 <FlowPane.margin>
                                     <Insets right="10.0" />
                                 </FlowPane.margin>
                             </Button>
 
-                            <Button fx:id="registerButton" text="Register">
+                            <Button fx:id="registerButton" text="Register" onAction="#register">
                                 <FlowPane.margin>
                                     <Insets left="10.0" />
                                 </FlowPane.margin>
