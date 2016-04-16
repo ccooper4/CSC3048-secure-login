@@ -1,5 +1,6 @@
 package ui.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
@@ -39,6 +40,9 @@ public class RegisterController {
         navManager.showLoginScreen();
     }
 
+    /**
+     * Show the usage policy
+     */
     public void showPolicyView() {
         navManager.showPolicyScreen();
     }
@@ -48,5 +52,9 @@ public class RegisterController {
      */
     public void register() {
         serverConnector.register(firstName.getText(), lastName.getText(), password.getText());
+    }
+
+    public void showRegisterView(ActionEvent actionEvent) {
+        navManager.goBackRegistration();
     }
 }

@@ -55,10 +55,24 @@ public class NavigationManager {
         }
     }
 
+    public void goBackRegistration() {
+        try {
+            FXMLLoader loader = Loader.getFXML("register");
+            scene.setRoot(loader.load());
+            RegisterController controller = loader.getController();
+            controller.setNavigationManager(this);
+
+        } catch (IOException ex) {
+            log.error("IOException", ex);
+        }
+    }
+
     public void showPolicyScreen() {
         try {
             FXMLLoader loader = Loader.getFXML("policy");
             scene.setRoot(loader.load());
+            RegisterController controller = loader.getController();
+            controller.setNavigationManager(this);
 
         } catch (IOException ex) {
             log.error("IOException", ex);

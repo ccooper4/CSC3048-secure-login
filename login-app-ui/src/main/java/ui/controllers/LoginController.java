@@ -41,6 +41,13 @@ public class LoginController {
         }
     }
 
+    /**
+     * Show the usage policy
+     */
+    public void showPolicyView() {
+        navManager.showPolicyScreen();
+    }
+
     //endregion
 
 }
