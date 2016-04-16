@@ -24,7 +24,6 @@ public class HMACSigningService implements IHMACSigningService {
     /**
      * Gets the configured secret key.
      */
-    @Value("${secretKey}")
     private byte[] secretKey;
 
     /**
@@ -42,6 +41,7 @@ public class HMACSigningService implements IHMACSigningService {
     public HMACSigningService() {
 
         try {
+            secretKey = "lSfAB3j1CkgyRVGKCuXI2o13QBBwiWUYMNAc6o28VbUgrHeIzxhP6cBmRdYKSChSgiY5tiVKSRe".getBytes();
             hmacImpl = Mac.getInstance(HMAC_IMPL);
             hmacImpl.init(new SecretKeySpec(secretKey, HMAC_IMPL));
         }
