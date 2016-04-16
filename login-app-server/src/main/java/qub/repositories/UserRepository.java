@@ -3,12 +3,12 @@ package qub.repositories;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import qub.domain.User;
+import qub.domain.user.User;
 
 import java.util.Collection;
 
 @Transactional
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository<T extends User> extends CrudRepository<T, Long> {
 
     /**
      * This method will find an {@link User} instance in the database by its first name.

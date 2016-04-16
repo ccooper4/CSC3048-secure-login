@@ -15,31 +15,37 @@ import javax.sql.DataSource;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder authentication) throws Exception {
 
-        String usersQuery = "select LOGIN_ID,PASSWORD from USER where LOGIN_ID=?";
+        String usersQuery = "SELECT LOGIN_ID, PASSWORD, 'true' FROM USER WHERE LOGIN_ID=?";
+        String authoritiesQuery = "SELECT LOGIN_ID, DTYPE from USER where LOGIN_ID=?";
 
         authentication.jdbcAuthentication()
                         .dataSource(dataSource)
-                        .usersByUsernameQuery(usersQuery);
+                        .usersByUsernameQuery(usersQuery)
+                        .authoritiesByUsernameQuery(authoritiesQuery);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-            // Allow login and console
-            .authorizeRequests()
-            .antMatchers("/login/**").permitAll()
-            .antMatchers("/console/**").permitAll()
-        .and()
-            // Secure others
-            .authorizeRequests()
-            .anyRequest()
-            .authenticated();
+            // Use HTTP Basic
+            .httpBasic()
+            .and()
+                // Allow login / logout by default + console
+                .authorizeRequests()
+                .antMatchers("/login/**").permitAll()
+                .antMatchers("/console/**").permitAll()
+                .antMatchers("/signOut/**").permitAll()
+            .and()
+                // Secure others
+                .authorizeRequests()
+                    .anyRequest()
+                    .authenticated();
 
         // Needed to view h2 console
         http.csrf().disable();

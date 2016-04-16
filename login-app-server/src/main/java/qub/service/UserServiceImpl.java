@@ -3,7 +3,9 @@ package qub.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import qub.domain.User;
+import qub.domain.user.AdminUser;
+import qub.domain.user.User;
+import qub.domain.user.StandardUser;
 import qub.repositories.UserRepository;
 import qub.util.LoginIdGenerator;
 import util.EncryptedLogger;
@@ -27,6 +29,7 @@ public class UserServiceImpl implements IUserService {
         return new ArrayList<>(userRepository.findByFirstName(name));
     }
 
+    @Override
     public User saveUser(User user) {
         Assert.notNull(user, "The user must not be null");
         userRepository.save(user);
@@ -39,9 +42,19 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findByLoginId(loginId);
     }
 
+    @Override
     public User createUser(String firstName, String lastName, String password) {
-        User newUser = new User(firstName, lastName);
+        StandardUser standardUser = new StandardUser(firstName, lastName);
+        return createUser(standardUser, password);
+    }
 
+    @Override
+    public User createAdminUser(String firstName, String lastName, String password) {
+        AdminUser adminUser = new AdminUser(firstName, lastName);
+        return createUser(adminUser, password);
+    }
+
+    private User createUser(User user, String password) {
         // Generate a new user id
         String newLoginId = LoginIdGenerator.newId();
 
@@ -50,11 +63,10 @@ public class UserServiceImpl implements IUserService {
             newLoginId = LoginIdGenerator.newId();
         }
 
-        newUser.setLoginId(newLoginId);
-        newUser.setPassword(password);
+        user.setLoginId(newLoginId);
+        user.setPassword(password);
 
-        saveUser(newUser);
-        return newUser;
+        saveUser(user);
+        return user;
     }
-
 }
