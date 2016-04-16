@@ -54,4 +54,14 @@ public class NavigationManager {
             log.error("IOException", ex);
         }
     }
+
+    public void showPolicyScreen() {
+        try {
+            FXMLLoader loader = Loader.getFXML("policy");
+            scene.setRoot(loader.load());
+
+        } catch (IOException ex) {
+            log.error("IOException", ex);
+        }
+    }
 }

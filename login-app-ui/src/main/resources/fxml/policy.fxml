@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane prefHeight="394.0" prefWidth="489.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.register.RegisterController">
+   <children>
+      <StackPane>
+         <children>
+            <VBox spacing="20.0">
+               <children>
+                  <Pane prefHeight="411.0" prefWidth="469.0">
+                     <children>
+                        <TextArea layoutX="7.0" prefHeight="318.0" prefWidth="465.0" text="Acceptable Use Policy&#10;&#10;Use of this system is strictly governed by group ISS1.&#10;&#10;Logging into this system confirms that you accept our acceptable use policy.&#10;&#10;1) Do not share your password or login information with anyone.&#10;2) Users must not deliberately create, retain, send, access or display unlawful&#10;material.&#10;3) Users must respect the copyright of all material made available by group ISS1.&#10;4) Users must respect the dignity and privacy of others.&#10;5) We carry out routine logging and monitoring of this application.&#10;6) Users must securely log off when finished with the application.&#10;7) Unauthorised disruption of the application is illegal.&#10;&#10;Any breach of the above policy could result in lawful prosecution!&#10;&#10;You can report any breach of the Acceptable Use Policy to: ISS1@secureemail.uk&#10;&#10;" />
+                        <Pane layoutX="135.0" layoutY="314.0" prefHeight="50.0" prefWidth="200.0">
+                           <children>
+                              <Button layoutX="80.0" layoutY="24.0" mnemonicParsing="false" text="Back" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+         </children>
+      </StackPane>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</StackPane>

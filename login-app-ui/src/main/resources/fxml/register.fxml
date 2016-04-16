@@ -71,7 +71,7 @@
                         </FlowPane>
 
                         <FlowPane alignment="CENTER">
-                            <Hyperlink fx:id="acceptableUsage" text="Acceptable usage policy" textFill="RED" underline="true" />
+                            <Hyperlink fx:id="policyLink" text="Acceptable usage policy" textFill="RED" underline="true" onAction="#showPolicyView"/>
                         </FlowPane>
 
                     </children>
