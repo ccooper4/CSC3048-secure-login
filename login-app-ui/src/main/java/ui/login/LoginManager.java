@@ -58,7 +58,7 @@ public class LoginManager {
             scene.setRoot(loader.load());
 
             RegisterController controller = loader.getController();
-//            controller.initManager(this);
+            controller.initManager(this);
         } catch (IOException ex) {
             log.error("IOException", ex);
         }

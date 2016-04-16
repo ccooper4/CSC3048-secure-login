@@ -51,12 +51,27 @@
                             </rowConstraints>
                         </GridPane>
 
+                        <!-- Buttons-->
                         <FlowPane alignment="CENTER">
-                            <Button id="registerButton" fx:id="registerButton" text="Register" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                            <Button fx:id="cancelButton" text="Cancel">
+                                <FlowPane.margin>
+                                    <Insets right="10.0" />
+                                </FlowPane.margin>
+                            </Button>
+
+                            <Button fx:id="registerButton" text="Register">
+                                <FlowPane.margin>
+                                    <Insets left="10.0" />
+                                </FlowPane.margin>
+                            </Button>
+
+                            <VBox.margin>
+                                <Insets top="20.0" />
+                            </VBox.margin>
                         </FlowPane>
 
                         <FlowPane alignment="CENTER">
-                            <Hyperlink fx:id="acceptableUsage" text="Acceptable usage policy" textFill="RED" underline="true" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                            <Hyperlink fx:id="acceptableUsage" text="Acceptable usage policy" textFill="RED" underline="true" />
                         </FlowPane>
 
                     </children>

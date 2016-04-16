@@ -5,30 +5,43 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import ui.login.LoginManager;
 
 /**
  * Controls the login screen
  */
 public class RegisterController {
     @FXML
-    private TextField fName;
+    private TextField firstName;
     @FXML
-    private TextField sName;
+    private TextField lastName;
     @FXML
-    private TextField email;
+    private TextField password;
+    @FXML
+    private TextField confirmPassword;
     @FXML
     private Button registerButton;
+    @FXML
+    private Button cancelButton;
 
     public void initialize() {
     }
 
-    public void initManager(final RegisterManager registerManagerManager) {
-        registerButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-               //register
-            }
+    public void initManager(final LoginManager loginManager) {
+        cancelButton.setOnAction(event -> {
+            loginManager.showLoginScreen();
         });
     }
+
+    public void register() {
+        // Set register action event
+        registerButton.setOnAction(event -> {
+
+            // TODO: Do some registration
+        });
+    }
+
+
+
 
 }
