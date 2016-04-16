@@ -2,8 +2,8 @@ package qub.controllers;
 
 import model.AuthResult;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
-import qub.security.AuthToken;
 import model.Credential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,9 +56,16 @@ public class AuthController {
 
         UsernamePasswordAuthenticationToken loginData = new UsernamePasswordAuthenticationToken(loginInfo.getUserName(), loginInfo.getPassWord());
 
-        Authentication res = authenticationManager.authenticate(loginData);
-
+        Authentication res;
         AuthResult returnResult = new AuthResult();
+
+        try {
+            res = authenticationManager.authenticate(loginData);
+        } catch (BadCredentialsException e) {
+            returnResult.setSuccess(false);
+            returnResult.setError("Credentials could not be verified.");
+            return returnResult;
+        }
 
         if (res.isAuthenticated()) {
 
@@ -72,8 +79,7 @@ public class AuthController {
 
             returnResult.setSuccess(true);
         }
-        else
-        {
+        else {
             returnResult.setSuccess(false);
             returnResult.setError("Credentials could not be verified.");
         }

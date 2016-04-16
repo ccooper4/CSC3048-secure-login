@@ -39,7 +39,7 @@ public class DatabaseSeed implements ApplicationListener<ContextRefreshedEvent> 
         }
 
         if (userService.getUsersByFirstName("Fred").isEmpty()) {
-            userService.createUser("Fred", "Fredricks", password);
+            userService.createStandardUser("Fred", "Fredricks", password);
         }
     }
 }

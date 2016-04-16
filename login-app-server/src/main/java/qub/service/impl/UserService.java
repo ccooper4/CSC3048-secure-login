@@ -1,4 +1,4 @@
-package qub.service;
+package qub.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,13 +7,14 @@ import qub.domain.user.AdminUser;
 import qub.domain.user.User;
 import qub.domain.user.StandardUser;
 import qub.repositories.UserRepository;
+import qub.service.IUserService;
 import qub.util.LoginIdGenerator;
 import util.EncryptedLogger;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserService implements IUserService {
     
     private EncryptedLogger log = new EncryptedLogger(getClass());
 
@@ -21,7 +22,7 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     // For use by spring data
-    protected UserServiceImpl() {}
+    protected UserService() {}
 
     @Override
     public List<User> getUsersByFirstName(String name) {
@@ -43,7 +44,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User createUser(String firstName, String lastName, String password) {
+    public User createStandardUser(String firstName, String lastName, String password) {
         StandardUser standardUser = new StandardUser(firstName, lastName);
         return createUser(standardUser, password);
     }

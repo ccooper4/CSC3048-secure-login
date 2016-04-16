@@ -1,7 +1,7 @@
-package qub.service;
+package qub.service.impl;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import qub.service.IHMACSigningService;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

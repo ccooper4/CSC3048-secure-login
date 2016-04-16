@@ -1,10 +1,11 @@
-package qub.service;
+package qub.service.impl;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import qub.security.AuthToken;
-import org.springframework.security.core.Authentication;
 import qub.domain.user.User;
+import qub.service.IAuthenticationService;
+import qub.service.IHMACSigningService;
 import util.StringConstants;
 
 import javax.xml.bind.DatatypeConverter;
@@ -21,6 +22,7 @@ public class AuthenticationService implements IAuthenticationService {
     /**
      * The HMAC Signing Service.
      */
+    @Autowired
     private IHMACSigningService signingService;
 
     //endregion

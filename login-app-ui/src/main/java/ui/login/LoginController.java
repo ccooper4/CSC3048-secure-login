@@ -3,6 +3,8 @@ package ui.login;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import network.IServerConnector;
+import network.ServerConnector;
 import util.EncryptedLogger;
 
 /**
@@ -10,7 +12,10 @@ import util.EncryptedLogger;
  */
 public class LoginController {
 
+    //region Private fields
+
     private EncryptedLogger log = new EncryptedLogger(getClass());
+    private IServerConnector serverConnector = new ServerConnector();
 
     @FXML
     private TextField user;
@@ -19,37 +24,29 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
-    public void initialize() {
-    }
+    //endregion
+
+    //region Public methods
 
     public void initManager(final LoginManager loginManager) {
         loginButton.setOnAction(event -> {
-            String sessionID1 = authorize();
-            if (sessionID1 != null) {
-                loginManager.authenticated(sessionID1);
+            boolean success = login();
+            if (success) {
+                loginManager.showMainView();
+            } else {
+                // TODO
             }
         });
     }
 
-    /**
-     * Check authorization credentials.
-     * <p>
-     * If accepted, return a sessionID for the authorized session
-     * otherwise, return null.
-     */
-    private String authorize() {
-        if ("open".equals(user.getText()) && "sesame".equals(password.getText())) {
-            log.info("User: " + user.getText() + " logged in");
-            return generateSessionID();
-        } else {
-            return null;
-        }
+    //endregion
+
+    //region Private methods
+
+    private boolean login() {
+        return serverConnector.login(user.getText(), password.getText());
     }
 
-    private static int sessionID = 0;
+    //endregion
 
-    private String generateSessionID() {
-        sessionID++;
-        return "xyzzy - session " + sessionID;
-    }
 }
