@@ -48,6 +48,10 @@ public class LoginController {
         navManager.showPolicyScreen();
     }
 
+    public void setUserField(String loginID) {
+        this.user.setText(loginID);
+    }
+
     //endregion
 
 }

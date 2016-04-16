@@ -10,8 +10,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.PasswordField?>
 <StackPane id="pane" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.LoginController">
     <children>
         <StackPane>
@@ -23,8 +23,8 @@
                             <children>
                                 <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                                 <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                <TextField fx:id="user" text="55408864" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                                <TextField fx:id="password" text="test" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField fx:id="user" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                                <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             </children>
 
                             <columnConstraints>

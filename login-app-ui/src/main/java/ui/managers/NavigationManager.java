@@ -6,6 +6,7 @@ import ui.Loader;
 import ui.controllers.LoginController;
 import ui.controllers.HomeController;
 import ui.controllers.RegisterController;
+import ui.controllers.RegistrationInfoController;
 import util.EncryptedLogger;
 
 import java.io.IOException;
@@ -28,6 +29,19 @@ public class NavigationManager {
             LoginController controller = loader.getController();
             controller.setNavigationManager(this);
             view = "login";
+        } catch (IOException ex) {
+            log.error("IOException", ex);
+        }
+    }
+
+    public void showLoginScreen(String loginID) {
+        try {
+            FXMLLoader loader = Loader.getFXML("login");
+            scene.setRoot(loader.load());
+
+            LoginController controller = loader.getController();
+            controller.setNavigationManager(this);
+            controller.setUserField(loginID);
         } catch (IOException ex) {
             log.error("IOException", ex);
         }
@@ -85,6 +99,19 @@ public class NavigationManager {
             RegisterController controller = loader.getController();
             controller.setNavigationManager(this);
 
+        } catch (IOException ex) {
+            log.error("IOException", ex);
+        }
+    }
+
+    public void showRegistrationInfoScreen(String loginId) {
+        try {
+            FXMLLoader loader = Loader.getFXML("registrationInfo");
+            scene.setRoot(loader.load());
+
+            RegistrationInfoController controller = loader.getController();
+            controller.setNavigationManager(this);
+            controller.setLoginID(loginId);
         } catch (IOException ex) {
             log.error("IOException", ex);
         }
