@@ -7,6 +7,7 @@ import qub.domain.user.AdminUser;
 import qub.domain.user.User;
 import qub.domain.user.StandardUser;
 import qub.repositories.UserRepository;
+import qub.service.ICryptoHashingService;
 import qub.service.IUserService;
 import qub.util.LoginIdGenerator;
 import util.EncryptedLogger;
@@ -17,6 +18,12 @@ import java.util.List;
 public class UserService implements IUserService {
     
     private EncryptedLogger log = new EncryptedLogger(getClass());
+
+    /**
+     * The crypto service.
+     */
+    @Autowired
+    private ICryptoHashingService cryptoHashingService;
 
     @Autowired
     private UserRepository userRepository;
@@ -65,7 +72,7 @@ public class UserService implements IUserService {
         }
 
         user.setLoginId(newLoginId);
-        user.setPassword(password);
+        user.setPassword(cryptoHashingService.hashString(password));
 
         saveUser(user);
         return user;

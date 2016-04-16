@@ -58,8 +58,6 @@ public class AuthController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public @ResponseBody AuthResult login(@RequestBody final Credential loginInfo, HttpServletResponse response) {
 
-        String hash = cryptoHashingService.hashString("Test");
-
         boolean validCreds = authenticationService.verifyUserCredentials(loginInfo.getUserName(), loginInfo.getPassWord());
 
         AuthResult returnResult = new AuthResult();
