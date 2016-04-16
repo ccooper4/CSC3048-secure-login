@@ -5,6 +5,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Service;
 import qub.service.ICryptoHashingService;
+import util.EncryptedLogger;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKeyFactory;
@@ -58,14 +59,14 @@ public class CryptoHashingService implements ICryptoHashingService {
     private byte[] hmacSecretKey;
 
     /**
-     * Gets the configured hash secret key.
-     */
-    private byte[] hashSecretKey;
-
-    /**
      * Gets the hmacImpl implementation.
      */
     private Mac hmacImpl;
+
+    /**
+     * The logger for this class.
+     */
+    private EncryptedLogger log = new EncryptedLogger(getClass());
 
     //endregion
 
@@ -82,9 +83,9 @@ public class CryptoHashingService implements ICryptoHashingService {
             Properties props = PropertiesLoaderUtils.loadProperties(resource);
 
             hmacSecretKey = props.getProperty("security.hmac.secretKey").getBytes();
-            hashSecretKey = props.getProperty("security.hash.secretKey").getBytes();
 
         } catch (IOException e) {
+            log.error("Could not construct Crypto Hashing Service", e);
             e.printStackTrace();
         }
 
@@ -94,7 +95,7 @@ public class CryptoHashingService implements ICryptoHashingService {
             hmacImpl.init(new SecretKeySpec(hmacSecretKey, HMAC_IMPL));
         }
         catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            e.printStackTrace();
+            log.error("Could not construct Crypto Hashing Service", e);
         }
 
     }
@@ -136,7 +137,7 @@ public class CryptoHashingService implements ICryptoHashingService {
 
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
+            log.error("Could not build the hash", e);
         }
 
         return finalHash;
@@ -176,7 +177,7 @@ public class CryptoHashingService implements ICryptoHashingService {
             hashesMatch = Arrays.equals(originalHash, newHash);
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
+            log.error("Could not build the hash", e);
         }
 
         return hashesMatch;
@@ -197,7 +198,7 @@ public class CryptoHashingService implements ICryptoHashingService {
         try {
             sr = SecureRandom.getInstance(SALT_GENERATION_IMPL);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            log.error("Could not generate salt", e);
         }
 
         byte[] salt = new byte[16];

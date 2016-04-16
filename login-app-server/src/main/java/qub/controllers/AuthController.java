@@ -18,9 +18,12 @@ import qub.domain.user.User;
 import qub.service.IAuthenticationService;
 import qub.service.ICryptoHashingService;
 import qub.service.IUserService;
+import util.EncryptedLogger;
 import util.StringConstants;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 @Controller
 public class AuthController {
@@ -51,12 +54,19 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    /**
+     * The logger for this class.
+     */
+    private EncryptedLogger log = new EncryptedLogger(getClass());
+
     //endregion
 
     //region Actions
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public @ResponseBody AuthResult login(@RequestBody final Credential loginInfo, HttpServletResponse response) {
+    public @ResponseBody AuthResult login(@RequestBody final Credential loginInfo, HttpServletResponse response, HttpServletRequest request) {
+
+        log.info("New login request for user: " + loginInfo.getUserName());
 
         boolean validCreds = authenticationService.verifyUserCredentials(loginInfo.getUserName(), loginInfo.getPassWord());
 
@@ -66,13 +76,22 @@ public class AuthController {
 
             User userInfo = userService.getUserByLoginId(loginInfo.getUserName());
 
-            String token = authenticationService.createTokenForUser(userInfo);
+            String userIp = request.getRemoteAddr();
+
+            Date currentDate = new Date();
+
+            Date tokenExpiryDate = new Date(currentDate.getTime() + 3600000);
+
+            String token = authenticationService.createTokenForUser(userInfo, userIp, tokenExpiryDate);
 
             response.setHeader(StringConstants.TOKEN_HEADER_NAME, token);
+
+            log.info("Login passed for user: " + loginInfo.getUserName() + ", issuing token");
 
             returnResult.setSuccess(true);
         }
         else {
+            log.info("Login failed for user: " + loginInfo.getUserName());
             returnResult.setSuccess(false);
             returnResult.setError("Credentials could not be verified.");
         }

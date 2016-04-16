@@ -6,6 +6,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import qub.security.AuthByHeaderToken;
 
 import javax.sql.DataSource;
 
@@ -17,6 +19,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private AuthByHeaderToken filterStage;
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder authentication) throws Exception {
@@ -44,6 +49,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .anyRequest()
                 .authenticated();
+
+        http.addFilterBefore(filterStage, UsernamePasswordAuthenticationFilter.class);
 
         // Needed to view h2 console
         http.csrf().disable();

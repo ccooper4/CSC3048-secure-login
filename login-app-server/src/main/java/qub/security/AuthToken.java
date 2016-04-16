@@ -11,6 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 
 /**
  * Represents the Auth Token used for authentication.
@@ -24,6 +25,16 @@ public class AuthToken extends AbstractAuthenticationToken {
      */
     private User authUser;
 
+    /**
+     * Gets the IP Address this token was assigned to.
+     */
+    private String ipAddres;
+
+    /**
+     * Gets the token's expiry date.
+     */
+    private Date expiryDate;
+
     //endregion
 
     //region Constructor
@@ -34,6 +45,8 @@ public class AuthToken extends AbstractAuthenticationToken {
     public AuthToken(User authUser) {
         super(null);
         this.authUser = authUser;
+
+        this.setAuthenticated(true);
     }
 
     /**
@@ -46,6 +59,55 @@ public class AuthToken extends AbstractAuthenticationToken {
     //endregion
 
     //region Getters & Setters
+
+    /**
+     * Gets the Authenticated user.
+     * @return The user.
+     */
+    public User getAuthUser() {
+        return authUser;
+    }
+
+    /**
+     * Sets the authenticated user.
+     * @param authUser The user.
+     */
+    public void setAuthUser(User authUser) {
+        this.authUser = authUser;
+    }
+
+    /**
+     * Gets the IP Address
+     * @return The IP Address.
+     */
+    public String getIpAddres() {
+        return ipAddres;
+    }
+
+    /**
+     * Sets the IP Address.
+     * @param ipAddres The new IP Address.
+     */
+    public void setIpAddres(String ipAddres) {
+        this.ipAddres = ipAddres;
+    }
+
+    /**
+     * Gets the expiry date.
+     * @return The token expiry date.
+     */
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+
+    /**
+     * Sets the expiry date.
+     * @param expiryDate The token expiry date.
+     */
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
 
     //endregion
 

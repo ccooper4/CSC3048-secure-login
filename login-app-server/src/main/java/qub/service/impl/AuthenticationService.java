@@ -1,16 +1,19 @@
 package qub.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import qub.security.AuthToken;
 import qub.domain.user.User;
 import qub.service.IAuthenticationService;
 import qub.service.ICryptoHashingService;
 import qub.service.IUserService;
+import util.EncryptedLogger;
 import util.StringConstants;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Provides an implementation of the IAuthenticationService.
@@ -32,19 +35,33 @@ public class AuthenticationService implements IAuthenticationService {
     @Autowired
     private IUserService userService;
 
+    /**
+     * The logger for this class.
+     */
+    private EncryptedLogger log = new EncryptedLogger(getClass());
+
     //endregion
 
     //region IAuthenticationService Implementation.
 
     /**
-     * Creates an AuthToken for the user and valid auth result.
+     * Creates an Auth Token for the specified user.
+     *
      * @param userDetails The user details.
-     * @return A valid, HMAC signed AuthToken.
+     * @param ipAddress   The IP Address.
+     * @param tokenExpiry This tokens expiry date.
+     * @return A valid, HMAC Signed auth token that can be handed to the user.
      */
     @Override
-    public String createTokenForUser(User userDetails) {
+    public String createTokenForUser(User userDetails, String ipAddress, Date tokenExpiry) {
 
         AuthToken token = new AuthToken(userDetails);
+
+        token.setIpAddres(ipAddress);
+        token.setExpiryDate(tokenExpiry);
+        token.setAuthenticated(true);
+
+        SecurityContextHolder.getContext().setAuthentication(token);
 
         String jsonToken = token.toString();
 
@@ -60,15 +77,20 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     /**
-     * Validates a token and parses an Auth object from it.
+     * Parses the Authentication details from the token passed in the request header.
+     *
      * @param tokenHeader The header.
-     * @return The parsed auth object.
+     * @param userIp      The user's IP.
+     * @return The parsed authentication object.
      */
     @Override
-    public AuthToken validateTokenFromUser(String tokenHeader) {
+    public AuthToken validateTokenFromUser(String tokenHeader, String userIp) {
 
         //Check we actually have a string.
         if (tokenHeader == null || tokenHeader.length() == 0) {
+
+            log.info("Failed whilst verifying token - token is not set");
+
             return null;
         }
 
@@ -76,6 +98,9 @@ public class AuthenticationService implements IAuthenticationService {
 
         //Check we have only 2 parts.
         if (tokenParts == null || tokenParts.length != 2 || tokenParts[0].length() == 0 || tokenParts[1].length() == 0) {
+
+            log.info("Failed whilst verifying token - token is invalid.");
+
             return null;
         }
 
@@ -87,6 +112,10 @@ public class AuthenticationService implements IAuthenticationService {
 
         if (!Arrays.equals(hmacSig, reHash)) {
             //Something isn't right - log a tampering attempt here.
+
+            log.info("Token hash did not match whilst verifying token");
+
+            return null;
         }
 
         //Deserialize the token.
@@ -95,21 +124,45 @@ public class AuthenticationService implements IAuthenticationService {
 
         AuthToken tokenObj = AuthToken.constructFromJson(tokenText);
 
+        Date timeNow = new Date();
+
+        if (tokenObj.getExpiryDate().before(timeNow)) {
+            //Log that the token has expired.
+
+            log.info("Token has expired.");
+
+            return null;
+        }
+
+        if (!tokenObj.getIpAddres().equals(userIp)) {
+            //Log that there is an IP mismatch.
+
+            log.info("Token IP did not match client IP.");
+
+            return null;
+        }
+
         return tokenObj;
     }
 
     /**
      * Verifies the user's credentials.
-     * @param userId The username.
+     *
+     * @param userId   The username.
      * @param password The password.
      * @return A boolean indicating if the credentials are valid.
      */
     @Override
     public boolean verifyUserCredentials(String userId, String password) {
 
+        log.info("Verifying credentials for user: " + userId);
+
         User foundUser = userService.getUserByLoginId(userId);
 
         if (foundUser == null) {
+
+            log.info("Could not find user " + userId);
+
             return false;
         }
 
@@ -127,6 +180,7 @@ public class AuthenticationService implements IAuthenticationService {
 
     /**
      * Converts a byte array to Base 64
+     *
      * @param content The bytes.
      * @return The Base 64 string.
      */
@@ -138,6 +192,7 @@ public class AuthenticationService implements IAuthenticationService {
 
     /**
      * Gets a byte array from a base 64 string.
+     *
      * @param b64 The base 64 string.
      * @return The byte array.
      */
