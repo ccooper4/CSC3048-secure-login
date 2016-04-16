@@ -20,21 +20,6 @@ public class AuthToken extends AbstractAuthenticationToken {
     //region Fields
 
     /**
-     * The HMAC Impl to use.
-     */
-    private static final String HMAC_IMPL = "HmacSHA256";
-
-    /**
-     * The character used to seperate the token.
-     */
-    private static final String TOKEN_SEPERATOR = "-";
-
-    /**
-     * Gets the configured secret key.
-     */
-    private byte[] secretKey;
-
-    /**
      * Gets the user this token represents.
      */
     private User authUser;
@@ -55,14 +40,6 @@ public class AuthToken extends AbstractAuthenticationToken {
 
     //region Getters & Setters
 
-    /**
-     * Sets the secret key.
-     * @param secretKey The new secret key.
-     */
-    public void setSecretKey(byte[] secretKey) {
-        this.secretKey = secretKey;
-    }
-
     //endregion
 
     //region ToString Override
@@ -78,28 +55,7 @@ public class AuthToken extends AbstractAuthenticationToken {
 
         String jsonObj = gson.toJson(this);
 
-        String finalToken = null;
-
-        try {
-
-            Mac hmac = Mac.getInstance(HMAC_IMPL);
-            hmac.init(new SecretKeySpec(secretKey, HMAC_IMPL));
-
-            byte[] tokenBytes = jsonObj.getBytes();
-            byte[] hmacHash = hmac.doFinal(tokenBytes);
-
-            String base64Token = getBase64String(tokenBytes);
-            String base64Hash = getBase64String(hmacHash);
-
-            finalToken = base64Token + TOKEN_SEPERATOR + base64Hash;
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
-
-        return finalToken;
+        return jsonObj;
     }
 
     //endregion
@@ -122,19 +78,6 @@ public class AuthToken extends AbstractAuthenticationToken {
     @Override
     public Object getPrincipal() {
         return authUser.getLoginId();
-    }
-
-    //endregion
-
-    //region Helpers
-
-    /**
-     * Converts a byte array to Base 64
-     * @param content The bytes.
-     * @return The Base 64 string.
-     */
-    private String getBase64String(byte[] content) {
-        return DatatypeConverter.printBase64Binary(content);
     }
 
     //endregion

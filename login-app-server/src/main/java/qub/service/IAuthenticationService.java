@@ -14,13 +14,13 @@ public interface IAuthenticationService {
      * @param userDetails The user details.
      * @return A valid, HMAC Signed auth token that can be handed to the user.
      */
-    AuthToken createTokenForUser(User userDetails);
+    String createTokenForUser(User userDetails);
 
     /**
      * Parses the Authentication details from the token passed in the request header.
      * @param tokenHeader The header.
      * @return The parsed authentication object.
      */
-    Authentication validateTokenFromUser(String tokenHeader);
+    AuthToken validateTokenFromUser(String tokenHeader);
 
 }

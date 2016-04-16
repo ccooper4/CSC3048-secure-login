@@ -6,6 +6,8 @@ import qub.security.AuthToken;
 import org.springframework.security.core.Authentication;
 import qub.domain.user.User;
 
+import javax.xml.bind.DatatypeConverter;
+
 /**
  * Provides an implementation of the IAuthenticationService.
  */
@@ -15,10 +17,14 @@ public class AuthenticationService implements IAuthenticationService {
     //region Fields
 
     /**
-     * Gets the configured secret key.
+     * The character used to seperate the token.
      */
-    @Value("${secretKey}")
-    private byte[] secretKey;
+    private static final String TOKEN_SEPERATOR = "-";
+
+    /**
+     * The HMAC Signing Service.
+     */
+    private IHMACSigningService signingService;
 
     //endregion
 
@@ -29,12 +35,21 @@ public class AuthenticationService implements IAuthenticationService {
      * @param userDetails The user details.
      * @return A valid, HMAC signed AuthToken.
      */
-    public AuthToken createTokenForUser(User userDetails) {
+    public String createTokenForUser(User userDetails) {
 
         AuthToken token = new AuthToken(userDetails);
-        token.setSecretKey(secretKey);
 
-        return token;
+        String jsonToken = token.toString();
+
+        byte[] tokenBytes = jsonToken.getBytes();
+        byte[] hmacTokenBytesSig = signingService.hmacSign(tokenBytes);
+
+        String base64Token = getBase64String(tokenBytes);
+        String base64Sig = getBase64String(hmacTokenBytesSig);
+
+        String finalToken = base64Token + TOKEN_SEPERATOR + base64Sig;
+
+        return finalToken;
     }
 
     /**
@@ -43,8 +58,23 @@ public class AuthenticationService implements IAuthenticationService {
      * @return The parsed auth object.
      */
     @Override
-    public Authentication validateTokenFromUser(String tokenHeader) {
+    public AuthToken validateTokenFromUser(String tokenHeader) {
         return null;
+    }
+
+    //endregion
+
+    //region Helpers
+
+    /**
+     * Converts a byte array to Base 64
+     * @param content The bytes.
+     * @return The Base 64 string.
+     */
+    private String getBase64String(byte[] content) {
+
+        return DatatypeConverter.printBase64Binary(content);
+
     }
 
     //endregion

@@ -66,9 +66,9 @@ public class AuthController {
 
             User userInfo = userService.getUserByLoginId(res.getName());
 
-            AuthToken token = authenticationService.createTokenForUser(userInfo);
+            String token = authenticationService.createTokenForUser(userInfo);
 
-            response.setHeader(StringConstants.TOKEN_HEADER_NAME, token.toString());
+            response.setHeader(StringConstants.TOKEN_HEADER_NAME, token);
 
             returnResult.setSuccess(true);
         }
