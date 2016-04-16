@@ -2,6 +2,7 @@ package network;
 
 import model.AuthResult;
 import model.Credential;
+import model.UserInfo;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,13 +18,18 @@ public class ServerConnector implements IServerConnector {
     public ServerConnector() {
     }
 
-    public boolean register(String firstName, String lastName, String password) {
-        return false;
+    public String register(String firstName, String lastName, String password) {
+
+        UserInfo userInfo = new UserInfo(firstName, lastName, password);
+
+        String loginId = restTemplate.postForObject(URI + "/register", userInfo, String.class);
+
+        return loginId;
     }
 
-    public boolean logout() {
+    public void logout() {
         AUTH_TOKEN = "";
-        return true;
+//        HttpEntity<AuthResult> response = restTemplate.exchange(URI + "/login", HttpMethod.POST, AuthResult.class);
     }
 
     public boolean login(String loginId, String password) {

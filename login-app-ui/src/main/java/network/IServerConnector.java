@@ -11,7 +11,7 @@ public interface IServerConnector {
      * @param lastName  The last name.
      * @param password  The password.
      */
-    boolean register(String firstName, String lastName, String password);
+    String register(String firstName, String lastName, String password);
 
     /**
      * Login a user to the system.
@@ -20,6 +20,10 @@ public interface IServerConnector {
      */
     boolean login(String loginId, String password);
 
-    boolean logout();
+    /**
+     * Logout the current user from the system.
+     * @return
+     */
+    void logout();
 
 }

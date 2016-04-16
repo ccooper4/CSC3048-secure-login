@@ -2,7 +2,6 @@ package ui.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import network.IServerConnector;
 import network.ServerConnector;
@@ -25,6 +24,7 @@ public class RegisterController {
     private TextField password;
     @FXML
     private TextField confirmPassword;
+
     @FXML
     private RequiredField requiredFieldFName;
     @FXML
@@ -61,7 +61,10 @@ public class RegisterController {
      */
     public void register() {
         validateFields();
-        serverConnector.register(firstName.getText(), lastName.getText(), password.getText());
+        String loginID = serverConnector.register(firstName.getText(), lastName.getText(), password.getText());
+        if (loginID != null) {
+            navManager.showRegistrationInfoScreen(loginID);
+        }
     }
 
     private void validateFields(){
