@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import qub.security.AuthToken;
 import org.springframework.security.core.Authentication;
 import qub.domain.user.User;
+import util.StringConstants;
 
 import javax.xml.bind.DatatypeConverter;
+import java.util.Arrays;
 
 /**
  * Provides an implementation of the IAuthenticationService.
@@ -15,11 +17,6 @@ import javax.xml.bind.DatatypeConverter;
 public class AuthenticationService implements IAuthenticationService {
 
     //region Fields
-
-    /**
-     * The character used to seperate the token.
-     */
-    private static final String TOKEN_SEPERATOR = "-";
 
     /**
      * The HMAC Signing Service.
@@ -47,7 +44,7 @@ public class AuthenticationService implements IAuthenticationService {
         String base64Token = getBase64String(tokenBytes);
         String base64Sig = getBase64String(hmacTokenBytesSig);
 
-        String finalToken = base64Token + TOKEN_SEPERATOR + base64Sig;
+        String finalToken = base64Token + StringConstants.TOKEN_SEPERATOR + base64Sig;
 
         return finalToken;
     }
@@ -59,7 +56,36 @@ public class AuthenticationService implements IAuthenticationService {
      */
     @Override
     public AuthToken validateTokenFromUser(String tokenHeader) {
-        return null;
+
+        //Check we actually have a string.
+        if (tokenHeader == null || tokenHeader.length() == 0) {
+            return null;
+        }
+
+        String[] tokenParts = tokenHeader.split("\\" + StringConstants.TOKEN_SEPERATOR);
+
+        //Check we have only 2 parts.
+        if (tokenParts == null || tokenParts.length != 2 || tokenParts[0].length() == 0 || tokenParts[1].length() == 0) {
+            return null;
+        }
+
+        byte[] token = getBytesFromBase64(tokenParts[0]);
+        byte[] hmacSig = getBytesFromBase64(tokenParts[1]);
+
+        //Check no one has tampered with the token or signature.
+        byte[] reHash = signingService.hmacSign(token);
+
+        if (!Arrays.equals(hmacSig, reHash)) {
+            //Something isn't right - log a tampering attempt here.
+        }
+
+        //Deserialize the token.
+
+        String tokenText = new String(token);
+
+        AuthToken tokenObj = AuthToken.constructFromJson(tokenText);
+
+        return tokenObj;
     }
 
     //endregion
@@ -74,6 +100,17 @@ public class AuthenticationService implements IAuthenticationService {
     private String getBase64String(byte[] content) {
 
         return DatatypeConverter.printBase64Binary(content);
+
+    }
+
+    /**
+     * Gets a byte array from a base 64 string.
+     * @param b64 The base 64 string.
+     * @return The byte array.
+     */
+    private byte[] getBytesFromBase64(String b64) {
+
+        return DatatypeConverter.parseBase64Binary(b64);
 
     }
 

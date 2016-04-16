@@ -36,6 +36,13 @@ public class AuthToken extends AbstractAuthenticationToken {
         this.authUser = authUser;
     }
 
+    /**
+     * Constructs a new Auth Token with no user.
+     */
+    public AuthToken() {
+        super(null);
+    }
+
     //endregion
 
     //region Getters & Setters
@@ -78,6 +85,24 @@ public class AuthToken extends AbstractAuthenticationToken {
     @Override
     public Object getPrincipal() {
         return authUser.getLoginId();
+    }
+
+    //endregion
+
+    //region Methods
+
+    /**
+     * Constructs an auth token from a JSON String.
+     * @param json The JSON.
+     * @return The AuthToken.
+     */
+    public static AuthToken constructFromJson(String json) {
+
+        Gson gson = new GsonBuilder().create();
+
+        AuthToken newToken = gson.fromJson(json, AuthToken.class);
+
+        return newToken;
     }
 
     //endregion

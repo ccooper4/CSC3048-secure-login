@@ -12,5 +12,10 @@ public class StringConstants {
      */
     public static String TOKEN_HEADER_NAME = "AUTH-TOKEN";
 
+    /**
+     * The character to use when seperating the token.
+     */
+    public static String TOKEN_SEPERATOR = "-";
+
     //endregion
 }
