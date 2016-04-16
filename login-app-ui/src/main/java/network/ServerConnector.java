@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 public class ServerConnector implements IServerConnector {
 
     private RestTemplate restTemplate = new RestTemplate();
-    private final String URI = "http://localhost:8080";
+    private final String URI = "https://localhost:8443";
 
     public ServerConnector() {
     }
