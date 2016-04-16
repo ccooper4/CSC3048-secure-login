@@ -2,6 +2,8 @@ package ui.login;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import ui.register.RegisterController;
+import ui.register.RegisterManager;
 import util.EncryptedLogger;
 import ui.Loader;
 import ui.main.MainViewController;
@@ -47,6 +49,19 @@ public class LoginManager {
             MainViewController controller = loader.getController();
             controller.initManager(this);
         } catch (IOException ex) {
+            log.error("IOException", ex);
+        }
+    }
+
+    public void showRegisterScreen() {
+        try {
+            FXMLLoader loader = Loader.getFXML("register");
+            scene.setRoot(loader.load());
+
+            RegisterController controller = new RegisterController();
+            controller.initManager(new RegisterManager(scene));
+
+        } catch (Exception ex) {
             log.error("IOException", ex);
         }
     }
