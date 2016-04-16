@@ -2,6 +2,7 @@ package qub.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -33,19 +34,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-            // Use HTTP Basic
-            .httpBasic()
-            .and()
-                // Allow login / logout by default + console
-                .authorizeRequests()
-                .antMatchers("/login/**").permitAll()
-                .antMatchers("/console/**").permitAll()
-                .antMatchers("/signOut/**").permitAll()
+            // Allow login / logout by default + console
+            .authorizeRequests()
+            .antMatchers(HttpMethod.POST, "/login/**").permitAll()
+            .antMatchers("/console/**").permitAll()
+            .antMatchers("/signOut/**").permitAll()
             .and()
                 // Secure others
-                .authorizeRequests()
-                    .anyRequest()
-                    .authenticated();
+            .authorizeRequests()
+                .anyRequest()
+                .authenticated();
 
         // Needed to view h2 console
         http.csrf().disable();

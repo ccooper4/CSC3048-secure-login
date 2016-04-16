@@ -1,13 +1,26 @@
 package qub.service;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import qub.security.AuthToken;
 import org.springframework.security.core.Authentication;
-import qub.domain.User;
+import qub.domain.user.User;
 
 /**
  * Provides an implementation of the IAuthenticationService.
  */
+@Service
 public class AuthenticationService implements IAuthenticationService {
+
+    //region Fields
+
+    /**
+     * Gets the configured secret key.
+     */
+    @Value("${secretKey}")
+    private byte[] secretKey;
+
+    //endregion
 
     //region IAuthenticationService Implementation.
 
@@ -19,6 +32,8 @@ public class AuthenticationService implements IAuthenticationService {
     public AuthToken createTokenForUser(User userDetails) {
 
         AuthToken token = new AuthToken(userDetails);
+        token.setSecretKey(secretKey);
+
         return token;
     }
 

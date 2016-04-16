@@ -1,6 +1,8 @@
 package qub.controllers;
 
 import model.AuthResult;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import qub.security.AuthToken;
 import model.Credential;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import qub.domain.User;
+import qub.domain.user.User;
 import qub.service.IAuthenticationService;
 import qub.service.IUserService;
 import util.StringConstants;
 
 import javax.servlet.http.HttpServletResponse;
 
+@Controller
 public class AuthController {
 
     //region Dependencies
@@ -41,11 +44,14 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Value("${secretKey}")
+    private byte[] secretKey;
+
     //endregion
 
     //region Actions
 
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public @ResponseBody AuthResult login(@RequestBody final Credential loginInfo, HttpServletResponse response) {
 
         UsernamePasswordAuthenticationToken loginData = new UsernamePasswordAuthenticationToken(loginInfo.getUserName(), loginInfo.getPassWord());

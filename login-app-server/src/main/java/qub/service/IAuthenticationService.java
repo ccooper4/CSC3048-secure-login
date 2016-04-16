@@ -2,7 +2,7 @@ package qub.service;
 
 import qub.security.AuthToken;
 import org.springframework.security.core.Authentication;
-import qub.domain.User;
+import qub.domain.user.User;
 
 /**
  * Outlines the interface for the Auth Service.
