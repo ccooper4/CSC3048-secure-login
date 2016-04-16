@@ -40,6 +40,10 @@ public class LoginController {
                 // TODO
             }
         });
+
+        register.setOnAction(event -> {
+            loginManager.showRegisterScreen();
+        });
     }
 
 

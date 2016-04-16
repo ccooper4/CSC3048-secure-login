@@ -31,7 +31,7 @@
                         <StackPane prefHeight="-1.0" prefWidth="-1.0">
                             <children>
                                 <Button fx:id="loginButton" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Login" StackPane.alignment="CENTER_RIGHT" />
-                        <Hyperlink id="register" prefHeight="23.0" prefWidth="65.0" text="Register">
+                        <Hyperlink fx:id="register" prefHeight="23.0" prefWidth="65.0" text="Register">
                            <StackPane.margin>
                               <Insets right="150.0" />
                            </StackPane.margin>
