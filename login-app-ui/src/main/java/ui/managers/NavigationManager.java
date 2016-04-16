@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import ui.Loader;
 import ui.controllers.LoginController;
-import ui.controllers.MainViewController;
+import ui.controllers.HomeController;
 import ui.controllers.RegisterController;
 import util.EncryptedLogger;
 
@@ -31,12 +31,12 @@ public class NavigationManager {
         }
     }
 
-    public void showMainView() {
+    public void showHomeScreen() {
         try {
-            FXMLLoader loader = Loader.getFXML("mainview");
+            FXMLLoader loader = Loader.getFXML("home");
             scene.setRoot(loader.load());
 
-            MainViewController controller = loader.getController();
+            HomeController controller = loader.getController();
             controller.setNavigationManager(this);
         } catch (IOException ex) {
             log.error("IOException", ex);

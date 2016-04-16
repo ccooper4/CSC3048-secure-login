@@ -1,8 +1,9 @@
 package ui.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import network.IServerConnector;
+import network.ServerConnector;
 import ui.managers.NavigationManager;
 
 /**
@@ -10,6 +11,7 @@ import ui.managers.NavigationManager;
  */
 public class RegisterController {
 
+    private IServerConnector serverConnector = new ServerConnector();
     private NavigationManager navManager;
 
     @FXML
@@ -20,10 +22,6 @@ public class RegisterController {
     private TextField password;
     @FXML
     private TextField confirmPassword;
-    @FXML
-    private Button registerButton;
-    @FXML
-    private Button cancelButton;
 
     /**
      * Set the login manager.
@@ -44,10 +42,6 @@ public class RegisterController {
      * Register a user.
      */
     public void register() {
-
+        serverConnector.register(firstName.getText(), lastName.getText(), password.getText());
     }
-
-
-
-
 }

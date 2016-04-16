@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.layout.FlowPane?>
-<StackPane prefWidth="231.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.RegisterController">
+<StackPane id="pane" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.RegisterController">
     <children>
         <StackPane>
             <children>

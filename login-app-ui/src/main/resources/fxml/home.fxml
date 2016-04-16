@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<StackPane id="pane" xmlns:fx="http://javafx.com/fxml" fx:controller="ui.controllers.HomeController">
+    <children>
+        <StackPane>
+            <children>
+                <VBox spacing="10.0">
+                    <children>
+                        <StackPane>
+                            <children>
+                                <Button id="loginButton" fx:id="logoutButton" text="Logout" onAction="#logout"/>
+                            </children>
+                        </StackPane>
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
+    </children>
+<padding>
+<Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+</padding>
+        </StackPane>
