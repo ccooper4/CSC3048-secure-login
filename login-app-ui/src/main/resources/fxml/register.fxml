@@ -39,6 +39,50 @@
                             <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                             <PasswordField fx:id="confirmPassword" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
+                            <!-- Validation-->
+                            <fx:define>
+                                <RequiredField fx:id="requiredFieldFName" >
+                                    <srcControl>
+                                        <fx:reference source="firstName"></fx:reference>
+                                    </srcControl>
+                                </RequiredField>
+                                <RequiredField fx:id="requiredFieldSName" >
+                                    <srcControl>
+                                        <fx:reference source="lastName"></fx:reference>
+                                    </srcControl>
+                                </RequiredField>
+                                <RequiredField fx:id="requiredFieldPassword" >
+                                    <srcControl>
+                                        <fx:reference source="password"></fx:reference>
+                                    </srcControl>
+                                </RequiredField>
+                                <RequiredField fx:id="requiredFieldCPassword" >
+                                    <srcControl>
+                                        <fx:reference source="confirmPassword"></fx:reference>
+                                    </srcControl>
+                                </RequiredField>
+                            </fx:define>
+                            <ErrorLabel message="Please enter your first name">
+                                <validator>
+                                    <fx:reference source="requiredFieldFName"></fx:reference>
+                                </validator>
+                            </ErrorLabel>
+                            <ErrorLabel message="Please enter your second name">
+                                <validator>
+                                    <fx:reference source="requiredFieldSName"></fx:reference>
+                                </validator>
+                            </ErrorLabel>
+                            <ErrorLabel message="Please enter your password">
+                                <validator>
+                                    <fx:reference source="requiredFieldPassword"></fx:reference>
+                                </validator>
+                            </ErrorLabel>
+                            <ErrorLabel message="Please confirm your password">
+                                <validator>
+                                    <fx:reference source="requiredFieldCPassword"></fx:reference>
+                                </validator>
+                            </ErrorLabel>
+
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="110.0" prefWidth="110.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="20.0" prefWidth="200.0" />

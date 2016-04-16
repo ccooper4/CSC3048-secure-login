@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import network.IServerConnector;
 import network.ServerConnector;
 import ui.managers.NavigationManager;
+import ui.validation.RequiredField;
 
 /**
  * Controls the registration screen
@@ -24,6 +25,14 @@ public class RegisterController {
     private TextField password;
     @FXML
     private TextField confirmPassword;
+    @FXML
+    private RequiredField requiredFieldFName;
+    @FXML
+    private RequiredField requiredFieldSName;
+    @FXML
+    private RequiredField requiredFieldPassword;
+    @FXML
+    private RequiredField requiredFieldCPassword;
 
     /**
      * Set the login manager.
@@ -51,7 +60,15 @@ public class RegisterController {
      * Register a user.
      */
     public void register() {
+        validateFields();
         serverConnector.register(firstName.getText(), lastName.getText(), password.getText());
+    }
+
+    private void validateFields(){
+        requiredFieldFName.eval();
+        requiredFieldSName.eval();
+        requiredFieldPassword.eval();
+        requiredFieldCPassword.eval();
     }
 
     public void showRegisterView(ActionEvent actionEvent) {
