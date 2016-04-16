@@ -43,7 +43,6 @@
 
                         <!-- Buttons-->
                         <FlowPane alignment="CENTER">
-                            
                             <Button fx:id="loginButton" text="Login">
                                 <FlowPane.margin>
                                    <Insets right="10.0" />
