@@ -34,7 +34,7 @@ public class RegisterController {
     @FXML
     private RequiredField requiredFieldCPassword;
 
-    private final String passwordPattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{5,10}";
+    private final String passwordPattern = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20})";
 
     private boolean hasErrors = false;
 
@@ -79,10 +79,15 @@ public class RegisterController {
         requiredFieldSName.eval();
         requiredFieldPassword.eval();
         requiredFieldCPassword.eval();
-        if(!password.toString().matches(passwordPattern)){
+        if(!password.getText().matches(passwordPattern)){
             hasErrors = true;
             requiredFieldPassword.setHasError(true);
         }
+
+        if(!password.getText().equals(confirmPassword.getText())){
+            requiredFieldCPassword.setHasError(true);
+        }
+
         if(requiredFieldFName.getHasErrors() || requiredFieldSName.getHasErrors() || requiredFieldPassword.getHasErrors() || requiredFieldCPassword.getHasErrors()) {
             hasErrors = true;
         }

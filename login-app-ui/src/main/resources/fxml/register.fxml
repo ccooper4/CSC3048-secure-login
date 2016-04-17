@@ -130,7 +130,7 @@
                                     <fx:reference source="requiredFieldPassword"></fx:reference>
                                 </validator>
                             </ErrorLabel>
-                            <ErrorLabel message="Please confirm your password" textFill="RED">
+                            <ErrorLabel message="Please ensure passwords match" textFill="RED">
                                 <validator>
                                     <fx:reference source="requiredFieldCPassword"></fx:reference>
                                 </validator>
