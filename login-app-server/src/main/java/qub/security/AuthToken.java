@@ -12,6 +12,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Represents the Auth Token used for authentication.
@@ -35,6 +36,11 @@ public class AuthToken extends AbstractAuthenticationToken {
      */
     private Date expiryDate;
 
+    /**
+     * Gets a unique id for this token.
+     */
+    private String tokenId;
+
     //endregion
 
     //region Constructor
@@ -47,6 +53,7 @@ public class AuthToken extends AbstractAuthenticationToken {
         this.authUser = authUser;
 
         this.setAuthenticated(true);
+        tokenId = UUID.randomUUID().toString();
     }
 
     /**
@@ -54,6 +61,7 @@ public class AuthToken extends AbstractAuthenticationToken {
      */
     public AuthToken() {
         super(null);
+        tokenId = UUID.randomUUID().toString();
     }
 
     //endregion
@@ -107,6 +115,14 @@ public class AuthToken extends AbstractAuthenticationToken {
      */
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    /**
+     * Gets the token id.
+     * @return The UUID.
+     */
+    public String getTokenId() {
+        return tokenId;
     }
 
     //endregion

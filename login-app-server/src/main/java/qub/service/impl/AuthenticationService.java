@@ -3,6 +3,7 @@ package qub.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import qub.domain.IssuedToken;
 import qub.security.AuthToken;
 import qub.domain.user.User;
 import qub.service.IAuthenticationService;
@@ -72,6 +73,15 @@ public class AuthenticationService implements IAuthenticationService {
         String base64Sig = getBase64String(hmacTokenBytesSig);
 
         String finalToken = base64Token + StringConstants.TOKEN_SEPERATOR + base64Sig;
+
+        //Save the token to the user.
+        IssuedToken tokenRef = new IssuedToken();
+        tokenRef.setTokenId(token.getTokenId());
+        tokenRef.setUser(userDetails);
+
+
+        userDetails.addIssuedToken(tokenRef);
+        userService.saveUser(userDetails);
 
         return finalToken;
     }
