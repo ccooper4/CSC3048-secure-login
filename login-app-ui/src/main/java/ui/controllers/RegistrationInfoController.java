@@ -1,7 +1,7 @@
 package ui.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import ui.managers.NavigationManager;
 
 public class RegistrationInfoController {
@@ -9,7 +9,7 @@ public class RegistrationInfoController {
     private NavigationManager navManager;
 
     @FXML
-    private Label loginID;
+    private TextField loginID;
 
     /**
      * Set the login manager.

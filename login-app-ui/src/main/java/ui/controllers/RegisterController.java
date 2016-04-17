@@ -1,6 +1,5 @@
 package ui.controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import network.IServerConnector;
@@ -74,7 +73,7 @@ public class RegisterController {
         requiredFieldCPassword.eval();
     }
 
-    public void showRegisterView(ActionEvent actionEvent) {
+    public void showRegisterView() {
         navManager.goBack();
     }
 }
