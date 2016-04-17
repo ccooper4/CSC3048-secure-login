@@ -20,7 +20,7 @@ public class ServerConnector implements IServerConnector {
     private RestTemplate restTemplate = new RestTemplate();
     private final String URI = "http://localhost:8080";
 
-    private String AUTH_TOKEN;
+    private static String AUTH_TOKEN;
 
     public ServerConnector() {
     }
@@ -35,7 +35,7 @@ public class ServerConnector implements IServerConnector {
         return loginId;
     }
 
-    public void logout() {
+    public boolean logout() {
         List<String> values = new ArrayList<>();
         values.add(AUTH_TOKEN);
 
@@ -45,8 +45,11 @@ public class ServerConnector implements IServerConnector {
         HttpEntity request = new HttpEntity<>(headers);
 
         log.info("Sending logout request to server");
-        HttpEntity<String> response  = restTemplate.exchange(URI + "/logout", HttpMethod.POST, request, String.class);
+        HttpEntity<Boolean> response  = restTemplate.exchange(URI + "/logout", HttpMethod.GET, request, Boolean.class);
+        boolean success = response.getBody();
+
         AUTH_TOKEN = "";
+        return success;
     }
 
     public UserInfo getCurrentUser() {
