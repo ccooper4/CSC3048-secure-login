@@ -43,6 +43,7 @@
                              </VBox.margin>
                         </GridPane>
 
+                        <FlowPane alignment="CENTER">
                         <!-- Validation-->
                         <fx:define>
                             <RequiredField fx:id="requiredFieldUName">
@@ -61,11 +62,14 @@
                                 <fx:reference source="requiredFieldUName"></fx:reference>
                             </validator>
                         </ErrorLabel>
+                        <FlowPane alignment="CENTER">
                         <ErrorLabel message="Please enter your password" textFill="RED">
                             <validator>
                                 <fx:reference source="requiredFieldPassword"></fx:reference>
                             </validator>
                         </ErrorLabel>
+                        </FlowPane>
+                        </FlowPane>
 
                         <!-- Buttons-->
                         <FlowPane alignment="CENTER">

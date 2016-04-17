@@ -115,22 +115,24 @@
                                     </srcControl>
                                 </RequiredField>
                             </fx:define>
-                            <ErrorLabel message="Please enter your first name&#10;" textFill="RED">
+                        <FlowPane alignment="CENTER">
+                            <ErrorLabel message="Please enter your first name. &#10;" textFill="RED">
                                 <validator>
                                     <fx:reference source="requiredFieldFName"></fx:reference>
                                 </validator>
                             </ErrorLabel>
-                            <ErrorLabel message="Please enter your second name&#10;" textFill="RED">
+                        </FlowPane>
+                            <ErrorLabel message="Please enter your second name. &#10;" textFill="RED">
                                 <validator>
                                     <fx:reference source="requiredFieldSName"></fx:reference>
                                 </validator>
                             </ErrorLabel>
-                            <ErrorLabel message="Please enter your a password longer than 8 characters with &#10;a digit, lower case letter, upper case letter and a special character" textFill="RED">
+                            <ErrorLabel message="Please enter a password longer than 8 characters with a digit,&#10;lower case letter, upper case letter and a special character." textFill="RED">
                                 <validator>
                                     <fx:reference source="requiredFieldPassword"></fx:reference>
                                 </validator>
                             </ErrorLabel>
-                            <ErrorLabel message="Please ensure passwords match" textFill="RED">
+                            <ErrorLabel message="Please ensure passwords match." textFill="RED">
                                 <validator>
                                     <fx:reference source="requiredFieldCPassword"></fx:reference>
                                 </validator>
@@ -142,6 +144,6 @@
         </StackPane>
     </children>
     <padding>
-        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+        <Insets left="10.0" right="10.0" />
     </padding>
 </StackPane>
