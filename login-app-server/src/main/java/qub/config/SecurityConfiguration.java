@@ -39,11 +39,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-            // Allow login / logout by default + console
+            // Allow public endpoints
             .authorizeRequests()
             .antMatchers(HttpMethod.POST, "/login/**").permitAll()
             .antMatchers("/console/**").permitAll()
-            .antMatchers("/signOut/**").permitAll()
             .antMatchers("/register/**").permitAll()
             .and()
                 // Secure others

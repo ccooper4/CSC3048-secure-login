@@ -130,6 +130,26 @@ public class User extends BaseEntity {
         issuedTokens.add(issuedToken);
     }
 
+    /**
+     * Remove a previously issued token from a user given the token ID.
+     * @param tokenId   The ID of the token to remove from the user
+     */
+    public void removeIssuedToken(String tokenId) {
+        IssuedToken tokenToRemove = null;
+        if (issuedTokens != null) {
+            for (IssuedToken token : issuedTokens) {
+                if (token.getTokenId().equals(tokenId)) {
+                    tokenToRemove = token;
+                    break;
+                }
+            }
+
+            if (tokenToRemove != null) {
+                issuedTokens.remove(tokenToRemove);
+            }
+        }
+    }
+
     //endregion
 
     //region Methods

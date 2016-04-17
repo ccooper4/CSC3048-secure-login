@@ -19,6 +19,7 @@ import util.EncryptedLogger;
 public class UserController {
 
     private EncryptedLogger log = new EncryptedLogger(UserController.class);
+
     @Autowired
     private IUserService userService;
 

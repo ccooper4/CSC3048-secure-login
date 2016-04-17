@@ -25,7 +25,7 @@ public interface IServerConnector {
     /**
      * Logout the current user from the system.
      */
-    void logout();
+    boolean logout();
 
     /**
      * Get the current logged in user.

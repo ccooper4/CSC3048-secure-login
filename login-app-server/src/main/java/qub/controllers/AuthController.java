@@ -1,17 +1,18 @@
 package qub.controllers;
 
 import model.AuthResult;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import model.Credential;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import qub.domain.user.User;
+import qub.security.AuthToken;
 import qub.service.IAuthenticationService;
-import qub.service.ICryptoHashingService;
 import qub.service.IUserService;
 import util.EncryptedLogger;
 import util.StringConstants;
@@ -35,18 +36,6 @@ public class AuthController {
      */
     @Autowired
     private IAuthenticationService authenticationService;
-
-    /**
-     * The Crypto Service.
-     */
-    @Autowired
-    private ICryptoHashingService cryptoHashingService;
-
-    /**
-     * The Auth Manager.
-     */
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     /**
      * The logger for this class.
@@ -92,6 +81,26 @@ public class AuthController {
 
         return returnResult;
     }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public @ResponseBody Boolean logout() {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            AuthToken token = (AuthToken) auth;
+            String tokenId = token.getTokenId();
+
+            User user = userService.getUserByLoginId(auth.getName());
+            user.removeIssuedToken(tokenId);
+            userService.saveUser(user);
+
+            return true;
+        } catch (Exception e) {
+            log.error("Error logging out", e);
+            return false;
+        }
+    }
+
+
 
     //endregion
 
