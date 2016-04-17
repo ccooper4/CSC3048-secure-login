@@ -1,6 +1,7 @@
 package ui.controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import network.IServerConnector;
 import network.ServerConnector;
@@ -33,6 +34,10 @@ public class RegisterController {
     @FXML
     private RequiredField requiredFieldCPassword;
 
+    private final String passwordPattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{5,10}";
+
+    private boolean hasErrors = false;
+
     /**
      * Set the login manager.
      * @param navManager  The navigation manager.
@@ -60,9 +65,12 @@ public class RegisterController {
      */
     public void register() {
         validateFields();
-        String loginID = serverConnector.register(firstName.getText(), lastName.getText(), password.getText());
-        if (loginID != null) {
-            navManager.showRegistrationInfoScreen(loginID);
+
+        if(!hasErrors) {
+            String loginID = serverConnector.register(firstName.getText(), lastName.getText(), password.getText());
+            if (loginID != null) {
+                navManager.showRegistrationInfoScreen(loginID);
+            }
         }
     }
 
@@ -71,6 +79,12 @@ public class RegisterController {
         requiredFieldSName.eval();
         requiredFieldPassword.eval();
         requiredFieldCPassword.eval();
+        if(!password.toString().matches(passwordPattern)){
+            hasErrors = true;
+        }
+        if(requiredFieldFName.getHasErrors() || requiredFieldSName.getHasErrors() || requiredFieldPassword.getHasErrors() || requiredFieldCPassword.getHasErrors()) {
+            hasErrors = true;
+        }
     }
 
     public void showRegisterView() {
