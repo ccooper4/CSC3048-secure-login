@@ -1,5 +1,6 @@
 package qub.domain.user;
 
+import java.util.Date;
 import qub.domain.BaseEntity;
 import qub.domain.IssuedToken;
 
@@ -20,6 +21,8 @@ public class User extends BaseEntity {
     private String password;
     private String firstName;
     private String lastName;
+    private int loginAttemptsSinceLastUnsuccessful;
+    private Date lockedOutUntil;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<IssuedToken> issuedTokens;
@@ -39,6 +42,8 @@ public class User extends BaseEntity {
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.loginAttemptsSinceLastUnsuccessful = 0;
+        this.lockedOutUntil = null;
     }
 
     //endregion
@@ -110,6 +115,44 @@ public class User extends BaseEntity {
     }
 
     /**
+     * Gets the time this user is locked out until.
+     * @return Gets the time this user is locked out until.
+     */
+    public Date getLockedOutUntil() {
+        return lockedOutUntil;
+    }
+
+    /**
+     * Sets the locked out until datetime.
+     * @param lockedOutUntil the date/time.
+     */
+    public void setLockedOutUntil(Date lockedOutUntil) {
+        this.lockedOutUntil = lockedOutUntil;
+    }
+    
+    /**
+     * gets the amount of unsuccessful login attempts since the last successful one
+     * @return the amount of unsuccessful login attempts since the last successful one
+     */
+    public int getLoginAttemptsSinceLastUnsuccessful() {
+        return loginAttemptsSinceLastUnsuccessful;
+    }
+
+    /**
+     * increments the amount of unsuccessful login attempts since the last successful one
+     */
+    public void incrementLoginAttemptsSinceLastUnsuccessful() {
+        this.loginAttemptsSinceLastUnsuccessful++;
+    }
+    
+    /**
+     * resets the amount of unsuccessful login attempts to 0
+     */
+    public void resetLoginAttemptsSinceLastUnsuccessful() {
+        this.loginAttemptsSinceLastUnsuccessful = 0;
+    }
+    
+    /**
      * Gets the list of issued tokens.
      * @return A set of issued tokens.
      */
@@ -160,7 +203,7 @@ public class User extends BaseEntity {
     @Override
     public String toString() {
         return String.format("StandardUser[id=%d, firstName='%s', lastName='%s']",
-                id, firstName, lastName);
+                id, firstName, lastName, loginAttemptsSinceLastUnsuccessful, lockedOutUntil);
     }
 
     //endregion
