@@ -181,7 +181,7 @@ public class AuthenticationService implements IAuthenticationService {
      * @return A boolean indicating if the credentials are valid.
      */
     @Override
-    public boolean verifyUserCredentials(String userId, String password) {
+    public int verifyUserCredentialsAndLockoutStatus(String userId, String password) {
 
         log.info("Verifying credentials for user: " + userId);
 
@@ -191,14 +191,27 @@ public class AuthenticationService implements IAuthenticationService {
 
             log.info("Could not find user " + userId);
 
-            return false;
+            return 0;
         }
 
         String storedHash = foundUser.getPassword();
 
-        boolean passwordValid = signingService.verifyStringAgainstHash(password, storedHash);
-
-        return passwordValid;
+        if (signingService.verifyStringAgainstHash(password, storedHash)) {
+            if (foundUser.getLockedOutUntil() == null || new Date(System.currentTimeMillis()).after(foundUser.getLockedOutUntil())) {
+                foundUser.resetLoginAttemptsSinceLastUnsuccessful();
+                userService.saveUser(foundUser);
+                log.info("User: " + userId + " has logged in succesfully.");
+                return 1;
+            } else {
+                log.info("User: " + userId + " has attempted to login with correct details, but is still timed out.");
+                return 2;
+            }                
+        } else {
+            foundUser.incrementLoginAttemptsSinceLastUnsuccessful();
+            userService.saveUser(foundUser);
+            log.info("User: " + userId + " has attempted to login with incorrect details, count incremented to " + foundUser.getLoginAttemptsSinceLastUnsuccessful());
+            return 0;
+        }
 
     }
 

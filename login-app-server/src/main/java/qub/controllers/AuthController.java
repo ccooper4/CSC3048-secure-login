@@ -52,32 +52,36 @@ public class AuthController {
 
         log.info("New login request for user: " + loginInfo.getUserName());
 
-        boolean validCreds = authenticationService.verifyUserCredentials(loginInfo.getUserName(), loginInfo.getPassWord());
+        int validCreds = authenticationService.verifyUserCredentialsAndLockoutStatus(loginInfo.getUserName(), loginInfo.getPassWord());
 
         AuthResult returnResult = new AuthResult();
 
-        if (validCreds) {
-
-            User userInfo = userService.getUserByLoginId(loginInfo.getUserName());
-
-            String userIp = request.getRemoteAddr();
-
-            Date currentDate = new Date();
-
-            Date tokenExpiryDate = new Date(currentDate.getTime() + 3600000);
-
-            String token = authenticationService.createTokenForUser(userInfo, userIp, tokenExpiryDate);
-
-            response.setHeader(StringConstants.TOKEN_HEADER_NAME, token);
-
-            log.info("Login passed for user: " + loginInfo.getUserName() + ", issuing token");
-
-            returnResult.setSuccess(true);
-        }
-        else {
-            log.info("Login failed for user: " + loginInfo.getUserName());
-            returnResult.setSuccess(false);
-            returnResult.setError("Credentials could not be verified.");
+        switch (validCreds) {
+            case 0:
+                log.info("Login failed for user (Credentials): " + loginInfo.getUserName());
+                returnResult.setSuccess(false);
+                returnResult.setError("Credentials could not be verified.");
+                break;
+            case 1:
+                User userInfo = userService.getUserByLoginId(loginInfo.getUserName());
+                String userIp = request.getRemoteAddr();
+                Date currentDate = new Date();
+                Date tokenExpiryDate = new Date(currentDate.getTime() + 3600000);
+                String token = authenticationService.createTokenForUser(userInfo, userIp, tokenExpiryDate);
+                response.setHeader(StringConstants.TOKEN_HEADER_NAME, token);
+                log.info("Login passed for user: " + loginInfo.getUserName() + ", issuing token");
+                returnResult.setSuccess(true);
+                break;            
+            case 2:
+                log.info("Login failed for user (Timeout): " + loginInfo.getUserName());
+                returnResult.setSuccess(false);
+                returnResult.setError("User is currently locked out.");
+                break;
+            default:
+                log.info("Invalid credentials state for login attempt");
+                returnResult.setSuccess(false);
+                returnResult.setError("Server doesnt have this state specified");
+                break;
         }
 
         return returnResult;

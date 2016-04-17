@@ -34,6 +34,6 @@ public interface IAuthenticationService {
      * @param password The password.
      * @return A boolean indicating if the credentials are valid.
      */
-    boolean verifyUserCredentials(String userId, String password);
+    int verifyUserCredentialsAndLockoutStatus(String userId, String password);
 
 }

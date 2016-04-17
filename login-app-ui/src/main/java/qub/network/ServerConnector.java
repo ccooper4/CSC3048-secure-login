@@ -44,7 +44,7 @@ public class ServerConnector implements IServerConnector {
         HttpEntity<Boolean> request = new HttpEntity<>(headers);
 
         log.info("Sending logout request to server");
-        HttpEntity<Boolean> response  = restTemplate.exchange(URI + "/signout", HttpMethod.GET, request, Boolean.class);
+        HttpEntity<Boolean> response = restTemplate.exchange(URI + "/signout", HttpMethod.GET, request, Boolean.class);
         boolean success = response.getBody();
 
         AUTH_TOKEN = "";
@@ -62,7 +62,7 @@ public class ServerConnector implements IServerConnector {
         HttpEntity request = new HttpEntity<>(headers);
 
         log.info("Sending current user request to server");
-        HttpEntity<UserInfo> response  = restTemplate.exchange(URI + "/currentUser", HttpMethod.GET, request, UserInfo.class);
+        HttpEntity<UserInfo> response = restTemplate.exchange(URI + "/currentUser", HttpMethod.GET, request, UserInfo.class);
         UserInfo userInfo = response.getBody();
 
         return userInfo;
@@ -82,7 +82,10 @@ public class ServerConnector implements IServerConnector {
         AuthResult result = response.getBody();
         HttpHeaders headers = response.getHeaders();
 
-        AUTH_TOKEN = headers.get(StringConstants.TOKEN_HEADER_NAME).get(0);
+        try {
+            AUTH_TOKEN = headers.get(StringConstants.TOKEN_HEADER_NAME).get(0);
+        } catch (Exception e) {
+        }
 
         return result.isSuccess();
     }

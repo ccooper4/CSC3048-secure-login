@@ -16,7 +16,6 @@ import java.util.Set;
 public class User extends BaseEntity {
 
     //region Fields
-
     private String loginId;
     private String password;
     private String firstName;
@@ -28,16 +27,16 @@ public class User extends BaseEntity {
     private Set<IssuedToken> issuedTokens;
 
     // For use by spring data
-    protected User() {}
+    protected User() {
+    }
 
     //endregion
-
     //region Constructor
-
     /**
      * Constructor.
+     *
      * @param firstName The first name.
-     * @param lastName  The last name.
+     * @param lastName The last name.
      */
     public User(String firstName, String lastName) {
         this.firstName = firstName;
@@ -47,11 +46,10 @@ public class User extends BaseEntity {
     }
 
     //endregion
-
     //region Getters & Setters
-
     /**
      * Gets the login id.
+     *
      * @return The login id.
      */
     public String getLoginId() {
@@ -60,6 +58,7 @@ public class User extends BaseEntity {
 
     /**
      * Sets the login id.
+     *
      * @param loginId The login id.
      */
     public void setLoginId(String loginId) {
@@ -68,6 +67,7 @@ public class User extends BaseEntity {
 
     /**
      * Gets the password.
+     *
      * @return The password.
      */
     public String getPassword() {
@@ -76,6 +76,7 @@ public class User extends BaseEntity {
 
     /**
      * Sets the password.
+     *
      * @param password The password.
      */
     public void setPassword(String password) {
@@ -84,6 +85,7 @@ public class User extends BaseEntity {
 
     /**
      * Gets the last name.
+     *
      * @return The last name.
      */
     public String getLastName() {
@@ -92,6 +94,7 @@ public class User extends BaseEntity {
 
     /**
      * Sets the last name.
+     *
      * @param lastName The last name.
      */
     public void setLastName(String lastName) {
@@ -100,6 +103,7 @@ public class User extends BaseEntity {
 
     /**
      * Gets the first name.
+     *
      * @return Gets the first name.
      */
     public String getFirstName() {
@@ -108,6 +112,7 @@ public class User extends BaseEntity {
 
     /**
      * Sets the first name.
+     *
      * @param firstName The first name.
      */
     public void setFirstName(String firstName) {
@@ -116,6 +121,7 @@ public class User extends BaseEntity {
 
     /**
      * Gets the time this user is locked out until.
+     *
      * @return Gets the time this user is locked out until.
      */
     public Date getLockedOutUntil() {
@@ -123,37 +129,46 @@ public class User extends BaseEntity {
     }
 
     /**
-     * Sets the locked out until datetime.
-     * @param lockedOutUntil the date/time.
+     * Sets the locked out until datetime. 5 minutes from now
+     *
      */
-    public void setLockedOutUntil(Date lockedOutUntil) {
-        this.lockedOutUntil = lockedOutUntil;
+    public void setLockedOut() {
+        this.lockedOutUntil = new Date(System.currentTimeMillis() + (5 * 60 * 1000));
     }
-    
+
     /**
-     * gets the amount of unsuccessful login attempts since the last successful one
-     * @return the amount of unsuccessful login attempts since the last successful one
+     * gets the amount of unsuccessful login attempts since the last successful
+     * one
+     *
+     * @return the amount of unsuccessful login attempts since the last
+     * successful one
      */
     public int getLoginAttemptsSinceLastUnsuccessful() {
         return loginAttemptsSinceLastUnsuccessful;
     }
 
     /**
-     * increments the amount of unsuccessful login attempts since the last successful one
+     * increments the amount of unsuccessful login attempts since the last
+     * successful one
      */
     public void incrementLoginAttemptsSinceLastUnsuccessful() {
-        this.loginAttemptsSinceLastUnsuccessful++;
+        this.loginAttemptsSinceLastUnsuccessful = getLoginAttemptsSinceLastUnsuccessful() + 1;
+        if (this.getLoginAttemptsSinceLastUnsuccessful() >= 3) {
+            this.setLockedOut();
+            this.resetLoginAttemptsSinceLastUnsuccessful();
+        }
     }
-    
+
     /**
      * resets the amount of unsuccessful login attempts to 0
      */
     public void resetLoginAttemptsSinceLastUnsuccessful() {
         this.loginAttemptsSinceLastUnsuccessful = 0;
     }
-    
+
     /**
      * Gets the list of issued tokens.
+     *
      * @return A set of issued tokens.
      */
     public Set<IssuedToken> getIssuedTokens() {
@@ -162,10 +177,10 @@ public class User extends BaseEntity {
 
     /**
      * Adds a new issued token to the entity.
+     *
      * @param issuedToken The issued token.
      */
-    public void addIssuedToken(IssuedToken issuedToken)
-    {
+    public void addIssuedToken(IssuedToken issuedToken) {
         if (issuedTokens == null) {
             issuedTokens = new HashSet<>();
         }
@@ -175,7 +190,8 @@ public class User extends BaseEntity {
 
     /**
      * Remove a previously issued token from a user given the token ID.
-     * @param tokenId   The ID of the token to remove from the user
+     *
+     * @param tokenId The ID of the token to remove from the user
      */
     public IssuedToken removeIssuedToken(String tokenId) {
         IssuedToken tokenToRemove = null;
@@ -197,9 +213,7 @@ public class User extends BaseEntity {
     }
 
     //endregion
-
     //region Methods
-
     @Override
     public String toString() {
         return String.format("StandardUser[id=%d, firstName='%s', lastName='%s']",
@@ -207,6 +221,4 @@ public class User extends BaseEntity {
     }
 
     //endregion
-
 }
-
