@@ -34,7 +34,7 @@ public class RegisterController {
     @FXML
     private RequiredField requiredFieldCPassword;
 
-    private final String passwordPattern = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20})";
+    private final String passwordPattern = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!£%&]).{8,20})";
 
     private boolean hasErrors = false;
 
