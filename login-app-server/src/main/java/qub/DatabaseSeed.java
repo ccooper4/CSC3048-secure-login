@@ -22,7 +22,7 @@ public class DatabaseSeed implements ApplicationListener<ContextRefreshedEvent> 
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
         // Create users if they do not exist
-        String password = "test";
+        String password = "Pa$$w0rd";
 
         if (userService.getUsersByFirstName("Andrew").isEmpty()) {
             log.info("Creating default user");
