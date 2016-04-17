@@ -1,5 +1,6 @@
 package qub.service;
 
+import qub.domain.IssuedToken;
 import qub.domain.user.User;
 
 import java.util.List;
@@ -47,4 +48,10 @@ public interface IUserService {
      * @return          The saved user.
      */
     User createAdminUser(String firstName, String lastName, String password);
+
+    /**
+     * Removes the specified token from the database.
+     * @param token The token
+     */
+    void deleteTokenFromRepository(IssuedToken token);
 }

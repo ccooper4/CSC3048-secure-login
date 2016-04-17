@@ -134,7 +134,7 @@ public class User extends BaseEntity {
      * Remove a previously issued token from a user given the token ID.
      * @param tokenId   The ID of the token to remove from the user
      */
-    public void removeIssuedToken(String tokenId) {
+    public IssuedToken removeIssuedToken(String tokenId) {
         IssuedToken tokenToRemove = null;
         if (issuedTokens != null) {
             for (IssuedToken token : issuedTokens) {
@@ -146,8 +146,11 @@ public class User extends BaseEntity {
 
             if (tokenToRemove != null) {
                 issuedTokens.remove(tokenToRemove);
+                tokenToRemove.setUser(null);
             }
         }
+
+        return tokenToRemove;
     }
 
     //endregion

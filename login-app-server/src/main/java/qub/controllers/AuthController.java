@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import qub.domain.IssuedToken;
 import qub.domain.user.User;
 import qub.security.AuthToken;
 import qub.service.IAuthenticationService;
@@ -90,8 +91,9 @@ public class AuthController {
             String tokenId = token.getTokenId();
 
             User user = userService.getUserByLoginId(auth.getName());
-            user.removeIssuedToken(tokenId);
+            IssuedToken tokenToDelete = user.removeIssuedToken(tokenId);
             userService.saveUser(user);
+            userService.deleteTokenFromRepository(tokenToDelete);
 
             return true;
         } catch (Exception e) {
