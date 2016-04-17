@@ -2,19 +2,12 @@ package qub.ui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-<<<<<<< .mine
 import network.IServerConnector;
 import network.ServerConnector;
 import ui.managers.NavigationManager;
 import ui.validation.RegexValidator;
 import ui.validation.RequiredField;
-=======
-import qub.network.IServerConnector;
-import qub.network.ServerConnector;
-import qub.ui.managers.NavigationManager;
-import qub.ui.validation.RequiredField;
 
->>>>>>> .theirs
 
 /**
  * Controls the registration screen
