@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.PasswordField?>
+<?import ui.validation.*?>
 <StackPane id="pane" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.LoginController">
     <children>
         <StackPane>
@@ -41,6 +42,30 @@
                                 <Insets top="20.0" />
                              </VBox.margin>
                         </GridPane>
+
+                        <!-- Validation-->
+                        <fx:define>
+                            <RequiredField fx:id="requiredFieldUName">
+                                <srcControl>
+                                    <fx:reference source="user"></fx:reference>
+                                </srcControl>
+                            </RequiredField>
+                            <RequiredField fx:id="requiredFieldPassword">
+                                <srcControl>
+                                    <fx:reference source="password"></fx:reference>
+                                </srcControl>
+                            </RequiredField>
+                        </fx:define>
+                        <ErrorLabel message="Please enter your username&#10;">
+                            <validator>
+                                <fx:reference source="requiredFieldUName"></fx:reference>
+                            </validator>
+                        </ErrorLabel>
+                        <ErrorLabel message="Please enter your password">
+                            <validator>
+                                <fx:reference source="requiredFieldPassword"></fx:reference>
+                            </validator>
+                        </ErrorLabel>
 
                         <!-- Buttons-->
                         <FlowPane alignment="CENTER">

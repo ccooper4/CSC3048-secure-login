@@ -6,6 +6,7 @@ import model.UserInfo;
 import network.IServerConnector;
 import network.ServerConnector;
 import ui.managers.NavigationManager;
+import ui.validation.RequiredField;
 
 /**
  * Controls the login screen
@@ -23,6 +24,14 @@ public class LoginController {
     @FXML
     private TextField password;
 
+    @FXML
+    private RequiredField requiredFieldUName;
+
+    @FXML
+    private RequiredField requiredFieldPassword;
+
+    private boolean hasErrors = false;
+
     //endregion
 
     //region Public methods
@@ -36,10 +45,14 @@ public class LoginController {
     }
 
     public void login() {
-        boolean success = serverConnector.login(user.getText(), password.getText());
-        UserInfo userInfo = serverConnector.getCurrentUser();
-        if (success) {
-            navManager.showHomeScreen(userInfo.getFirstName() + " " + userInfo.getLastName());
+        validateFields();
+        if(!hasErrors)
+        {
+            boolean success = serverConnector.login(user.getText(), password.getText());
+            UserInfo userInfo = serverConnector.getCurrentUser();
+            if (success) {
+                navManager.showHomeScreen(userInfo.getFirstName() + " " + userInfo.getLastName());
+            }
         }
     }
 
@@ -52,6 +65,15 @@ public class LoginController {
 
     public void setUserField(String loginID) {
         this.user.setText(loginID);
+    }
+
+    private void validateFields(){
+        requiredFieldPassword.eval();
+        requiredFieldUName.eval();
+
+        if(requiredFieldPassword.getHasErrors() || requiredFieldUName.getHasErrors()) {
+            hasErrors = true;
+        }
     }
 
     //endregion
