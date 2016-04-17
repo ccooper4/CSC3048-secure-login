@@ -83,8 +83,8 @@ public class AuthController {
         return returnResult;
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public @ResponseBody Boolean logout() {
+    @RequestMapping(value = "/signout", method = RequestMethod.GET)
+    public @ResponseBody Boolean signOut() {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             AuthToken token = (AuthToken) auth;
