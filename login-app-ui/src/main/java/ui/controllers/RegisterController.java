@@ -81,6 +81,7 @@ public class RegisterController {
         requiredFieldCPassword.eval();
         if(!password.toString().matches(passwordPattern)){
             hasErrors = true;
+            requiredFieldPassword.setHasError(true);
         }
         if(requiredFieldFName.getHasErrors() || requiredFieldSName.getHasErrors() || requiredFieldPassword.getHasErrors() || requiredFieldCPassword.getHasErrors()) {
             hasErrors = true;

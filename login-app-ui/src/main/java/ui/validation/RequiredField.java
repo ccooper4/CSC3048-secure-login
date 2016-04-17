@@ -50,6 +50,10 @@ public class RequiredField extends ValidatorBase {
         onEval();
     }
 
+    public void setHasError(boolean input){
+        hasErrors.set(input);
+    }
+
 
 
 

@@ -56,12 +56,12 @@
                                 </srcControl>
                             </RequiredField>
                         </fx:define>
-                        <ErrorLabel message="Please enter your username&#10;">
+                        <ErrorLabel message="Please enter your username&#10;" textFill="RED">
                             <validator>
                                 <fx:reference source="requiredFieldUName"></fx:reference>
                             </validator>
                         </ErrorLabel>
-                        <ErrorLabel message="Please enter your password">
+                        <ErrorLabel message="Please enter your password" textFill="RED">
                             <validator>
                                 <fx:reference source="requiredFieldPassword"></fx:reference>
                             </validator>

@@ -115,22 +115,22 @@
                                     </srcControl>
                                 </RequiredField>
                             </fx:define>
-                            <ErrorLabel message="Please enter your first name&#10;">
+                            <ErrorLabel message="Please enter your first name&#10;" textFill="RED">
                                 <validator>
                                     <fx:reference source="requiredFieldFName"></fx:reference>
                                 </validator>
                             </ErrorLabel>
-                            <ErrorLabel message="Please enter your second name&#10;">
+                            <ErrorLabel message="Please enter your second name&#10;" textFill="RED">
                                 <validator>
                                     <fx:reference source="requiredFieldSName"></fx:reference>
                                 </validator>
                             </ErrorLabel>
-                            <ErrorLabel message="Please enter your a password longer than 8 characters with &#10;a digit, lower case letter, upper case letter and a special character">
+                            <ErrorLabel message="Please enter your a password longer than 8 characters with &#10;a digit, lower case letter, upper case letter and a special character" textFill="RED">
                                 <validator>
                                     <fx:reference source="requiredFieldPassword"></fx:reference>
                                 </validator>
                             </ErrorLabel>
-                            <ErrorLabel message="Please confirm your password">
+                            <ErrorLabel message="Please confirm your password" textFill="RED">
                                 <validator>
                                     <fx:reference source="requiredFieldCPassword"></fx:reference>
                                 </validator>
