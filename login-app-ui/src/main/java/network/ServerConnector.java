@@ -3,10 +3,12 @@ package network;
 import model.AuthResult;
 import model.Credential;
 import model.UserInfo;
+import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
+import util.EncryptedLogger;
 import util.StringConstants;
 
 import java.util.ArrayList;
@@ -14,10 +16,11 @@ import java.util.List;
 
 public class ServerConnector implements IServerConnector {
 
+    private EncryptedLogger log = new EncryptedLogger(getClass());
     private RestTemplate restTemplate = new RestTemplate();
     private final String URI = "http://localhost:8080";
 
-    public static String AUTH_TOKEN;
+    private String AUTH_TOKEN;
 
     public ServerConnector() {
     }
@@ -26,14 +29,24 @@ public class ServerConnector implements IServerConnector {
 
         UserInfo userInfo = new UserInfo(firstName, lastName, password);
 
+        log.info("Sending registration request to server");
         String loginId = restTemplate.postForObject(URI + "/register", userInfo, String.class);
 
         return loginId;
     }
 
     public void logout() {
+        List<String> values = new ArrayList<>();
+        values.add(AUTH_TOKEN);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.put(StringConstants.TOKEN_HEADER_NAME, values);
+
+        HttpEntity request = new HttpEntity<>(headers);
+
+        log.info("Sending logout request to server");
+        HttpEntity<String> response  = restTemplate.exchange(URI + "/logout", HttpMethod.POST, request, String.class);
         AUTH_TOKEN = "";
-//        HttpEntity<AuthResult> response = restTemplate.exchange(URI + "/login", HttpMethod.POST, AuthResult.class);
     }
 
     public UserInfo getCurrentUser() {
@@ -46,6 +59,7 @@ public class ServerConnector implements IServerConnector {
 
         HttpEntity request = new HttpEntity<>(headers);
 
+        log.info("Sending current user request to server");
         HttpEntity<UserInfo> response  = restTemplate.exchange(URI + "/currentUser", HttpMethod.GET, request, UserInfo.class);
         UserInfo userInfo = response.getBody();
 
@@ -60,6 +74,7 @@ public class ServerConnector implements IServerConnector {
 
         // Create the request
         HttpEntity<Credential> body = new HttpEntity<>(credential);
+        log.info("Sending login request to server");
         HttpEntity<AuthResult> response = restTemplate.exchange(URI + "/login", HttpMethod.POST, body, AuthResult.class);
 
         AuthResult result = response.getBody();

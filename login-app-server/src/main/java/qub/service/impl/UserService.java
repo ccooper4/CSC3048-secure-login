@@ -40,6 +40,7 @@ public class UserService implements IUserService {
     @Override
     public User saveUser(User user) {
         Assert.notNull(user, "The user must not be null");
+        log.info("Saving user: " + user.toString());
         userRepository.save(user);
         return user;
     }
@@ -47,6 +48,7 @@ public class UserService implements IUserService {
     @Override
     public User getUserByLoginId(String loginId) {
         Assert.notNull(loginId, "The login id must not be null");
+        log.info("Retrieving user with id: " + loginId);
         return userRepository.findByLoginId(loginId);
     }
 

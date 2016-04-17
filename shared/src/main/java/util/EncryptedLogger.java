@@ -1,6 +1,5 @@
 package util;
 
-import cipher.util.AESWrapper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,7 @@ import java.util.Date;
  */
 public class EncryptedLogger {
 
-    private static Logger log;
+    private final Logger log;
     private AESWrapper aesWrapper = new AESWrapper();
     private File file = new File("log/log.txt");
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");

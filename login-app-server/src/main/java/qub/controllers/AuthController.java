@@ -1,15 +1,10 @@
 package qub.controllers;
 
 import model.AuthResult;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import model.Credential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,7 +15,6 @@ import qub.service.ICryptoHashingService;
 import qub.service.IUserService;
 import util.EncryptedLogger;
 import util.StringConstants;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -57,7 +51,7 @@ public class AuthController {
     /**
      * The logger for this class.
      */
-    private EncryptedLogger log = new EncryptedLogger(getClass());
+    private EncryptedLogger log = new EncryptedLogger(AuthController.class);
 
     //endregion
 

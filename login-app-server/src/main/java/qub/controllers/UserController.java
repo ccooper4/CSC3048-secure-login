@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import qub.domain.user.User;
 import qub.service.IUserService;
+import util.EncryptedLogger;
 
 /**
  * The controller for handling users.
@@ -17,6 +18,7 @@ import qub.service.IUserService;
 @Controller
 public class UserController {
 
+    private EncryptedLogger log = new EncryptedLogger(UserController.class);
     @Autowired
     private IUserService userService;
 
@@ -26,6 +28,7 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
 
+        log.info("Getting current user");
         User user = userService.getUserByLoginId(name);
 
         UserInfo userInfo = new UserInfo();

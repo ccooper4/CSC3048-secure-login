@@ -1,7 +1,5 @@
 package qub.domain.user;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.google.gson.annotations.Expose;
 import qub.domain.BaseEntity;
 import qub.domain.IssuedToken;
 
@@ -126,7 +124,7 @@ public class User extends BaseEntity {
     public void addIssuedToken(IssuedToken issuedToken)
     {
         if (issuedTokens == null) {
-            issuedTokens = new HashSet<IssuedToken>();
+            issuedTokens = new HashSet<>();
         }
 
         issuedTokens.add(issuedToken);

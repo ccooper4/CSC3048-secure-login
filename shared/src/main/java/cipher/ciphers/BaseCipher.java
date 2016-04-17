@@ -1,10 +1,11 @@
 package cipher.ciphers;
 
-import util.EncryptedLogger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseCipher {
     
-    public EncryptedLogger log = new EncryptedLogger(getClass());
+    public Logger log = LoggerFactory.getLogger(getClass());
 
     public abstract String encrypt(String plaintext);
 

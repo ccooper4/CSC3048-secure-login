@@ -32,7 +32,7 @@ public class AuthByHeaderToken extends GenericFilterBean {
     /**
      * The logger for this class.
      */
-    private EncryptedLogger log = new EncryptedLogger(getClass());
+    private EncryptedLogger log = new EncryptedLogger(AuthByHeaderToken.class);
 
     //endregion
 

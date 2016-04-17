@@ -1,4 +1,4 @@
-package cipher.util;
+package util;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -10,6 +10,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Wrapper class around AES cipher functionality.
+ * Used specifically inside the encrypted logger for secure log output.
  */
 public class AESWrapper {
 

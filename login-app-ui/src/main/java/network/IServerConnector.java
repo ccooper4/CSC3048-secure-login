@@ -24,7 +24,6 @@ public interface IServerConnector {
 
     /**
      * Logout the current user from the system.
-     * @return
      */
     void logout();
 
