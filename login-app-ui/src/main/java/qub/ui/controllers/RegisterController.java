@@ -2,10 +2,19 @@ package qub.ui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+<<<<<<< .mine
+import network.IServerConnector;
+import network.ServerConnector;
+import ui.managers.NavigationManager;
+import ui.validation.RegexValidator;
+import ui.validation.RequiredField;
+=======
 import qub.network.IServerConnector;
 import qub.network.ServerConnector;
 import qub.ui.managers.NavigationManager;
 import qub.ui.validation.RequiredField;
+
+>>>>>>> .theirs
 
 /**
  * Controls the registration screen
@@ -78,6 +87,17 @@ public class RegisterController {
         requiredFieldSName.eval();
         requiredFieldPassword.eval();
         requiredFieldCPassword.eval();
+
+        if(!firstName.getText().matches("^[^0-9]+$")){
+            hasErrors = true;
+            requiredFieldFName.setHasError(true);
+        }
+
+        if(!lastName.getText().matches("^[^0-9]+$")){
+            hasErrors = true;
+            requiredFieldSName.setHasError(true);
+        }
+
         if(!password.getText().matches(passwordPattern)){
             hasErrors = true;
             requiredFieldPassword.setHasError(true);
