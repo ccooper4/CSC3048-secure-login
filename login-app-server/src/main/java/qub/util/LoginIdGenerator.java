@@ -1,6 +1,6 @@
 package qub.util;
 
-import static cipher.util.RandomNumberGen.getRandom;
+import static util.RandomNumberGen.getRandom;
 
 /**
  * Generates a new random identifier.
