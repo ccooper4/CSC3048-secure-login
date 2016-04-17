@@ -10,6 +10,11 @@ import org.springframework.web.client.RestTemplate;
 import util.EncryptedLogger;
 import util.StringConstants;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +22,23 @@ public class ServerConnector implements IServerConnector {
 
     private EncryptedLogger log = new EncryptedLogger(getClass());
     private RestTemplate restTemplate = new RestTemplate();
-    private final String URI = "http://localhost:8080";
+    private final String URI = "https://localhost:8080";
 
     private static String AUTH_TOKEN;
 
     public ServerConnector() {
+
+        /**
+         * Prevent self-signed certificate error.
+         */
+        try {
+            DisableSSLCertCheck.disableChecks();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String register(String firstName, String lastName, String password) {
