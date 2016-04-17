@@ -5,7 +5,9 @@ import javafx.scene.control.TextField;
 import qub.network.IServerConnector;
 import qub.network.ServerConnector;
 import qub.ui.managers.NavigationManager;
+import qub.ui.validation.RegexValidator;
 import qub.ui.validation.RequiredField;
+
 
 /**
  * Controls the registration screen
@@ -78,6 +80,17 @@ public class RegisterController {
         requiredFieldSName.eval();
         requiredFieldPassword.eval();
         requiredFieldCPassword.eval();
+
+        if(!firstName.getText().matches("^[^0-9]+$")){
+            hasErrors = true;
+            requiredFieldFName.setHasError(true);
+        }
+
+        if(!lastName.getText().matches("^[^0-9]+$")){
+            hasErrors = true;
+            requiredFieldSName.setHasError(true);
+        }
+
         if(!password.getText().matches(passwordPattern)){
             hasErrors = true;
             requiredFieldPassword.setHasError(true);
