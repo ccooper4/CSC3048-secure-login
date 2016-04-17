@@ -5,6 +5,7 @@ import cipher.util.AESKeyGenerator;
 import org.junit.Ignore;
 import org.junit.Test;
 import java.util.Arrays;
+import org.junit.Assert;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNotNull;
@@ -85,18 +86,59 @@ public class AESTest extends BaseCipherTest {
 
         log.info(Arrays.deepToString(matrix) + "\n");
     }
+    
     @Test
     public void testRconGeneration() {
-//        KeyExpansion_AES keaes = new KeyExpansion_AES();
-//        keaes.generateRcon(1, 4, 1);
-//        keaes.generateRcon(2, 4, 2);
-//        keaes.generateRcon(3, 4, 3);
-//        keaes.generateRcon(4, 4, 4);
-//        keaes.generateRcon(5, 4, 5);
-//        keaes.generateRcon(6, 4, 6);
-//        keaes.generateRcon(7, 4, 7);
-//        keaes.generateRcon(8, 4, 8);
-//        keaes.generateRcon(9, 4, 9);
-//        keaes.generateRcon(10, 4, 10);
+        int Nk = 4;
+        KeyExpansion_AES keaes = new KeyExpansion_AES();
+        Assert.assertEquals("01000000", keaes.generateRcon(4, Nk));
+        Assert.assertEquals("01000000", keaes.generateRcon(5, Nk));
+        Assert.assertEquals("01000000", keaes.generateRcon(6, Nk));
+        Assert.assertEquals("01000000", keaes.generateRcon(7, Nk));
+        
+        Assert.assertEquals("02000000", keaes.generateRcon(8, Nk));
+        Assert.assertEquals("02000000", keaes.generateRcon(9, Nk));
+        Assert.assertEquals("02000000", keaes.generateRcon(10, Nk));
+        Assert.assertEquals("02000000", keaes.generateRcon(11, Nk));
+        
+        Assert.assertEquals("04000000", keaes.generateRcon(12, Nk));
+        Assert.assertEquals("04000000", keaes.generateRcon(13, Nk));
+        Assert.assertEquals("04000000", keaes.generateRcon(14, Nk));
+        Assert.assertEquals("04000000", keaes.generateRcon(15, Nk));
+        
+        Assert.assertEquals("08000000", keaes.generateRcon(16, Nk));
+        Assert.assertEquals("08000000", keaes.generateRcon(17, Nk));
+        Assert.assertEquals("08000000", keaes.generateRcon(18, Nk));
+        Assert.assertEquals("08000000", keaes.generateRcon(19, Nk));
+        
+        Assert.assertEquals("10000000", keaes.generateRcon(20, Nk));
+        Assert.assertEquals("10000000", keaes.generateRcon(21, Nk));
+        Assert.assertEquals("10000000", keaes.generateRcon(22, Nk));
+        Assert.assertEquals("10000000", keaes.generateRcon(23, Nk));
+        
+        Assert.assertEquals("20000000", keaes.generateRcon(24, Nk));
+        Assert.assertEquals("20000000", keaes.generateRcon(25, Nk));
+        Assert.assertEquals("20000000", keaes.generateRcon(26, Nk));
+        Assert.assertEquals("20000000", keaes.generateRcon(27, Nk));
+        
+        Assert.assertEquals("40000000", keaes.generateRcon(28, Nk));
+        Assert.assertEquals("40000000", keaes.generateRcon(29, Nk));
+        Assert.assertEquals("40000000", keaes.generateRcon(30, Nk));
+        Assert.assertEquals("40000000", keaes.generateRcon(31, Nk));
+        
+        Assert.assertEquals("80000000", keaes.generateRcon(32, Nk));
+        Assert.assertEquals("80000000", keaes.generateRcon(33, Nk));
+        Assert.assertEquals("80000000", keaes.generateRcon(34, Nk));
+        Assert.assertEquals("80000000", keaes.generateRcon(35, Nk));
+        
+        Assert.assertEquals("1b000000", keaes.generateRcon(36, Nk));
+        Assert.assertEquals("1b000000", keaes.generateRcon(37, Nk));
+        Assert.assertEquals("1b000000", keaes.generateRcon(38, Nk));
+        Assert.assertEquals("1b000000", keaes.generateRcon(39, Nk));
+        
+        Assert.assertEquals("36000000", keaes.generateRcon(40, Nk));
+        Assert.assertEquals("36000000", keaes.generateRcon(41, Nk));
+        Assert.assertEquals("36000000", keaes.generateRcon(42, Nk));
+        Assert.assertEquals("36000000", keaes.generateRcon(43, Nk));
     }
 }

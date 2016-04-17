@@ -1,6 +1,7 @@
 package cipher.ciphers.aes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,11 +51,13 @@ public class KeyExpansion_AES {
         
         String rcon = "";
         for (int j = 1; j < 10; j++) {
-            rcon = generateRcon(i, Nk, i);
+            rcon = generateRcon(i, Nk);
         }       
 
         //num rounds*num blocks
         while (i < Nb * (Nr + 1)) {
+            
+            rcon = generateRcon(i, Nk);
 
             temp = w[i - 1];
 
@@ -120,7 +123,7 @@ public class KeyExpansion_AES {
         return res;
     }
 
-    public String generateRcon(int round, int nK, int x) {
+    public String generateRcon(int round, int nK) {
 
         //to calculate do left-shift followed with a conditional XOR with a constant
         //rcon = (rcon left shift) ^ (0x11b & -(rcon>>7));
@@ -129,10 +132,10 @@ public class KeyExpansion_AES {
         //• Iif leftmost bit is one, shift left and XOR with 00011011
         //• Convert back to hex        
         String res = "";
-
+        
         int val = round / nK;
-
-        System.out.println("round = " + round);
+        
+        round = val;
 
         int tmp = (int) Math.pow(2, round - 1);
 
@@ -143,23 +146,24 @@ public class KeyExpansion_AES {
 
         if (round > 8) {
 
-            System.out.println("\tbinString = " + binString);
+            //System.out.println("\tbinString = " + binString);
             if (binString.charAt(0) == '0') {
                 binString = binString.substring(round - 8);
             } else {
                 binString = binString.substring(round - 8);
                 if (round == 10) {
-                    binString = generateRcon(round - 1, nK, x);
+                    binString = generateRcon((round - 1) * 4, nK);
                     //System.out.println("got previous rcon value = " + binString);
-                    binString = hexToBinary(binString) + "0";
+                    binString = hexToBinary(binString.substring(0, 2)) + "0";
+                    //System.out.println("updated to = " + binString);
                     binString = binString.substring(1);
-                    System.out.println("round 10 = " + binString);
+                    //System.out.println("round 10 binstring now = " + binString);
                 } else {
                     binString = xorBinaryStrings(binString, "00011011");
                 }
             }
         } else {
-            System.out.println("\tbinString = " + binString);
+            //System.out.println("\tbinString = " + binString);
         }
 
         while (binString.length() < 8) {
@@ -167,9 +171,9 @@ public class KeyExpansion_AES {
         }
 
         String thp = binaryToHex(binString.substring(0, 4));
-        res = thp + binaryToHex(binString.substring(4, 8));
+        res = thp + binaryToHex(binString.substring(4, 8)) + "000000";
 
-        System.out.println("\tres = " + res);
+        //System.out.println("\tres = " + res);
 
         return res;
 
