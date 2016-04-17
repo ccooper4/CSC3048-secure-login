@@ -3,9 +3,11 @@ package qub.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import qub.domain.IssuedToken;
 import qub.domain.user.AdminUser;
 import qub.domain.user.User;
 import qub.domain.user.StandardUser;
+import qub.repositories.IssuedTokenRepository;
 import qub.repositories.UserRepository;
 import qub.service.ICryptoHashingService;
 import qub.service.IUserService;
@@ -27,6 +29,12 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    /**
+     * The token repository.
+     */
+    @Autowired
+    private IssuedTokenRepository tokenRepository;
 
     // For use by spring data
     protected UserService() {}
@@ -62,6 +70,17 @@ public class UserService implements IUserService {
     public User createAdminUser(String firstName, String lastName, String password) {
         AdminUser adminUser = new AdminUser(firstName, lastName);
         return createUser(adminUser, password);
+    }
+
+    /**
+     * Removes the specified token from the database.
+     * @param token The token
+     */
+    @Override
+    public void deleteTokenFromRepository(IssuedToken token) {
+
+        tokenRepository.delete(token);
+
     }
 
     private User createUser(User user, String password) {

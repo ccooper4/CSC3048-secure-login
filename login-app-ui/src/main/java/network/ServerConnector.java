@@ -42,10 +42,10 @@ public class ServerConnector implements IServerConnector {
         HttpHeaders headers = new HttpHeaders();
         headers.put(StringConstants.TOKEN_HEADER_NAME, values);
 
-        HttpEntity request = new HttpEntity<>(headers);
+        HttpEntity<Boolean> request = new HttpEntity<>(headers);
 
         log.info("Sending logout request to server");
-        HttpEntity<Boolean> response  = restTemplate.exchange(URI + "/logout", HttpMethod.GET, request, Boolean.class);
+        HttpEntity<Boolean> response  = restTemplate.exchange(URI + "/signout", HttpMethod.GET, request, Boolean.class);
         boolean success = response.getBody();
 
         AUTH_TOKEN = "";

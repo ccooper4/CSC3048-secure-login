@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import qub.domain.IssuedToken;
 import qub.domain.user.User;
 import qub.security.AuthToken;
 import qub.service.IAuthenticationService;
@@ -82,16 +83,17 @@ public class AuthController {
         return returnResult;
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public @ResponseBody Boolean logout() {
+    @RequestMapping(value = "/signout", method = RequestMethod.GET)
+    public @ResponseBody Boolean signOut() {
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             AuthToken token = (AuthToken) auth;
             String tokenId = token.getTokenId();
 
             User user = userService.getUserByLoginId(auth.getName());
-            user.removeIssuedToken(tokenId);
+            IssuedToken tokenToDelete = user.removeIssuedToken(tokenId);
             userService.saveUser(user);
+            userService.deleteTokenFromRepository(tokenToDelete);
 
             return true;
         } catch (Exception e) {
