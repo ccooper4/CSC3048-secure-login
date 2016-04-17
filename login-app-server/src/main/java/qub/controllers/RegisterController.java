@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import qub.domain.user.User;
 import qub.service.IUserService;
+import util.EncryptedLogger;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Controller to handle registration requests.
@@ -21,12 +24,21 @@ public class RegisterController {
     @Autowired
     private IUserService userService;
 
+    /**
+     * The logger for this class.
+     */
+    private EncryptedLogger log = new EncryptedLogger(RegisterController.class);
+
     //endregion
 
     //region Public methods
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public @ResponseBody String register(@RequestBody final UserInfo userInfo) {
+    public @ResponseBody String register(@RequestBody final UserInfo userInfo, HttpServletRequest request) {
+
+        String userIp = request.getRemoteAddr();
+
+        log.info("New registration request from IP: " + userIp);
 
         User newUser = userService.createStandardUser(userInfo.getFirstName(), userInfo.getLastName(), userInfo.getPassword());
 

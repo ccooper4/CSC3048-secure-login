@@ -22,6 +22,7 @@ public class User extends BaseEntity {
     private String lastName;
     private int loginAttemptsSinceLastUnsuccessful;
     private Date lockedOutUntil;
+    private Date lastSuccessfulLogin;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<IssuedToken> issuedTokens;
@@ -31,6 +32,7 @@ public class User extends BaseEntity {
     }
 
     //endregion
+
     //region Constructor
     /**
      * Constructor.
@@ -46,6 +48,7 @@ public class User extends BaseEntity {
     }
 
     //endregion
+
     //region Getters & Setters
     /**
      * Gets the login id.
@@ -212,7 +215,24 @@ public class User extends BaseEntity {
         return tokenToRemove;
     }
 
+    /**
+     * Gets the last succssful login date.
+     * @return
+     */
+    public Date getLastSuccessfulLogin() {
+        return lastSuccessfulLogin;
+    }
+
+    /**
+     * Sets the last successful login date.
+     * @param lastSuccessfulLogin
+     */
+    public void setLastSuccessfulLogin(Date lastSuccessfulLogin) {
+        this.lastSuccessfulLogin = lastSuccessfulLogin;
+    }
+
     //endregion
+
     //region Methods
     @Override
     public String toString() {

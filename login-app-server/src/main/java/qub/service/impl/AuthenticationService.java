@@ -199,6 +199,7 @@ public class AuthenticationService implements IAuthenticationService {
         if (signingService.verifyStringAgainstHash(password, storedHash)) {
             if (foundUser.getLockedOutUntil() == null || new Date(System.currentTimeMillis()).after(foundUser.getLockedOutUntil())) {
                 foundUser.resetLoginAttemptsSinceLastUnsuccessful();
+                foundUser.setLastSuccessfulLogin(new Date());
                 userService.saveUser(foundUser);
                 log.info("User: " + userId + " has logged in succesfully.");
                 return 1;

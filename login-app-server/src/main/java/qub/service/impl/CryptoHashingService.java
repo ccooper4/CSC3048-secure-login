@@ -50,7 +50,7 @@ public class CryptoHashingService implements ICryptoHashingService {
     /**
      * The number of hashing iterations to use.
      */
-    private static final int HASH_ITERATIONS = 1000;
+    private static final int HASH_ITERATIONS = 10000;
 
     /**
      * Gets the configured secret key.

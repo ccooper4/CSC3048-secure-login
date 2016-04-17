@@ -54,31 +54,32 @@ public class AuthController {
 
         int validCreds = authenticationService.verifyUserCredentialsAndLockoutStatus(loginInfo.getUserName(), loginInfo.getPassWord());
 
+        String userIp = request.getRemoteAddr();
+
         AuthResult returnResult = new AuthResult();
 
         switch (validCreds) {
             case 0:
-                log.info("Login failed for user (Credentials): " + loginInfo.getUserName());
+                log.info("Login failed for user (Credentials): " + loginInfo.getUserName() + " IP: " + userIp);
                 returnResult.setSuccess(false);
                 returnResult.setError("Credentials could not be verified.");
                 break;
             case 1:
                 User userInfo = userService.getUserByLoginId(loginInfo.getUserName());
-                String userIp = request.getRemoteAddr();
                 Date currentDate = new Date();
                 Date tokenExpiryDate = new Date(currentDate.getTime() + 3600000);
                 String token = authenticationService.createTokenForUser(userInfo, userIp, tokenExpiryDate);
                 response.setHeader(StringConstants.TOKEN_HEADER_NAME, token);
-                log.info("Login passed for user: " + loginInfo.getUserName() + ", issuing token");
+                log.info("Login passed for user: " + loginInfo.getUserName() + ", issuing token IP: " + userIp);
                 returnResult.setSuccess(true);
                 break;            
             case 2:
-                log.info("Login failed for user (Timeout): " + loginInfo.getUserName());
+                log.info("Login failed for user (Timeout): " + loginInfo.getUserName() + " IP: " + userIp);
                 returnResult.setSuccess(false);
                 returnResult.setError("User is currently locked out.");
                 break;
             default:
-                log.info("Invalid credentials state for login attempt");
+                log.info("Invalid credentials state for login attempt IP: " + userIp);
                 returnResult.setSuccess(false);
                 returnResult.setError("Server doesnt have this state specified");
                 break;
