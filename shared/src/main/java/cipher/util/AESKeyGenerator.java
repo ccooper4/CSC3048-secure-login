@@ -1,6 +1,6 @@
 package cipher.util;
 
-import static cipher.util.RandomNumberGen.getRandom;
+import static util.RandomNumberGen.getRandom;
 
 /**
  *  Utility class for generating a random key to be used for AES encryption
