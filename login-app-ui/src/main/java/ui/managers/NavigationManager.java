@@ -47,13 +47,14 @@ public class NavigationManager {
         }
     }
 
-    public void showHomeScreen() {
+    public void showHomeScreen(String username) {
         try {
             FXMLLoader loader = Loader.getFXML("home");
             scene.setRoot(loader.load());
 
             HomeController controller = loader.getController();
             controller.setNavigationManager(this);
+            controller.setUserText(username);
             view = "home";
         } catch (IOException ex) {
             log.error("IOException", ex);

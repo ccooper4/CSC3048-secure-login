@@ -2,6 +2,7 @@ package ui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import model.UserInfo;
 import network.IServerConnector;
 import network.ServerConnector;
 import ui.managers.NavigationManager;
@@ -36,8 +37,9 @@ public class LoginController {
 
     public void login() {
         boolean success = serverConnector.login(user.getText(), password.getText());
+        UserInfo userInfo = serverConnector.getCurrentUser();
         if (success) {
-            navManager.showHomeScreen();
+            navManager.showHomeScreen(userInfo.getFirstName() + " " + userInfo.getLastName());
         }
     }
 

@@ -7,6 +7,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
+import util.StringConstants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServerConnector implements IServerConnector {
 
@@ -32,6 +36,22 @@ public class ServerConnector implements IServerConnector {
 //        HttpEntity<AuthResult> response = restTemplate.exchange(URI + "/login", HttpMethod.POST, AuthResult.class);
     }
 
+    public UserInfo getCurrentUser() {
+
+        List<String> values = new ArrayList<>();
+        values.add(AUTH_TOKEN);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.put(StringConstants.TOKEN_HEADER_NAME, values);
+
+        HttpEntity request = new HttpEntity<>(headers);
+
+        HttpEntity<UserInfo> response  = restTemplate.exchange(URI + "/currentUser", HttpMethod.GET, request, UserInfo.class);
+        UserInfo userInfo = response.getBody();
+
+        return userInfo;
+    }
+
     public boolean login(String loginId, String password) {
         Credential credential = new Credential();
 
@@ -45,7 +65,7 @@ public class ServerConnector implements IServerConnector {
         AuthResult result = response.getBody();
         HttpHeaders headers = response.getHeaders();
 
-        AUTH_TOKEN = headers.get("AUTH-TOKEN").get(0);
+        AUTH_TOKEN = headers.get(StringConstants.TOKEN_HEADER_NAME).get(0);
 
         return result.isSuccess();
     }

@@ -1,5 +1,7 @@
 package network;
 
+import model.UserInfo;
+
 /**
  * Outlines the interface for the client communications with the server.
  */
@@ -26,4 +28,9 @@ public interface IServerConnector {
      */
     void logout();
 
+    /**
+     * Get the current logged in user.
+     * @return  The user info.
+     */
+    UserInfo getCurrentUser();
 }
