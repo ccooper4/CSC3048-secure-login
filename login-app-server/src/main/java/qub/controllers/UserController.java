@@ -1,7 +1,6 @@
 package qub.controllers;
 
-import com.google.gson.Gson;
-import model.AuthResult;
+import model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,19 +17,21 @@ import qub.service.IUserService;
 @Controller
 public class UserController {
 
-    private Gson gson = new Gson();
-
     @Autowired
     private IUserService userService;
 
     @RequestMapping(value = "/currentUser", method = RequestMethod.GET)
-    public @ResponseBody User getCurrentUser() {
+    public @ResponseBody UserInfo getCurrentUser() {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
 
         User user = userService.getUserByLoginId(name);
 
-        return user;
+        UserInfo userInfo = new UserInfo();
+        userInfo.setFirstName(user.getFirstName());
+        userInfo.setLastName(user.getLastName());
+
+        return userInfo;
     }
 }
