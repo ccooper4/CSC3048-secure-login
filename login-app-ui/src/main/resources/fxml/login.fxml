@@ -12,8 +12,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.PasswordField?>
-<?import ui.validation.*?>
-<StackPane id="pane" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.controllers.LoginController">
+<?import qub.ui.validation.*?>
+<StackPane id="pane" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="qub.ui.controllers.LoginController">
     <children>
         <StackPane>
             <children>

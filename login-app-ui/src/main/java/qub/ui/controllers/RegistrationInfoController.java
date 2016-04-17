@@ -1,8 +1,8 @@
-package ui.controllers;
+package qub.ui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import ui.managers.NavigationManager;
+import qub.ui.managers.NavigationManager;
 
 public class RegistrationInfoController {
 

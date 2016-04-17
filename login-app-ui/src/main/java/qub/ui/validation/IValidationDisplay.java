@@ -1,4 +1,4 @@
-package ui.validation;
+package qub.ui.validation;
 
 /**
  * Created by pedro_000 on 7/26/2014.

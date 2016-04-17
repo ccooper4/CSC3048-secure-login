@@ -1,12 +1,12 @@
-package ui.controllers;
+package qub.ui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import model.UserInfo;
-import network.IServerConnector;
-import network.ServerConnector;
-import ui.managers.NavigationManager;
-import ui.validation.RequiredField;
+import qub.network.IServerConnector;
+import qub.network.ServerConnector;
+import qub.ui.managers.NavigationManager;
+import qub.ui.validation.RequiredField;
 
 /**
  * Controls the login screen

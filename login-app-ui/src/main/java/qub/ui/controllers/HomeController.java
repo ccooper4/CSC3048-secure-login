@@ -1,10 +1,10 @@
-package ui.controllers;
+package qub.ui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
-import network.IServerConnector;
-import network.ServerConnector;
-import ui.managers.NavigationManager;
+import qub.network.IServerConnector;
+import qub.network.ServerConnector;
+import qub.ui.managers.NavigationManager;
 
 /**
  * Controls the main application screen

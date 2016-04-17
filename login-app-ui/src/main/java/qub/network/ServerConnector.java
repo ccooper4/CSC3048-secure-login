@@ -1,9 +1,8 @@
-package network;
+package qub.network;
 
 import model.AuthResult;
 import model.Credential;
 import model.UserInfo;
-import org.apache.log4j.spi.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

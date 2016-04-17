@@ -1,17 +1,17 @@
-package ui;
+package qub;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import ui.managers.NavigationManager;
+import qub.ui.managers.NavigationManager;
 
 import java.io.IOException;
 
 /**
  * The frontend Application class.
  */
-public class App extends Application {
+public class Client extends Application {
 
     public static void main(String[] args) {
         launch(args);

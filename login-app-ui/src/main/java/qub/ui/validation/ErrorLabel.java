@@ -1,4 +1,4 @@
-package ui.validation;
+package qub.ui.validation;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

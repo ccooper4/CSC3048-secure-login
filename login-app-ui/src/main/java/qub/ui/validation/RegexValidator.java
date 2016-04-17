@@ -1,16 +1,15 @@
-package ui.validation;
+package qub.ui.validation;
 
-import javafx.scene.control.ComboBox;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.TextInputControl;
 
-/**
- * Created by pedro_000 on 7/2/2014.
- */
-public class RequiredField extends ValidatorBase {
+import java.util.regex.Pattern;
 
-    public RequiredField()
-    {
-    }
+/**
+ * Created by pedro_000 on 7/7/2014.
+ */
+public class RegexValidator extends ValidatorBase{
 
     /***************************************************************************
      *                                                                         *
@@ -19,48 +18,57 @@ public class RequiredField extends ValidatorBase {
      **************************************************************************/
 
     @Override
-    public void eval()
-    {
+    public void eval() {
         if(srcControl.get() instanceof TextInputControl)
             evalTextInputField();
-        else if (srcControl.get() instanceof ComboBox)
-            evalComboBox();
-
     }
 
-    protected void evalComboBox() {
-        ComboBox comboBox = (ComboBox) srcControl.get();
-
-        if (comboBox.getValue() == null || comboBox.getValue().toString().trim().isEmpty())
-            hasErrors.set(true);
-        else
-            hasErrors.set(false);
-
-        onEval();
-    }
-
-    protected void evalTextInputField()
+    private void evalTextInputField()
     {
         TextInputControl textField = (TextInputControl) srcControl.get();
-        if (textField.getText() == null || textField.getText().equals(""))
-            hasErrors.set(true);
-        else
+        if (regex.get() == null || regex.get().trim().isEmpty())
             hasErrors.set(false);
+        else
+        {
+            String text = textField.getText();
+            hasErrors.set(!evalString(text));
+        }
 
         onEval();
     }
 
-    public void setHasError(boolean input){
-        hasErrors.set(input);
+    protected boolean evalString(String text)
+    {
+        if (text == null)
+            return false;
+        else
+        {
+            return Pattern.matches(regex.get(), text);
+        }
     }
-
-
-
 
     /***************************************************************************
      *                                                                         *
      * Properties                                                              *
      *                                                                         *
      **************************************************************************/
+
+    /***** regex string *****/
+    protected SimpleStringProperty regex = new SimpleStringProperty();
+
+    public void setRegex(String regex)
+    {
+        this.regex.set(regex);
+    }
+
+    public String getRegex()
+    {
+        return this.regex.get();
+    }
+
+    public StringProperty regexProperty()
+    {
+        return this.regex;
+    }
 
 }

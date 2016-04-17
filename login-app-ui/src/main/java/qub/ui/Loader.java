@@ -1,4 +1,4 @@
-package ui;
+package qub.ui;
 
 import javafx.fxml.FXMLLoader;
 import java.net.URL;

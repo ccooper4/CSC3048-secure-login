@@ -1,12 +1,12 @@
-package ui.managers;
+package qub.ui.managers;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import ui.Loader;
-import ui.controllers.LoginController;
-import ui.controllers.HomeController;
-import ui.controllers.RegisterController;
-import ui.controllers.RegistrationInfoController;
+import qub.ui.Loader;
+import qub.ui.controllers.LoginController;
+import qub.ui.controllers.HomeController;
+import qub.ui.controllers.RegisterController;
+import qub.ui.controllers.RegistrationInfoController;
 import util.EncryptedLogger;
 
 import java.io.IOException;

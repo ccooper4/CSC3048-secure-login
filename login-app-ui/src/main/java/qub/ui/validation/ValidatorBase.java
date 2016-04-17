@@ -1,12 +1,10 @@
-package ui.validation;
+package qub.ui.validation;
 
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Control;
-import javafx.scene.control.TextField;
 
 /**
  * Created by pedro_000 on 7/5/2014.

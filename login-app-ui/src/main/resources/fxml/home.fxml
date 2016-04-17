@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.TextField?>
-<StackPane id="pane" xmlns:fx="http://javafx.com/fxml" fx:controller="ui.controllers.HomeController">
+<StackPane id="pane" xmlns:fx="http://javafx.com/fxml" fx:controller="qub.ui.controllers.HomeController">
     <children>
         <StackPane>
             <children>
