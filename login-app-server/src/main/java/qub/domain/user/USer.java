@@ -1,5 +1,7 @@
 package qub.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.google.gson.annotations.Expose;
 import qub.domain.BaseEntity;
 import qub.domain.IssuedToken;
 
@@ -18,11 +20,10 @@ public class User extends BaseEntity {
 
     private String loginId;
     private String password;
-
     private String firstName;
     private String lastName;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<IssuedToken> issuedTokens;
 
     // For use by spring data

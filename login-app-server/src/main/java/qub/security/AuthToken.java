@@ -2,9 +2,11 @@ package qub.security;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import qub.domain.user.User;
+import qub.util.GsonWrapper;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -136,7 +138,7 @@ public class AuthToken extends AbstractAuthenticationToken {
     @Override
     public String toString() {
 
-        Gson gson = new GsonBuilder().create();
+        Gson gson = GsonWrapper.getGson();
 
         String jsonObj = gson.toJson(this);
 
@@ -176,7 +178,7 @@ public class AuthToken extends AbstractAuthenticationToken {
      */
     public static AuthToken constructFromJson(String json) {
 
-        Gson gson = new GsonBuilder().create();
+        Gson gson = GsonWrapper.getGson();
 
         AuthToken newToken = gson.fromJson(json, AuthToken.class);
 

@@ -134,12 +134,14 @@ public class AuthenticationService implements IAuthenticationService {
 
         AuthToken tokenObj = AuthToken.constructFromJson(tokenText);
 
+        String tokenId = tokenObj.getTokenId();
+
         Date timeNow = new Date();
 
         if (tokenObj.getExpiryDate().before(timeNow)) {
             //Log that the token has expired.
 
-            log.info("Token has expired.");
+            log.info("Token " + tokenId + " has expired.");
 
             return null;
         }
@@ -147,7 +149,23 @@ public class AuthenticationService implements IAuthenticationService {
         if (!tokenObj.getIpAddres().equals(userIp)) {
             //Log that there is an IP mismatch.
 
-            log.info("Token IP did not match client IP.");
+            log.info("Token "  + tokenId + " IP did not match client IP.");
+
+            return null;
+        }
+
+        User dbUser = userService.getUserByLoginId(tokenObj.getName());
+
+        if (dbUser == null) {
+
+            log.info("User expressed by token "  + tokenId + " was not found in the database.");
+
+            return null;
+        }
+
+        if (dbUser.getIssuedTokens().stream().noneMatch(it -> it.getTokenId().equals(tokenObj.getTokenId()))) {
+
+            log.info("Token "  + tokenId + " was not found in the user's active token set.");
 
             return null;
         }

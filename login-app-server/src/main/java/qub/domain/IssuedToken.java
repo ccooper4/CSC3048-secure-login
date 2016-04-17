@@ -1,6 +1,9 @@
 package qub.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
 import qub.domain.user.User;
+import qub.util.ExcludeField;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -19,6 +22,8 @@ public class IssuedToken extends BaseEntity {
     private String tokenId;
 
     @ManyToOne
+    @JsonIgnore
+    @ExcludeField
     private User user;
 
     //endregion
