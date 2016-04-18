@@ -73,6 +73,7 @@ public class RegisterController {
                 navManager.showRegistrationInfoScreen(loginID);
             }
         }
+        hasErrors = false;
     }
 
     private void validateFields(){
