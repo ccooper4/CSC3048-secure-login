@@ -17,3 +17,5 @@ target/
 /data/
 /log/
 /shared/log
+/login-app-server/log
+/login-app-ui/log

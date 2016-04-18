@@ -55,6 +55,8 @@ public class LoginController {
                 alert.setTitle("CSC3048 Group ISS1");
                 alert.setHeaderText("Login Error");
                 alert.setContentText("The provided username and/or password are not valid or you are timed out. Please check these details.");
+                alert.setResizable(true);
+                alert.getDialogPane().setPrefSize(400, 200);
                 alert.showAndWait();
             }
         }

@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="qub.ui.controllers.RegisterController">
    <children>
       <StackPane>
@@ -12,8 +13,12 @@
                   <StackPane>
                      <children>
                         <FlowPane alignment="CENTER">
+                           <FlowPane.margin>
+                              <Insets top="20.0" />
+                           </FlowPane.margin>
+
                            <children>
-                              <TextArea prefHeight="238.0" prefWidth="465.0" text="Acceptable Use Policy&#10;&#10;Use of this system is strictly governed by group ISS1.&#10;&#10;Logging into this system confirms that you accept our acceptable use policy.&#10;&#10;1) Do not share your password or login information with anyone.&#10;2) Users must not deliberately create, retain, send, access or display unlawful&#10;material.&#10;3) Users must respect the copyright of all material made available by group ISS1.&#10;4) Users must respect the dignity and privacy of others.&#10;5) We carry out routine logging and monitoring of this application.&#10;6) Users must securely log off when finished with the application.&#10;7) Unauthorised disruption of the application is illegal.&#10;&#10;Any breach of the above policy could result in lawful prosecution!&#10;&#10;You can report any breach of the Acceptable Use Policy to: ISS1@secureemail.uk&#10;&#10;" />
+                              <TextArea prefHeight="310.0" prefWidth="585.0" text="Acceptable Use Policy&#10;&#10;Use of this system is strictly governed by group ISS1.&#10;&#10;Logging into this system confirms that you accept our acceptable use policy.&#10;&#10;1) Do not share your password or login information with anyone.&#10;2) Users must not deliberately create, retain, send, access or display unlawful&#10;material.&#10;3) Users must respect the copyright of all material made available by group ISS1.&#10;4) Users must respect the dignity and privacy of others.&#10;5) We carry out routine logging and monitoring of this application.&#10;6) Users must securely log off when finished with the application.&#10;7) Unauthorised disruption of the application is illegal.&#10;&#10;Any breach of the above policy could result in lawful prosecution!&#10;&#10;You can report any breach of the Acceptable Use Policy to: ISS1@secureemail.uk&#10;&#10;" />
                            </children>
                         </FlowPane>
                      </children>

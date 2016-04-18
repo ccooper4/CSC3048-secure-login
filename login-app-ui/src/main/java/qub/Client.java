@@ -20,7 +20,7 @@ public class Client extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        Scene scene = new Scene(new StackPane(), 500, 300);
+        Scene scene = new Scene(new StackPane(), 600, 400);
         scene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("css/style.css").toExternalForm());
 
         NavigationManager navManager = new NavigationManager(scene);
